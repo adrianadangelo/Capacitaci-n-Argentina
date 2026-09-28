@@ -168,7 +168,7 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:20px}
   <div class="wrap">
     <div class="brand">FARMATODO <span>Capacitación, VP de Recursos Humanos</span></div>
     <h1>Plan de capacitación Argentina</h1>
-    <p class="lead">Tras una semana de preparación, del 9 de octubre al 13 de diciembre de 2026 Mariana entrena a Oswaldo Saldivia en las 5 conductas de servicio y los 5 pilares de la operación, y juntos las llevan a las 31 farmacias de las 3 áreas de Operaciones.</p>
+    <p class="lead">Tras su preparación del 29 de septiembre al 8 de octubre, Mariana llega a Argentina el 14 de octubre y hasta el 13 de diciembre entrena a Oswaldo Saldivia en las 5 conductas de servicio y los 5 pilares de la operación, y juntos las llevan a las 31 farmacias de las 3 áreas de Operaciones.</p>
     <div id="timeline" class="timeline" aria-label="Línea de tiempo de las fases"></div>
   </div>
 </header>
@@ -203,7 +203,7 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:20px}
 <script>
 // ===== CONFIGURACIÓN EDITABLE =====
 const CONFIG = {
-  inicio: '2026-10-09',
+  inicio: '2026-10-14',
   ultimoDiaMariana: '2026-12-11',   // viernes; regresa el 13-dic
   salidaMariana: '2026-12-13',
   pausa: { desde: '2026-12-21', hasta: '2027-01-01', motivo: 'Temporada alta navideña: sin visitas de campo' },
@@ -346,7 +346,8 @@ function planificar(opts = {}) {
   while ((qAM.some(b => b.pend.length) || qPM.some(b => b.pend.length)) && guard++ < 400) {
     if (!esHabil(f) || enPausa(f)) { registraInhabil(f); next(); continue; }
     if (f === CONFIG.ultimoDiaMariana) {
-      push(f, { fase: 'cierre', titulo: 'Cierre y traspaso a Oswaldo', detalle: 'Informe de avance por tienda, reunión con Gerentes de Área y Coordinadores de RRHH, entrega del plan de continuidad y rutas de Oswaldo.' });
+      const pmU = tomar(qPM, f, 'PM');
+      push(f, { fase: 'cierre', titulo: 'Cierre y traspaso a Oswaldo', rol: rol(f), detalle: 'Mañana (8:00 a 12:00): informe de avance por tienda, reunión con Gerentes de Área y Coordinadores de RRHH, entrega del plan de continuidad y rutas de Oswaldo.', am: null, amNota: 'Cierre y traspaso', pm: pmU, pmNota: pmU ? null : 'Seguimiento, registro de evidencias y reporte' });
       next(); continue;
     }
     const am = tomar(qAM, f, 'AM');
@@ -465,7 +466,7 @@ function resumen() {
         <div class="when">${flarga(F.refuerzo[0])} al ${flarga(CONFIG.ultimoDiaMariana)}</div>
         <h3>Refuerzo en tienda con Mariana</h3>
         <p>Al revés que en el kickoff, aquí nadie se traslada: Mariana y Oswaldo van juntos a cada farmacia y trabajan con el equipo del turno en su propio lugar de trabajo. Cada visita dura cerca de 60 minutos y refuerza 1 conducta y 1 pilar. El turno mañana arranca una semana antes que el turno tarde, igual que en el cronograma de referencia. El liderazgo pasa gradualmente a Oswaldo:</p>
-        <ul><li>Hasta el 20 nov: Mariana lidera, Oswaldo co-facilita.</li><li>24 nov al 4 dic: co-facilitación 50/50.</li><li>Desde el 7 dic: Oswaldo lidera, Mariana observa y da feedback.</li><li>11 dic: cierre, informe por tienda y traspaso formal.</li></ul>
+        <ul><li>Hasta el 20 nov: Mariana lidera, Oswaldo co-facilita.</li><li>24 nov al 4 dic: co-facilitación 50/50.</li><li>Desde el 7 dic: Oswaldo lidera, Mariana observa y da feedback.</li><li>11 dic: cierre y traspaso formal en la mañana; en la tarde, últimas visitas juntos.</li></ul>
       </div></div>
       <div class="phase continuidad"><div class="n">5</div><div>
         <div class="when">${F.continuidad ? flarga(F.continuidad[0]) + ' al ' + flarga(F.continuidad[1]) : '—'}</div>
@@ -590,7 +591,7 @@ function agenda() {
         if (d.titulo) h += `<div class="title">${esc(d.titulo)}</div>`;
         if (d.detalle) h += `<p class="det">${esc(d.detalle)}</p>`;
         if (d.fase === 'kickoff' && d.am) h += slot('AM', d.am) + slot('PM', d.pm);
-        if (['refuerzo','continuidad'].includes(d.fase)) h += slot('AM', d.am, d.amNota) + slot('PM', d.pm, d.pmNota);
+        if (['refuerzo','continuidad','cierre'].includes(d.fase)) h += slot('AM', d.am, d.amNota) + slot('PM', d.pm, d.pmNota);
       }
       h += '</div></article>';
     });
@@ -633,7 +634,7 @@ function farmacias() {
 function supuestos() {
   $('supuestos').innerHTML = `
   <h2>Supuestos y riesgos</h2>
-  <p class="sub">Lo que hace que este cronograma sea alcanzable, y lo que conviene validar antes del 9 de octubre.</p>
+  <p class="sub">Lo que hace que este cronograma sea alcanzable, y lo que conviene validar antes de que Mariana llegue el 14 de octubre.</p>
   <div class="warn"><b>Conclusión:</b> con Mariana en Argentina alcanza para entrenar a Oswaldo, hacer el kickoff completo, cerrar el ciclo 1 en las 31 farmacias y dejar el ciclo 2 en marcha. Los ciclos 2 al 5 los completa Oswaldo, con cierre estimado el ${flarga(P.fin)}.</div>
   <div class="two">
     <div class="box"><h3>Ritmo de trabajo</h3><ul>
@@ -656,7 +657,7 @@ function supuestos() {
     </ul></div>
     <div class="box"><h3>Riesgos y cómo mitigarlos</h3><ul>
       <li>Una visita que se cae se reprograma en el siguiente espacio de "seguimiento" de la misma semana.</li>
-      <li>Si Oswaldo no está listo el 20 oct, se agrega un día de práctica y el kickoff corre un día.</li>
+      <li>Si Oswaldo no está listo el ${flarga(P.fases.entrenamiento[1])}, se agrega un día de práctica y el kickoff corre un día.</li>
       <li>Quien falte a su ronda de kickoff se cita en la siguiente ronda de su área, respetando el máximo de 2 por farmacia.</li>
       <li>La semana del 24 al 27 nov es la más cargada (4 días hábiles): priorizarla en la agenda de las tiendas.</li>
       <li>Sin Mariana baja el acompañamiento: se propone seguimiento remoto quincenal y una muestra de visitas observadas por el Coordinador de RRHH de cada área.</li>
@@ -669,7 +670,7 @@ function exportar() {
   const ag = [];
   P.dias.forEach(d => {
     const base = { Fecha: d.fecha, Día: DIA[dow(d.fecha)], Fase: faseNombre[d.fase], Responsable: d.fase === 'inhabil' ? '' : (d.rol || d.resp) };
-    if (d.fase === 'inhabil' || d.fase === 'preparacion' || d.fase === 'entrenamiento' || d.fase === 'cierre' || (d.fase === 'kickoff' && !d.am)) ag.push({ ...base, Turno: '', Área: '', Contenido: d.titulo || '', Farmacias: d.detalle || '' });
+    if (d.fase === 'inhabil' || d.fase === 'preparacion' || d.fase === 'entrenamiento' || (d.fase === 'kickoff' && !d.am)) ag.push({ ...base, Turno: '', Área: '', Contenido: d.titulo || '', Farmacias: d.detalle || '' });
     else [['AM', d.am, d.amNota], ['PM', d.pm, d.pmNota]].forEach(([t, b, n]) => ag.push({ ...base, Turno: t, Área: b ? AREAS[b.area].nombre : '', Contenido: b ? (b.ciclo ? `Ciclo ${b.ciclo}: ${ciclo(b.ciclo)}` : `Kickoff: ${b.nota}`) : (n || ''), Farmacias: b ? (b.resumen ? b.resumen + ': ' : '') + b.tiendas.join(', ') : '' }));
   });
   const vis = P.visitas.map(v => ({ Farmacia: v.tienda, Área: AREAS[v.area].nombre, Actividad: v.ciclo ? `Ciclo ${v.ciclo}` : 'Kickoff', Contenido: v.ciclo ? ciclo(v.ciclo) : 'Kickoff', Turno: v.turno, Fecha: v.fecha, Responsable: v.resp }));
