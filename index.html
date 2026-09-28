@@ -34,6 +34,7 @@ button,select,input{font:inherit;color:inherit}
 .tl-track{position:relative;height:58px;border-radius:6px;background:rgba(255,255,255,.08)}
 .tl-seg{position:absolute;top:0;bottom:0;border-radius:4px;padding:8px 10px;font-size:12px;font-weight:600;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;line-height:1.25}
 .tl-seg small{display:block;font-weight:500;opacity:.85}
+.tl-seg.preparacion{background:#9DC3EC;color:var(--navy)}
 .tl-seg.entrenamiento{background:#fff;color:var(--navy)}
 .tl-seg.kickoff{background:var(--cyan);color:#fff}
 .tl-seg.refuerzo{background:var(--blue);color:#fff}
@@ -75,6 +76,7 @@ section.block{margin-bottom:40px}
 .phase{display:grid;grid-template-columns:56px 1fr;gap:16px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:18px 20px;border-left:6px solid var(--blue)}
 .phase.entrenamiento{border-left-color:var(--navy)}
 .phase.kickoff{border-left-color:var(--cyan)}
+.phase.preparacion{border-left-color:#9DC3EC}
 .phase.continuidad{border-left-color:#9DC3EC;border-left-style:dashed}
 .phase .n{font-size:30px;font-weight:800;color:var(--blue);line-height:1}
 .phase .when{font-weight:700;font-size:13px;color:var(--muted);margin-bottom:4px}
@@ -118,6 +120,7 @@ th{font-weight:700;background:var(--sky);white-space:nowrap}
 .cell.k{background:var(--cyan);color:#fff}
 .cell.c{background:var(--blue);color:#fff}
 .cell.co{background:repeating-linear-gradient(135deg,#8DBBEB 0 6px,#A9CDF1 6px 12px);color:var(--navy)}
+.cell.p{background:#9DC3EC;color:var(--navy)}
 .cell.t{background:var(--navy);color:#fff}
 .cell.h{background:#F0F0F0;color:#888}
 .matrix td.leave{border-left:3px dashed var(--navy)}
@@ -165,7 +168,7 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:20px}
   <div class="wrap">
     <div class="brand">FARMATODO <span>Capacitación, VP de Recursos Humanos</span></div>
     <h1>Plan de capacitación Argentina</h1>
-    <p class="lead">Del 9 de octubre al 13 de diciembre de 2026, Mariana entrena a Oswaldo Saldivia en las 5 conductas de servicio y los 5 pilares de la operación, y juntos las llevan a las 31 farmacias de las 3 áreas de Operaciones.</p>
+    <p class="lead">Tras una semana de preparación, del 9 de octubre al 13 de diciembre de 2026 Mariana entrena a Oswaldo Saldivia en las 5 conductas de servicio y los 5 pilares de la operación, y juntos las llevan a las 31 farmacias de las 3 áreas de Operaciones.</p>
     <div id="timeline" class="timeline" aria-label="Línea de tiempo de las fases"></div>
   </div>
 </header>
@@ -237,6 +240,17 @@ const AREAS = {
        tiendas: ['Olleros','Botánico','Mark','Rivadavia','Devoto','25 de Mayo (Nobleza)','San Martín','Scalabrini','Olivos','Villa del Parque II','Villa Devoto'] },
 };
 
+// Preparación de Mariana antes de viajar (fechas propuestas, editables)
+const PREPARACION = [
+  { fecha: '2026-09-29', t: 'Presentación del cronograma', resp: 'Adriana', d: 'Recorrido por el plan completo en Argentina: fases, áreas, farmacias, responsables y entregables.' },
+  { fecha: '2026-09-30', t: 'Taller Cultura de Servicio, personal base', resp: 'Adriana', d: 'Mariana vive el taller como participante y toma nota de la secuencia, dinámicas y mensajes clave para replicarlo.' },
+  { fecha: '2026-10-01', t: 'Taller Cultura de Servicio, supervisores', resp: 'Adriana', d: 'Versión para líderes de tienda: cómo sostener las conductas en el día a día y dar feedback al equipo.' },
+  { fecha: '2026-10-02', t: 'Inducción 5 pilares de la operación (día 1)', resp: 'GT David', d: 'Contenido de los 5 pilares y cómo se ven en tienda.' },
+  { fecha: '2026-10-05', t: 'Inducción 5 pilares de la operación (día 2)', resp: 'GT David', d: 'Checklist de los pilares aplicado en tienda y dudas frecuentes de los equipos.' },
+  { fecha: '2026-10-06', t: 'Formaciones de kickoff (día 1)', resp: 'Monica Urdaneta', d: 'Guion, materiales y dinámicas del taller de Conductas.' },
+  { fecha: '2026-10-07', t: 'Formaciones de kickoff (día 2)', resp: 'Monica Urdaneta', d: 'Guion, materiales y dinámicas del taller de Pilares.' },
+  { fecha: '2026-10-08', t: 'Formaciones de kickoff (día 3)', resp: 'Monica Urdaneta', d: 'Práctica de facilitación de Mariana con feedback y ajustes finales del material antes de viajar.' },
+];
 const ENTRENAMIENTO = [
   { t: 'Llegada, inducción y alineación', d: 'Reunión con Coordinadores de RRHH Operaciones y Gerentes de Área. Revisión del plan, materiales y logística. Reserva de las salas Las Heras y Los Olivos.' },
   { t: '5 conductas de servicio · teoría y modelaje', d: 'Mariana presenta y modela las 5 conductas. Oswaldo observa y toma notas de facilitación.' },
@@ -276,6 +290,8 @@ function planificar(opts = {}) {
     push(s, { fase: 'inhabil', titulo: FERIADOS[s] || NO_LABORABLES[s] || CONFIG.pausa.motivo });
   };
 
+  // Fase 0: preparación antes del viaje
+  PREPARACION.forEach(p => dias.push({ fecha: p.fecha, fase: 'preparacion', titulo: p.t, detalle: p.d, resp: 'Responsable: ' + p.resp, responsable: p.resp }));
   // Fase 1: entrenamiento
   let i = 0;
   while (i < ENTRENAMIENTO.length) {
@@ -375,12 +391,13 @@ function calcular() {
 function render() { timeline(); resumen(); matriz(); agenda(); farmacias(); supuestos(); }
 
 function timeline() {
-  const ini = CONFIG.inicio, fin = P.fin;
+  const ini = PREPARACION[0].fecha, fin = P.fin;
   const tot = (D(fin) - D(ini)) / 864e5 + 1;
   const pos = s => ((D(s) - D(ini)) / 864e5) / tot * 100;
-  const seg = (cls, a, b, t, sm) => { const w = pos(addDays(b,1)) - pos(a); return `<div class="tl-seg ${cls}" style="left:${pos(a)}%;width:${w}%" title="${esc(t)}: ${fcorta(a)} al ${fcorta(b)}">${w > 7 ? t + '<small>' + sm + '</small>' : ''}</div>`; };
+  const seg = (cls, a, b, t, sm) => { const w = pos(addDays(b,1)) - pos(a); return `<div class="tl-seg ${cls}" style="left:${pos(a)}%;width:${w}%" title="${esc(t)}: ${fcorta(a)} al ${fcorta(b)}">${w > 3.5 ? t + (w > 9 ? '<small>' + sm + '</small>' : '') : ''}</div>`; };
   const F = P.fases;
   let h = '<div class="tl-track">';
+  h += seg('preparacion', PREPARACION[0].fecha, PREPARACION[PREPARACION.length-1].fecha, 'Preparación', `${fcorta(PREPARACION[0].fecha)}–${fcorta(PREPARACION[PREPARACION.length-1].fecha)}`);
   h += seg('entrenamiento', F.entrenamiento[0], F.entrenamiento[1], 'Entrenamiento', `${fcorta(F.entrenamiento[0])}–${fcorta(F.entrenamiento[1])}`);
   h += seg('kickoff', F.kickoff[0], F.kickoff[1], 'Kickoff', `${fcorta(F.kickoff[0])}–${fcorta(F.kickoff[1])}`);
   h += seg('refuerzo', F.refuerzo[0], CONFIG.ultimoDiaMariana, 'Refuerzo con Mariana', `${fcorta(F.refuerzo[0])}–${fcorta(CONFIG.ultimoDiaMariana)}`);
@@ -392,7 +409,7 @@ function timeline() {
     } else h += seg('continuidad', F.continuidad[0], F.continuidad[1], 'Oswaldo continúa solo', `hasta ${flarga(F.continuidad[1])}`);
   }
   h += `<div class="tl-mark" style="left:${pos(CONFIG.salidaMariana)}%"><span>13 dic, regresa Mariana</span></div></div><div class="tl-months">`;
-  h += `<span style="left:0;transform:none">${MES[D(ini).getUTCMonth()]}</span>`;
+  if (D(ini).getUTCDate() < 20) h += `<span style="left:0;transform:none">${MES[D(ini).getUTCMonth()]}</span>`;
   let m = D(ini); m = new Date(Date.UTC(m.getUTCFullYear(), m.getUTCMonth()+1, 1));
   while (S(m) <= fin) { h += `<span style="left:${pos(S(m))}%">${MES[m.getUTCMonth()]}</span>`; m = new Date(Date.UTC(m.getUTCFullYear(), m.getUTCMonth()+1, 1)); }
   $('timeline').innerHTML = h + '</div>';
@@ -418,15 +435,21 @@ function resumen() {
   </div>
 
   <section class="block">
-    <h2>Las cuatro fases</h2>
+    <h2>Las cinco fases</h2>
     <p class="sub">Cada fase empieza cuando termina la anterior. Las fechas se recalculan si cambias las opciones de la barra superior.</p>
     <div class="phases">
-      <div class="phase entrenamiento"><div class="n">1</div><div>
+      <div class="phase preparacion"><div class="n">1</div><div>
+        <div class="when">${flarga(PREPARACION[0].fecha)} al ${flarga(PREPARACION[PREPARACION.length-1].fecha)}, antes de viajar</div>
+        <h3>Preparación de Mariana</h3>
+        <p>Mariana recibe los contenidos que luego enseñará a Oswaldo y facilitará en las farmacias.</p>
+        <div class="scroll" style="margin-top:10px"><table><thead><tr><th>Fecha</th><th>Actividad</th><th>Responsable</th></tr></thead><tbody>${PREPARACION.map(p => `<tr><td>${flarga(p.fecha)}</td><td>${esc(p.t)}</td><td><b>${esc(p.resp)}</b></td></tr>`).join('')}</tbody></table></div>
+      </div></div>
+      <div class="phase entrenamiento"><div class="n">2</div><div>
         <div class="when">${flarga(F.entrenamiento[0])} al ${flarga(F.entrenamiento[1])}, ${F.entrenamiento[2]} días hábiles</div>
         <h3>Mariana entrena a Oswaldo</h3>
         <p>Dos días de conductas de servicio, dos de pilares de la operación (en tienda), uno de metodología de facilitación y un ensayo general donde Oswaldo facilita el kickoff completo y Mariana lo certifica.</p>
       </div></div>
-      <div class="phase kickoff"><div class="n">2</div><div>
+      <div class="phase kickoff"><div class="n">3</div><div>
         <div class="when">${flarga(F.kickoff[0])} al ${flarga(F.kickoff[1])}</div>
         <h3>Kickoff en las 31 farmacias</h3>
         <p>Los talleres se hacen en las salas de capacitación Las Heras y Los Olivos, y los participantes van presencialmente. Para no dejar las farmacias sin personal, a cada taller van como máximo ${CONFIG.kickoff.maxPorTienda} personas de una misma farmacia. Por eso cada área necesita varias rondas: con ${P.colab} colaboradores por farmacia son ${P.porTurno} rondas por turno.</p>
@@ -438,13 +461,13 @@ function resumen() {
         <li>${[1,2,3].map(a => `${AREAS[a].nombre}: ${CONFIG.kickoff.salaPorArea[a]}`).join('; ')}.</li>
         <li>El último día se consolida la asistencia y se arman las rutas de refuerzo.</li></ul>
       </div></div>
-      <div class="phase refuerzo"><div class="n">3</div><div>
+      <div class="phase refuerzo"><div class="n">4</div><div>
         <div class="when">${flarga(F.refuerzo[0])} al ${flarga(CONFIG.ultimoDiaMariana)}</div>
         <h3>Refuerzo en tienda con Mariana</h3>
         <p>Al revés que en el kickoff, aquí nadie se traslada: Mariana y Oswaldo van juntos a cada farmacia y trabajan con el equipo del turno en su propio lugar de trabajo. Cada visita dura cerca de 60 minutos y refuerza 1 conducta y 1 pilar. El turno mañana arranca una semana antes que el turno tarde, igual que en el cronograma de referencia. El liderazgo pasa gradualmente a Oswaldo:</p>
         <ul><li>Hasta el 20 nov: Mariana lidera, Oswaldo co-facilita.</li><li>24 nov al 4 dic: co-facilitación 50/50.</li><li>Desde el 7 dic: Oswaldo lidera, Mariana observa y da feedback.</li><li>11 dic: cierre, informe por tienda y traspaso formal.</li></ul>
       </div></div>
-      <div class="phase continuidad"><div class="n">4</div><div>
+      <div class="phase continuidad"><div class="n">5</div><div>
         <div class="when">${F.continuidad ? flarga(F.continuidad[0]) + ' al ' + flarga(F.continuidad[1]) : '—'}</div>
         <h3>Oswaldo continúa solo</h3>
         <p>Completa el ciclo 2 y ejecuta los ciclos 3, 4 y 5 con la misma ruta y ritmo.${$('optPausa').checked ? ' Sin visitas de campo del 21 dic al 1 ene por temporada alta.' : ''} Mariana le da seguimiento remoto quincenal.</p>
@@ -488,9 +511,10 @@ function resumen() {
 function matriz() {
   const hab = P.dias;
   const semanas = [];
-  for (let s = lunes(CONFIG.inicio); s <= P.fin; s = addDays(s,7)) semanas.push(s);
+  for (let s = lunes(PREPARACION[0].fecha); s <= P.fin; s = addDays(s,7)) semanas.push(s);
   const idx = {};
   P.visitas.forEach(v => { const k = `${lunes(v.fecha)}|${v.turno}|${v.area}`; (idx[k] = idx[k] || []).push(v); });
+  const pr = {}; hab.filter(d => d.fase === 'preparacion').forEach(d => (pr[lunes(d.fecha)] = pr[lunes(d.fecha)] || []).push(`${flarga(d.fecha)}: ${d.titulo} (${d.responsable})`));
   const tr = {}; hab.filter(d => d.fase === 'entrenamiento').forEach(d => tr[lunes(d.fecha)] = (tr[lunes(d.fecha)] || 0) + 1);
   const hol = {}; hab.filter(d => d.fase === 'inhabil').forEach(d => (hol[lunes(d.fecha)] = hol[lunes(d.fecha)] || []).push(`${flarga(d.fecha)}: ${d.titulo}`));
   const leave = lunes(addDays(CONFIG.salidaMariana,1));
@@ -501,6 +525,7 @@ function matriz() {
   semanas.forEach(s => { const m = D(s).getUTCMonth(); if (m !== prev) { monthCells.push({ m, n: 1, y: D(s).getUTCFullYear() }); prev = m; } else monthCells[monthCells.length-1].n++; });
   h += monthCells.map(c => `<th colspan="${c.n}">${MESL[c.m]}${c.y !== 2026 ? ' ' + c.y : ''}</th>`).join('');
   h += '</tr><tr><th class="rowh">Semana del</th>' + semanas.map(s => `<th class="${s === leave ? 'leave' : ''}">${D(s).getUTCDate()}</th>`).join('') + '</tr></thead><tbody>';
+  h += '<tr><td class="rowh">Preparación</td>' + semanas.map(s => `<td${s === leave ? ' class="leave"' : ''}>${pr[s] ? `<div class="cell p" title="${esc(pr[s].join('\n'))}">P</div>` : ''}</td>`).join('') + '</tr>';
   // fila entrenamiento
   h += '<tr><td class="rowh">Entrenamiento</td>' + semanas.map(s => { const lc = s === leave ? ' class="leave"' : ''; return tr[s] ? `<td${lc}><div class="cell t" title="${tr[s]} días de entrenamiento">E</div></td>` : `<td${lc}>${hol[s] && !idx[s+'|AM|1'] && !idx[s+'|AM|2'] && !idx[s+'|AM|3'] && !tr[s] ? '' : ''}</td>`; }).join('') + '</tr>';
   for (const turno of ['AM','PM']) {
@@ -526,17 +551,17 @@ function matriz() {
   }
   h += '<tr><td class="rowh" style="font-weight:500;color:var(--muted)">Feriados</td>' + semanas.map(s => `<td class="${s === leave ? 'leave' : ''}">${hol[s] ? `<div class="cell h" title="${esc(hol[s].join('\n'))}">F</div>` : ''}</td>`).join('') + '</tr>';
   h += '</tbody></table></div>';
-  h += `<div class="legend"><span><i style="background:var(--navy)"></i>E: entrenamiento</span><span><i style="background:var(--cyan)"></i>K: kickoff</span><span><i style="background:var(--blue)"></i>C1 a C5: ciclo con Mariana</span><span><i style="background:repeating-linear-gradient(135deg,#8DBBEB 0 6px,#A9CDF1 6px 12px)"></i>Ciclo con Oswaldo solo</span><span><i style="background:#F0F0F0"></i>F: feriado o pausa</span></div>`;
+  h += `<div class="legend"><span><i style="background:#9DC3EC"></i>P: preparación de Mariana</span><span><i style="background:var(--navy)"></i>E: entrenamiento a Oswaldo</span><span><i style="background:var(--cyan)"></i>K: kickoff</span><span><i style="background:var(--blue)"></i>C1 a C5: ciclo con Mariana</span><span><i style="background:repeating-linear-gradient(135deg,#8DBBEB 0 6px,#A9CDF1 6px 12px)"></i>Ciclo con Oswaldo solo</span><span><i style="background:#F0F0F0"></i>F: feriado o pausa</span></div>`;
   $('matriz').innerHTML = h;
 }
 
-const faseNombre = { entrenamiento: 'Entrenamiento', kickoff: 'Kickoff', refuerzo: 'Refuerzo con Mariana', cierre: 'Cierre y traspaso', continuidad: 'Oswaldo continúa solo', inhabil: 'No hábil' };
+const faseNombre = { preparacion: 'Preparación antes del viaje', entrenamiento: 'Entrenamiento', kickoff: 'Kickoff', refuerzo: 'Refuerzo con Mariana', cierre: 'Cierre y traspaso', continuidad: 'Oswaldo continúa solo', inhabil: 'No hábil' };
 let filtro = { fase: 'todas', area: 'todas' };
 function agenda() {
   const opt = (v, t, cur) => `<option value="${v}"${v === cur ? ' selected' : ''}>${t}</option>`;
   let h = `<h2>Agenda diaria</h2><p class="sub">Horario de lunes a viernes, 8:00 a 17:00. AM de 8:00 a 12:00 y PM de 13:00 a 17:00. El kickoff es en sala; en el refuerzo, Mariana y Oswaldo van a cada farmacia y cada visita dura cerca de 60 minutos más el traslado entre farmacias.</p>
   <div class="filters">
-    <select id="fFase" aria-label="Filtrar por fase">${opt('todas','Todas las fases',filtro.fase)}${opt('mariana','Solo mientras está Mariana',filtro.fase)}${['entrenamiento','kickoff','refuerzo','continuidad'].map(f => opt(f, faseNombre[f], filtro.fase)).join('')}</select>
+    <select id="fFase" aria-label="Filtrar por fase">${opt('todas','Todas las fases',filtro.fase)}${opt('mariana','Solo mientras está Mariana',filtro.fase)}${['preparacion','entrenamiento','kickoff','refuerzo','continuidad'].map(f => opt(f, faseNombre[f], filtro.fase)).join('')}</select>
     <select id="fArea" aria-label="Filtrar por área">${opt('todas','Todas las áreas',filtro.area)}${[1,2,3].map(a => opt(String(a), AREAS[a].nombre, filtro.area)).join('')}</select>
   </div>`;
   const pasa = d => {
@@ -644,7 +669,7 @@ function exportar() {
   const ag = [];
   P.dias.forEach(d => {
     const base = { Fecha: d.fecha, Día: DIA[dow(d.fecha)], Fase: faseNombre[d.fase], Responsable: d.fase === 'inhabil' ? '' : (d.rol || d.resp) };
-    if (d.fase === 'inhabil' || d.fase === 'entrenamiento' || d.fase === 'cierre' || (d.fase === 'kickoff' && !d.am)) ag.push({ ...base, Turno: '', Área: '', Contenido: d.titulo || '', Farmacias: d.detalle || '' });
+    if (d.fase === 'inhabil' || d.fase === 'preparacion' || d.fase === 'entrenamiento' || d.fase === 'cierre' || (d.fase === 'kickoff' && !d.am)) ag.push({ ...base, Turno: '', Área: '', Contenido: d.titulo || '', Farmacias: d.detalle || '' });
     else [['AM', d.am, d.amNota], ['PM', d.pm, d.pmNota]].forEach(([t, b, n]) => ag.push({ ...base, Turno: t, Área: b ? AREAS[b.area].nombre : '', Contenido: b ? (b.ciclo ? `Ciclo ${b.ciclo}: ${ciclo(b.ciclo)}` : `Kickoff: ${b.nota}`) : (n || ''), Farmacias: b ? (b.resumen ? b.resumen + ': ' : '') + b.tiendas.join(', ') : '' }));
   });
   const vis = P.visitas.map(v => ({ Farmacia: v.tienda, Área: AREAS[v.area].nombre, Actividad: v.ciclo ? `Ciclo ${v.ciclo}` : 'Kickoff', Contenido: v.ciclo ? ciclo(v.ciclo) : 'Kickoff', Turno: v.turno, Fecha: v.fecha, Responsable: v.resp }));
