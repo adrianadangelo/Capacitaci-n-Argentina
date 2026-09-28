@@ -180,6 +180,7 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:20px}
       <button role="tab" aria-selected="false" data-tab="supuestos">Supuestos y riesgos</button>
     </div>
     <div class="controls">
+      <label>Kickoff <select id="optKick" style="border:1px solid var(--line);border-radius:6px;padding:5px 6px"><option value="mismo">Ambos talleres el mismo día</option><option value="separado">Un taller por día</option></select></label>
       <label>Colaboradores por farmacia <input type="number" id="optColab" value="16" min="2" max="60" style="width:62px;border:1px solid var(--line);border-radius:6px;padding:5px 6px"></label>
       <label><input type="checkbox" id="opt7"> Trabajar el lun 7-dic (no laborable)</label>
       <label><input type="checkbox" id="optPausa" checked> Pausa navideña</label>
@@ -210,8 +211,9 @@ const CONFIG = {
     colaboradoresPorTienda: 16,     // promedio; la mitad en turno mañana y la mitad en turno tarde
     maxPorTienda: 2,                // máximo de personas de una misma farmacia por taller
     salaPorArea: { 1: 'Sala Los Olivos', 2: 'Sala Las Heras', 3: 'Sala Los Olivos' },
-    horarioAM: '9:30 a 11:30',
-    horarioPM: '14:00 a 16:00',
+    // Cada taller (Conductas y Pilares) dura 2 horas
+    mismoDia: { AM: 'Conductas 8:00 a 10:00 y Pilares 10:15 a 12:15', PM: 'Conductas 12:45 a 14:45 y Pilares 15:00 a 17:00' },
+    separado: { AM: '9:30 a 11:30', PM: '14:00 a 16:00' },
   },
 };
 const FERIADOS = {
@@ -285,17 +287,23 @@ function planificar(opts = {}) {
   const K = CONFIG.kickoff;
   const colab = opts.colaboradores || K.colaboradoresPorTienda;
   const porTurno = Math.ceil(Math.ceil(colab / 2) / K.maxPorTienda);
+  const separado = !!opts.kickoffSeparado;
   const sesiones = [];
-  for (let r = 1; r <= porTurno; r++) for (const a of [1,2,3]) sesiones.push({ area: a, ronda: r });
+  for (let r = 1; r <= porTurno; r++) {
+    if (separado) { for (const tl of ['Conductas','Pilares']) for (const a of [1,2,3]) sesiones.push({ area: a, ronda: r, taller: tl }); }
+    else for (const a of [1,2,3]) sesiones.push({ area: a, ronda: r, taller: 'Conductas y Pilares' });
+  }
   i = 0;
   while (i <= sesiones.length) {
     if (!esHabil(f)) { registraInhabil(f); next(); continue; }
     if (i < sesiones.length) {
       const g = sesiones[i], ar = AREAS[g.area], n = ar.tiendas.length, sala = K.salaPorArea[g.area];
+      const H = separado ? K.separado : K.mismoDia;
+      const tl = separado ? `taller de ${g.taller}, ` : '';
       const resumen = `${n} farmacias del área, hasta ${K.maxPorTienda} personas por farmacia (${n * K.maxPorTienda} participantes)`;
-      push(f, { fase: 'kickoff', area: g.area, titulo: `Kickoff ${ar.nombre}, ronda ${g.ronda} de ${porTurno}`, sala,
-        am: { area: g.area, tiendas: ar.tiendas, nota: `${sala}, ${K.horarioAM}, turno mañana`, resumen },
-        pm: { area: g.area, tiendas: ar.tiendas, nota: `${sala}, ${K.horarioPM}, turno tarde`, resumen } });
+      push(f, { fase: 'kickoff', area: g.area, titulo: `Kickoff ${ar.nombre}, ronda ${g.ronda} de ${porTurno}: ${separado ? 'taller de ' + g.taller : 'Conductas y Pilares'}`, sala,
+        am: { area: g.area, tiendas: ar.tiendas, nota: `${sala}, ${tl}${H.AM}, turno mañana`, resumen },
+        pm: { area: g.area, tiendas: ar.tiendas, nota: `${sala}, ${tl}${H.PM}, turno tarde`, resumen } });
       ar.tiendas.forEach(t => { visitas.push({ tienda: t, area: g.area, ciclo: 0, turno: 'AM', fecha: f, resp: resp(f), sala }); visitas.push({ tienda: t, area: g.area, ciclo: 0, turno: 'PM', fecha: f, resp: resp(f), sala }); });
     } else {
       push(f, { fase: 'kickoff', titulo: 'Cierre del kickoff', detalle: 'Consolidar asistencia por farmacia, citar a quienes faltaron y ajustar el material del ciclo 1. Armar rutas de refuerzo con cada Gerente de Área.' });
@@ -335,7 +343,7 @@ function planificar(opts = {}) {
     push(f, d);
     next();
   }
-  return { dias, visitas, iniRefuerzo, iniPM, fin: dias[dias.length-1].fecha, porTurno, colab };
+  return { dias, visitas, iniRefuerzo, iniPM, fin: dias[dias.length-1].fecha, porTurno, colab, separado, sesiones: sesiones.length };
 }
 
 
@@ -353,7 +361,7 @@ const $ = id => document.getElementById(id);
 
 let P;
 function calcular() {
-  P = planificar({ trabajar7dic: $('opt7').checked, pausa: $('optPausa').checked, colaboradores: Math.max(2, Math.min(60, +$('optColab').value || CONFIG.kickoff.colaboradoresPorTienda)) });
+  P = planificar({ trabajar7dic: $('opt7').checked, pausa: $('optPausa').checked, kickoffSeparado: $('optKick').value === 'separado', colaboradores: Math.max(2, Math.min(60, +$('optColab').value || CONFIG.kickoff.colaboradoresPorTienda)) });
   const hab = P.dias.filter(d => d.fase !== 'inhabil');
   const rango = f => { const x = hab.filter(d => d.fase === f); return x.length ? [x[0].fecha, x[x.length-1].fecha, x.length] : null; };
   P.fases = { entrenamiento: rango('entrenamiento'), kickoff: rango('kickoff'), refuerzo: rango('refuerzo'), cierre: rango('cierre'), continuidad: rango('continuidad') };
@@ -404,7 +412,7 @@ function resumen() {
   <div class="figures">
     <div><b>31</b><span>farmacias en 3 áreas</span></div>
     <div><b>${F.entrenamiento[2]} días</b><span>de entrenamiento a Oswaldo</span></div>
-    <div><b>${F.kickoff[2]-1} días</b><span>de kickoff, ${(F.kickoff[2]-1)*2} talleres en sala</span></div>
+    <div><b>${F.kickoff[2]-1} días</b><span>de kickoff, ${P.sesiones * 2 * (P.separado ? 1 : 2)} talleres de 2 horas en sala</span></div>
     <div><b>${fcorta(c1)}</b><span>ciclo 1 completo en las 31 farmacias, con Mariana</span></div>
     <div><b>${P.refConM} de ${P.refTotal}</b><span>visitas de refuerzo hechas con Mariana (${pct}%)</span></div>
   </div>
@@ -422,7 +430,10 @@ function resumen() {
         <div class="when">${flarga(F.kickoff[0])} al ${flarga(F.kickoff[1])}</div>
         <h3>Kickoff en las 31 farmacias</h3>
         <p>Los talleres se hacen en las salas de capacitación Las Heras y Los Olivos, y los participantes van presencialmente. Para no dejar las farmacias sin personal, a cada taller van como máximo ${CONFIG.kickoff.maxPorTienda} personas de una misma farmacia. Por eso cada área necesita varias rondas: con ${P.colab} colaboradores por farmacia son ${P.porTurno} rondas por turno.</p>
-        <ul><li>Mariana y Oswaldo facilitan juntos un taller a la vez, nunca en paralelo: ${CONFIG.kickoff.horarioAM} para el turno mañana y ${CONFIG.kickoff.horarioPM} para el turno tarde.</li>
+        <ul><li>Cada participante recibe dos talleres de 2 horas: Conductas y Pilares. Mariana y Oswaldo facilitan juntos, un taller a la vez, nunca en paralelo.</li>
+        ${P.separado
+          ? `<li>Un taller por visita a la sala: primero Conductas y, tres días después, Pilares. Turno mañana ${CONFIG.kickoff.separado.AM} y turno tarde ${CONFIG.kickoff.separado.PM}. El participante va dos veces a la sala, pero se ausenta solo 2 horas de su farmacia cada vez.</li>`
+          : `<li>Ambos talleres el mismo día, en un solo traslado. Turno mañana: ${CONFIG.kickoff.mismoDia.AM}. Turno tarde: ${CONFIG.kickoff.mismoDia.PM}. Es una jornada completa para Mariana y Oswaldo.</li>`}
         <li>Las áreas se alternan día a día (Área 1, Área 2, Área 3), así cada farmacia envía personal solo un día de cada tres.</li>
         <li>${[1,2,3].map(a => `${AREAS[a].nombre}: ${CONFIG.kickoff.salaPorArea[a]}`).join('; ')}.</li>
         <li>El último día se consolida la asistencia y se arman las rutas de refuerzo.</li></ul>
@@ -615,7 +626,7 @@ function supuestos() {
       <li>Colaboradores por farmacia: el cálculo usa ${P.colab} en promedio (mitad por turno). Cambia el número en la barra superior y el kickoff se recalcula; las farmacias con más personal pueden necesitar una ronda extra.</li>
       <li>Sala por área: ${[1,2,3].map(a => `${AREAS[a].nombre} en ${CONFIG.kickoff.salaPorArea[a]}`).join(', ')}. Confirmar con cada Gerente de Área según los traslados de su equipo.</li>
       <li>Capacidad de las salas: cada taller reúne hasta 22 personas (Área 3: 11 farmacias por 2 personas).</li>
-      <li>Traslado de los participantes a la sala y regreso a tiempo para su turno.</li>
+      <li>Traslado de los participantes a la sala y regreso a tiempo para su turno. En la modalidad de un día, cada participante está fuera de su farmacia unas 4 horas y media más el traslado.</li>
       <li>Transporte de Mariana y Oswaldo, sobre todo para Área 1 (Pilar, KM 47,5, Nordelta).</li>
     </ul></div>
     <div class="box"><h3>Riesgos y cómo mitigarlos</h3><ul>
@@ -650,6 +661,7 @@ document.querySelectorAll('.tabs button').forEach(b => b.onclick = () => {
 $('opt7').onchange = calcular;
 $('optPausa').onchange = calcular;
 $('optColab').onchange = calcular;
+$('optKick').onchange = calcular;
 $('btnXlsx').onclick = exportar;
 calcular();
 </script>
