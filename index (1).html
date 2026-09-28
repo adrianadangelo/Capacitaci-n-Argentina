@@ -1,0 +1,637 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mariana Meza en Argentina · Cronograma 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js" defer></script>
+<style>
+:root{
+  --navy:#001E62; --blue:#418FDE; --cyan:#00A6DC; --sky:#E8F2FC; --bg:#F4F7FB;
+  --line:#D6E1EE; --muted:#5A6B8C; --white:#fff; --warn:#B25E00; --warnbg:#FFF4E5;
+  --a1:#418FDE; --a2:#00A6DC; --a3:#2B4FA3;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:Montserrat,Arial,Helvetica,sans-serif;color:var(--navy);background:var(--bg);font-size:15px;line-height:1.55}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+a{color:var(--blue)}
+button,select,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--cyan);outline-offset:2px}
+
+/* Encabezado */
+.top{background:var(--navy);color:#fff;padding:28px 0 34px}
+.brand{font-weight:800;letter-spacing:.06em;font-size:15px;display:flex;gap:14px;align-items:baseline;flex-wrap:wrap}
+.brand span{font-weight:500;letter-spacing:0;opacity:.75;font-size:13px}
+.top h1{font-size:clamp(30px,5vw,52px);line-height:1.05;margin:26px 0 10px;font-weight:800;letter-spacing:-.02em}
+.top .lead{max-width:68ch;margin:0;font-size:16px;opacity:.9}
+
+/* Línea de tiempo del encabezado */
+.timeline{margin-top:44px}
+.tl-track{position:relative;height:58px;border-radius:6px;background:rgba(255,255,255,.08)}
+.tl-seg{position:absolute;top:0;bottom:0;border-radius:4px;padding:8px 10px;font-size:12px;font-weight:600;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;line-height:1.25}
+.tl-seg small{display:block;font-weight:500;opacity:.85}
+.tl-seg.entrenamiento{background:#fff;color:var(--navy)}
+.tl-seg.kickoff{background:var(--cyan);color:#fff}
+.tl-seg.refuerzo{background:var(--blue);color:#fff}
+.tl-seg.continuidad{background:repeating-linear-gradient(135deg,rgba(65,143,222,.45) 0 8px,rgba(65,143,222,.25) 8px 16px);color:#fff}
+.tl-seg.pausa{background:rgba(255,255,255,.1);color:rgba(255,255,255,.7)}
+.tl-mark{position:absolute;top:-14px;bottom:-24px;width:0;border-left:2px dashed #fff}
+.tl-mark span{position:absolute;top:-4px;left:6px;transform:translateY(-100%);font-size:12px;font-weight:700;white-space:nowrap}
+.tl-months{position:relative;height:18px;margin-top:6px;font-size:11px;opacity:.7}
+.tl-months span{position:absolute;transform:translateX(-50%)}
+
+/* Pestañas y controles */
+.bar{position:sticky;top:0;z-index:5;background:var(--white);border-bottom:1px solid var(--line)}
+.bar .wrap{display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding-top:8px;padding-bottom:8px}
+.tabs{display:flex;gap:4px;flex-wrap:wrap}
+.tabs button{border:0;background:none;padding:9px 14px;border-radius:6px;font-weight:600;cursor:pointer;color:var(--muted)}
+.tabs button[aria-selected="true"]{background:var(--sky);color:var(--navy)}
+.controls{display:flex;gap:14px;align-items:center;flex-wrap:wrap;font-size:13px}
+.controls label{display:flex;gap:6px;align-items:center;cursor:pointer}
+.btn{border:1px solid var(--navy);background:var(--navy);color:#fff;border-radius:6px;padding:8px 14px;font-weight:600;cursor:pointer}
+.btn:hover{background:#0B2E80}
+
+main{padding:30px 20px 60px}
+.panel{display:none}
+.panel.active{display:block}
+h2{font-size:24px;margin:0 0 6px;font-weight:800;letter-spacing:-.01em}
+h3{font-size:17px;margin:0 0 8px;font-weight:700}
+.sub{color:var(--muted);margin:0 0 22px;max-width:75ch}
+section.block{margin-bottom:40px}
+
+/* Cifras */
+.figures{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:0;border-top:3px solid var(--navy);border-bottom:1px solid var(--line);margin-bottom:40px;background:#fff}
+.figures div{padding:18px 20px;border-right:1px solid var(--line)}
+.figures div:last-child{border-right:0}
+.figures b{display:block;font-size:34px;font-weight:800;line-height:1.1}
+.figures span{font-size:13px;color:var(--muted)}
+
+/* Fases */
+.phases{display:grid;gap:14px}
+.phase{display:grid;grid-template-columns:56px 1fr;gap:16px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:18px 20px;border-left:6px solid var(--blue)}
+.phase.entrenamiento{border-left-color:var(--navy)}
+.phase.kickoff{border-left-color:var(--cyan)}
+.phase.continuidad{border-left-color:#9DC3EC;border-left-style:dashed}
+.phase .n{font-size:30px;font-weight:800;color:var(--blue);line-height:1}
+.phase .when{font-weight:700;font-size:13px;color:var(--muted);margin-bottom:4px}
+.phase p{margin:4px 0 0;max-width:80ch}
+.phase ul{margin:8px 0 0;padding-left:18px}
+
+.two{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media (max-width:780px){.two{grid-template-columns:1fr}}
+.box{background:#fff;border:1px solid var(--line);border-radius:10px;padding:18px 20px}
+.box ul{margin:6px 0 0;padding-left:18px}
+.box li{margin:4px 0}
+.box.solid{background:var(--navy);color:#fff;border-color:var(--navy)}
+.box.stripe{background:repeating-linear-gradient(135deg,#fff 0 10px,#F3F8FE 10px 20px)}
+
+table{border-collapse:collapse;width:100%;background:#fff;font-size:13px}
+th,td{border-bottom:1px solid var(--line);padding:9px 10px;text-align:left;vertical-align:top}
+th{font-weight:700;background:var(--sky);white-space:nowrap}
+.scroll{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:#fff}
+
+.chip{display:inline-block;border-radius:999px;padding:1px 9px;font-size:12px;font-weight:700;color:#fff;white-space:nowrap}
+.chip.a1{background:var(--a1)} .chip.a2{background:var(--a2)} .chip.a3{background:var(--a3)}
+.who-m{font-weight:700}
+.who-o{color:var(--muted)}
+
+/* Áreas */
+.areas{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media (max-width:900px){.areas{grid-template-columns:1fr}}
+.area{background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px 18px;border-top:5px solid var(--a1)}
+.area.a2{border-top-color:var(--a2)} .area.a3{border-top-color:var(--a3)}
+.area .ppl{font-size:13px;color:var(--muted);margin:2px 0 10px}
+.area ol{margin:0;padding-left:20px;columns:2;column-gap:18px;font-size:13px}
+
+/* Matriz semanal */
+.matrix{border-collapse:separate;border-spacing:0;font-size:12px}
+.matrix th,.matrix td{border-bottom:1px solid var(--line);border-right:1px solid #EDF2F8;padding:0;text-align:center;min-width:44px;height:34px}
+.matrix thead th{background:#fff;font-weight:600;padding:4px 2px;color:var(--muted)}
+.matrix thead tr.mon th{color:var(--navy);font-weight:800;font-size:13px;border-bottom:0;text-align:left;padding-left:6px}
+.matrix .rowh{position:sticky;left:0;background:#fff;z-index:2;text-align:left;padding:0 10px;min-width:150px;font-weight:700;white-space:nowrap}
+.matrix .turn{position:sticky;left:0;white-space:nowrap;background:var(--sky);z-index:2;text-align:left;padding:0 10px;font-weight:800}
+.cell{display:flex;align-items:center;justify-content:center;height:100%;font-weight:700;font-size:11px;cursor:default}
+.cell.k{background:var(--cyan);color:#fff}
+.cell.c{background:var(--blue);color:#fff}
+.cell.co{background:repeating-linear-gradient(135deg,#8DBBEB 0 6px,#A9CDF1 6px 12px);color:var(--navy)}
+.cell.t{background:var(--navy);color:#fff}
+.cell.h{background:#F0F0F0;color:#888}
+.matrix td.leave{border-left:3px dashed var(--navy)}
+.legend{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;margin:14px 0 0;color:var(--muted)}
+.legend i{display:inline-block;width:16px;height:16px;border-radius:3px;vertical-align:-3px;margin-right:6px}
+
+/* Agenda */
+.filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+.filters select,.filters input{border:1px solid var(--line);background:#fff;border-radius:6px;padding:8px 10px}
+.week{margin-bottom:26px}
+.week h3{font-size:14px;color:var(--muted);font-weight:700;border-bottom:1px solid var(--line);padding-bottom:6px;margin-bottom:10px}
+.day{display:grid;grid-template-columns:70px 1fr;gap:14px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px 16px;margin-bottom:8px}
+.day .date b{display:block;font-size:26px;font-weight:800;line-height:1}
+.day .date span{font-size:12px;color:var(--muted);text-transform:capitalize}
+.day .meta{font-size:12px;font-weight:700;color:var(--muted);margin-bottom:4px}
+.day .title{font-weight:700}
+.day .det{margin:2px 0 0;font-size:14px}
+.slot{display:grid;grid-template-columns:70px 1fr;gap:10px;padding:6px 0;border-top:1px dashed var(--line);font-size:14px}
+.slot:first-of-type{border-top:0}
+.slot .t{font-weight:800;font-size:12px;padding-top:2px}
+.slot .cyc{font-weight:600;margin-left:6px}
+.slot .note{color:var(--muted)}
+.day.inhabil{background:#F7F7F7;border-style:dashed}
+.day.inhabil .title{color:#777;font-weight:600}
+.day.cierre{border:2px solid var(--navy)}
+.day.continuidad{background:repeating-linear-gradient(135deg,#fff 0 12px,#F7FAFE 12px 24px)}
+
+.warn{background:var(--warnbg);border-left:4px solid var(--warn);padding:12px 16px;border-radius:6px;margin-bottom:22px;font-size:14px}
+.empty{padding:30px;text-align:center;color:var(--muted);background:#fff;border:1px dashed var(--line);border-radius:10px}
+td.m{font-weight:700}
+td.o{color:var(--muted)}
+td small{display:block;white-space:nowrap}
+footer{color:var(--muted);font-size:12px;text-align:center;padding:20px}
+@media (max-width:600px){
+  .day{grid-template-columns:52px 1fr;padding:12px}
+  .slot{grid-template-columns:1fr;gap:2px}
+  .tl-seg small{display:none}
+}
+@media (prefers-reduced-motion:no-preference){.panel.active{animation:none}}
+@media print{.bar{display:none}.panel{display:block!important;page-break-after:always}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <div class="brand">FARMATODO <span>Capacitación, VP de Recursos Humanos</span></div>
+    <h1>Mariana Meza en Argentina</h1>
+    <p class="lead">Del 9 de octubre al 13 de diciembre de 2026, Mariana entrena a Oswaldo Saldivia en las 5 conductas de servicio y los 5 pilares de la operación, y juntos las llevan a las 31 farmacias de las 3 áreas de Operaciones.</p>
+    <div id="timeline" class="timeline" aria-label="Línea de tiempo de las fases"></div>
+  </div>
+</header>
+
+<div class="bar">
+  <div class="wrap">
+    <div class="tabs" role="tablist">
+      <button role="tab" aria-selected="true" data-tab="resumen">Resumen</button>
+      <button role="tab" aria-selected="false" data-tab="matriz">Cronograma semanal</button>
+      <button role="tab" aria-selected="false" data-tab="agenda">Agenda diaria</button>
+      <button role="tab" aria-selected="false" data-tab="farmacias">Farmacias</button>
+      <button role="tab" aria-selected="false" data-tab="supuestos">Supuestos y riesgos</button>
+    </div>
+    <div class="controls">
+      <label><input type="checkbox" id="opt7"> Trabajar el lun 7-dic (no laborable)</label>
+      <label><input type="checkbox" id="optPausa" checked> Pausa navideña</label>
+      <button class="btn" id="btnXlsx">Descargar Excel</button>
+    </div>
+  </div>
+</div>
+
+<main class="wrap" style="padding-left:20px;padding-right:20px">
+  <section id="resumen" class="panel active" role="tabpanel"></section>
+  <section id="matriz" class="panel" role="tabpanel"></section>
+  <section id="agenda" class="panel" role="tabpanel"></section>
+  <section id="farmacias" class="panel" role="tabpanel"></section>
+  <section id="supuestos" class="panel" role="tabpanel"></section>
+</main>
+<footer>Gerencia de Capacitación, Farmatodo. Cronograma generado automáticamente a partir de la distribución de áreas de Operaciones Argentina.</footer>
+<script>
+// ===== CONFIGURACIÓN EDITABLE =====
+const CONFIG = {
+  inicio: '2026-10-09',
+  ultimoDiaMariana: '2026-12-11',   // viernes; regresa el 13-dic
+  salidaMariana: '2026-12-13',
+  pausa: { desde: '2026-12-21', hasta: '2027-01-01', motivo: 'Temporada alta navideña: sin visitas de campo' },
+  capacidad: { 1: 2, 2: 3, 3: 2 },  // tiendas por medio turno (AM 8–12 / PM 13–17)
+  conductas: ['Conducta 1','Conducta 2','Conducta 3','Conducta 4','Conducta 5'],
+  pilares:   ['Pilar 1','Pilar 2','Pilar 3','Pilar 4','Pilar 5'],
+};
+const FERIADOS = {
+  '2026-10-12': 'Feriado: Día del Respeto a la Diversidad Cultural',
+  '2026-11-23': 'Feriado: Día de la Soberanía Nacional (trasladado del 20)',
+  '2026-12-08': 'Feriado: Inmaculada Concepción',
+  '2026-12-25': 'Feriado: Navidad',
+  '2027-01-01': 'Feriado: Año Nuevo',
+  '2027-02-08': 'Feriado: Carnaval',
+  '2027-02-09': 'Feriado: Carnaval',
+  '2027-03-24': 'Feriado: Día de la Memoria',
+};
+const NO_LABORABLES = { '2026-12-07': 'Día no laborable con fines turísticos (puente)' };
+
+const AREAS = {
+  1: { nombre: 'Área 1', gerente: 'Miguel González', coord: 'Mariano Murta',
+       tiendas: ['Colectora','Quinta 46','Soria','KM 47,5','Iglesia','Alesel','Walker','Sanfar','San Isidro','Nordelta'] },
+  2: { nombre: 'Área 2', gerente: 'Karol Brinkmann', coord: 'Reinaldo Contreras',
+       tiendas: ['Las Heras','Salguero','Gran Ferrari','Perdriel','Lupo','Patricios','Caballito','Juncal','Parque Chacabuco','Villa del Parque I'] },
+  3: { nombre: 'Área 3', gerente: 'Eduardo Páez', coord: 'Alejandra Zacarías',
+       tiendas: ['Olleros','Botánico','Mark','Rivadavia','Devoto','25 de Mayo (Nobleza)','San Martín','Scalabrini','Olivos','Villa del Parque II','Villa Devoto'] },
+};
+const GRUPOS_KICKOFF = { 1: [3,3,2,2], 2: [3,3,2,2], 3: [3,3,3,2] };
+
+const ENTRENAMIENTO = [
+  { t: 'Llegada, inducción y alineación', d: 'Reunión con Coordinadores de RRHH Operaciones y Gerentes de Área. Revisión del plan, materiales y logística.' },
+  { t: '5 conductas de servicio · teoría y modelaje', d: 'Mariana presenta y modela las 5 conductas. Oswaldo observa y toma notas de facilitación.' },
+  { t: '5 conductas de servicio · práctica', d: 'Role play, casos reales de tienda y teach-back de Oswaldo con feedback.' },
+  { t: '5 pilares de la operación · teoría en tienda', d: 'Recorrido guiado en una tienda cercana aplicando el checklist de los 5 pilares.' },
+  { t: '5 pilares de la operación · práctica', d: 'Oswaldo aplica el checklist en tienda y explica cada pilar al equipo con acompañamiento.' },
+  { t: 'Metodología de facilitación y guion del kickoff', d: 'Estructura del taller, dinámicas, manejo de grupo y cómo registrar asistencia y evidencias.' },
+  { t: 'Ensayo general y certificación', d: 'Oswaldo facilita el kickoff completo. Validación de Mariana, ajustes finales y confirmación de convocatorias.' },
+];
+
+// ===== utilidades de fecha (UTC) =====
+const D = s => { const [y,m,d] = s.split('-').map(Number); return new Date(Date.UTC(y,m-1,d)); };
+const S = dt => dt.toISOString().slice(0,10);
+const addDays = (s,n) => { const x = D(s); x.setUTCDate(x.getUTCDate()+n); return S(x); };
+const dow = s => D(s).getUTCDay();
+
+function planificar(opts = {}) {
+  const trabajar7dic = !!opts.trabajar7dic;
+  const conPausa = opts.pausa !== false;
+  const dias = [];      // agenda día a día
+  const visitas = [];   // {tienda, area, ciclo, turno, fecha, resp}
+  const esHabil = s => {
+    const w = dow(s); if (w === 0 || w === 6) return false;
+    if (FERIADOS[s]) return false;
+    if (NO_LABORABLES[s] && !trabajar7dic) return false;
+    return true;
+  };
+  const enPausa = s => conPausa && s >= CONFIG.pausa.desde && s <= CONFIG.pausa.hasta;
+  const resp = s => s <= CONFIG.ultimoDiaMariana ? 'Mariana y Oswaldo' : 'Oswaldo';
+  const rol = s => s < '2026-11-24' ? 'Mariana lidera, Oswaldo co-facilita' : s < '2026-12-07' ? 'Co-facilitación 50/50' : s <= CONFIG.ultimoDiaMariana ? 'Oswaldo lidera, Mariana observa y da feedback' : 'Oswaldo facilita solo';
+
+  let f = CONFIG.inicio;
+  const push = (s, o) => dias.push(Object.assign({ fecha: s, resp: resp(s) }, o));
+  const next = () => { f = addDays(f,1); };
+  const registraInhabil = s => {
+    const w = dow(s); if (w === 0 || w === 6) return;
+    push(s, { fase: 'inhabil', titulo: FERIADOS[s] || NO_LABORABLES[s] || CONFIG.pausa.motivo });
+  };
+
+  // Fase 1: entrenamiento
+  let i = 0;
+  while (i < ENTRENAMIENTO.length) {
+    if (esHabil(f)) { push(f, { fase: 'entrenamiento', titulo: ENTRENAMIENTO[i].t, detalle: ENTRENAMIENTO[i].d, resp: 'Mariana entrena a Oswaldo' }); i++; }
+    else registraInhabil(f);
+    next();
+  }
+  // Fase 2: kickoff
+  const grupos = [];
+  for (const a of [1,2,3]) { let k = 0; GRUPOS_KICKOFF[a].forEach((n,gi) => { grupos.push({ area: a, n: gi+1, tiendas: AREAS[a].tiendas.slice(k,k+n) }); k += n; }); }
+  i = 0;
+  while (i <= grupos.length) {
+    if (!esHabil(f)) { registraInhabil(f); next(); continue; }
+    if (i < grupos.length) {
+      const g = grupos[i];
+      push(f, { fase: 'kickoff', area: g.area, titulo: `Kickoff ${AREAS[g.area].nombre} · grupo ${g.n}`,
+        am: { area: g.area, tiendas: g.tiendas, nota: 'Taller 9:00–11:00 · turno mañana' },
+        pm: { area: g.area, tiendas: g.tiendas, nota: 'Taller 14:00–16:00 · turno tarde' } });
+      g.tiendas.forEach(t => { visitas.push({ tienda: t, area: g.area, ciclo: 0, turno: 'AM', fecha: f, resp: resp(f) }); visitas.push({ tienda: t, area: g.area, ciclo: 0, turno: 'PM', fecha: f, resp: resp(f) }); });
+    } else {
+      push(f, { fase: 'kickoff', titulo: 'Cierre del kickoff', detalle: 'Consolidar asistencia, feedback de tiendas y ajustar material del ciclo 1. Armar rutas de refuerzo con cada Gerente de Área.' });
+    }
+    i++; next();
+  }
+  // Fase 3/4: refuerzo por ciclos (1 conducta + 1 pilar), AM y PM desfasados una semana
+  const mkQueue = () => { const q = []; for (let c = 1; c <= 5; c++) for (const a of [1,2,3]) q.push({ ciclo: c, area: a, pend: AREAS[a].tiendas.slice() }); return q; };
+  const qAM = mkQueue(), qPM = mkQueue();
+  const iniRefuerzo = (() => { let s = f; while (!esHabil(s)) s = addDays(s,1); return s; })();
+  const iniPM = addDays(iniRefuerzo, 7);
+  const amIniciado = new Set();
+  const tomar = (q, s, turno) => {
+    while (q.length && q[0].pend.length === 0) q.shift();
+    if (!q.length) return null;
+    const b = q[0];
+    if (turno === 'PM' && !amIniciado.has(b.ciclo+'-'+b.area)) return null;
+    const lote = b.pend.splice(0, CONFIG.capacidad[b.area]);
+    if (turno === 'AM') amIniciado.add(b.ciclo+'-'+b.area);
+    lote.forEach(t => visitas.push({ tienda: t, area: b.area, ciclo: b.ciclo, turno, fecha: s, resp: resp(s) }));
+    return { area: b.area, ciclo: b.ciclo, tiendas: lote };
+  };
+  let guard = 0;
+  while ((qAM.some(b => b.pend.length) || qPM.some(b => b.pend.length)) && guard++ < 400) {
+    if (!esHabil(f) || enPausa(f)) { registraInhabil(f); next(); continue; }
+    if (f === CONFIG.ultimoDiaMariana) {
+      push(f, { fase: 'cierre', titulo: 'Cierre y traspaso a Oswaldo', detalle: 'Informe de avance por tienda, reunión con Gerentes de Área y Coordinadores de RRHH, entrega del plan de continuidad y rutas de Oswaldo.' });
+      next(); continue;
+    }
+    const am = tomar(qAM, f, 'AM');
+    const pm = f >= iniPM ? tomar(qPM, f, 'PM') : null;
+    const fase = f <= CONFIG.ultimoDiaMariana ? 'refuerzo' : 'continuidad';
+    const d = { fase, am, pm, rol: rol(f) };
+    if (!pm && f < iniPM) d.pmNota = 'Repesca de kickoff (colaboradores ausentes) y registro de evidencias';
+    else if (!pm) d.pmNota = 'Seguimiento, registro de evidencias y reporte';
+    if (!am) d.amNota = 'Seguimiento, registro de evidencias y reporte';
+    push(f, d);
+    next();
+  }
+  return { dias, visitas, iniRefuerzo, iniPM, fin: dias[dias.length-1].fecha };
+}
+
+
+// ===== Interfaz =====
+const MES = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+const MESL = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+const DIA = ['dom','lun','mar','mié','jue','vie','sáb'];
+const fcorta = s => { const x = D(s); return `${x.getUTCDate()} ${MES[x.getUTCMonth()]}`; };
+const flarga = s => { const x = D(s); return `${DIA[x.getUTCDay()]} ${x.getUTCDate()} ${MES[x.getUTCMonth()]}${x.getUTCFullYear() !== 2026 ? ' ' + x.getUTCFullYear() : ''}`; };
+const lunes = s => { const w = dow(s); return addDays(s, w === 0 ? -6 : 1 - w); };
+const ciclo = c => `${CONFIG.conductas[c-1]} + ${CONFIG.pilares[c-1]}`;
+const esc = t => String(t).replace(/[&<>"]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
+const chip = a => `<span class="chip a${a}">${AREAS[a].nombre}</span>`;
+const $ = id => document.getElementById(id);
+
+let P;
+function calcular() {
+  P = planificar({ trabajar7dic: $('opt7').checked, pausa: $('optPausa').checked });
+  const hab = P.dias.filter(d => d.fase !== 'inhabil');
+  const rango = f => { const x = hab.filter(d => d.fase === f); return x.length ? [x[0].fecha, x[x.length-1].fecha, x.length] : null; };
+  P.fases = { entrenamiento: rango('entrenamiento'), kickoff: rango('kickoff'), refuerzo: rango('refuerzo'), cierre: rango('cierre'), continuidad: rango('continuidad') };
+  P.finCiclo = {}; P.iniCiclo = {};
+  P.visitas.forEach(v => { const c = v.ciclo; if (!P.finCiclo[c] || v.fecha > P.finCiclo[c]) P.finCiclo[c] = v.fecha; if (!P.iniCiclo[c] || v.fecha < P.iniCiclo[c]) P.iniCiclo[c] = v.fecha; });
+  P.refConM = P.visitas.filter(v => v.ciclo > 0 && v.fecha <= CONFIG.ultimoDiaMariana).length;
+  P.refTotal = P.visitas.filter(v => v.ciclo > 0).length;
+  render();
+}
+
+function render() { timeline(); resumen(); matriz(); agenda(); farmacias(); supuestos(); }
+
+function timeline() {
+  const ini = CONFIG.inicio, fin = P.fin;
+  const tot = (D(fin) - D(ini)) / 864e5 + 1;
+  const pos = s => ((D(s) - D(ini)) / 864e5) / tot * 100;
+  const seg = (cls, a, b, t, sm) => { const w = pos(addDays(b,1)) - pos(a); return `<div class="tl-seg ${cls}" style="left:${pos(a)}%;width:${w}%" title="${esc(t)}: ${fcorta(a)} al ${fcorta(b)}">${w > 7 ? t + '<small>' + sm + '</small>' : ''}</div>`; };
+  const F = P.fases;
+  let h = '<div class="tl-track">';
+  h += seg('entrenamiento', F.entrenamiento[0], F.entrenamiento[1], 'Entrenamiento', `${fcorta(F.entrenamiento[0])}–${fcorta(F.entrenamiento[1])}`);
+  h += seg('kickoff', F.kickoff[0], F.kickoff[1], 'Kickoff', `${fcorta(F.kickoff[0])}–${fcorta(F.kickoff[1])}`);
+  h += seg('refuerzo', F.refuerzo[0], CONFIG.ultimoDiaMariana, 'Refuerzo con Mariana', `${fcorta(F.refuerzo[0])}–${fcorta(CONFIG.ultimoDiaMariana)}`);
+  if (F.continuidad) {
+    if ($('optPausa').checked) {
+      h += seg('continuidad', F.continuidad[0], addDays(CONFIG.pausa.desde,-1), 'Oswaldo', '');
+      h += seg('pausa', CONFIG.pausa.desde, CONFIG.pausa.hasta, 'Pausa', '');
+      h += seg('continuidad', addDays(CONFIG.pausa.hasta,1), F.continuidad[1], 'Oswaldo continúa solo', `hasta ${flarga(F.continuidad[1])}`);
+    } else h += seg('continuidad', F.continuidad[0], F.continuidad[1], 'Oswaldo continúa solo', `hasta ${flarga(F.continuidad[1])}`);
+  }
+  h += `<div class="tl-mark" style="left:${pos(CONFIG.salidaMariana)}%"><span>13 dic, regresa Mariana</span></div></div><div class="tl-months">`;
+  h += `<span style="left:0;transform:none">${MES[D(ini).getUTCMonth()]}</span>`;
+  let m = D(ini); m = new Date(Date.UTC(m.getUTCFullYear(), m.getUTCMonth()+1, 1));
+  while (S(m) <= fin) { h += `<span style="left:${pos(S(m))}%">${MES[m.getUTCMonth()]}</span>`; m = new Date(Date.UTC(m.getUTCFullYear(), m.getUTCMonth()+1, 1)); }
+  $('timeline').innerHTML = h + '</div>';
+}
+
+function resumen() {
+  const F = P.fases;
+  const c1 = P.finCiclo[1];
+  const pct = Math.round(P.refConM / P.refTotal * 100);
+  const cicloRows = [1,2,3,4,5].map(c => {
+    const fin = P.finCiclo[c], ini = P.iniCiclo[c];
+    const quien = fin <= CONFIG.ultimoDiaMariana ? '<span class="who-m">Mariana y Oswaldo</span>' : ini <= CONFIG.ultimoDiaMariana ? '<span class="who-m">Inicia con Mariana</span>, cierra Oswaldo' : '<span class="who-o">Oswaldo</span>';
+    return `<tr><td><b>Ciclo ${c}</b></td><td>${esc(ciclo(c))}</td><td>${flarga(ini)}</td><td>${flarga(fin)}</td><td>${quien}</td></tr>`;
+  }).join('');
+  const hechoC2 = P.visitas.filter(v => v.ciclo === 2 && v.fecha <= CONFIG.ultimoDiaMariana).length;
+  $('resumen').innerHTML = `
+  <div class="figures">
+    <div><b>31</b><span>farmacias en 3 áreas</span></div>
+    <div><b>${F.entrenamiento[2]} días</b><span>de entrenamiento a Oswaldo</span></div>
+    <div><b>${F.kickoff[2]-1} días</b><span>de kickoff, ${(F.kickoff[2]-1)*2} talleres AM y PM</span></div>
+    <div><b>${fcorta(c1)}</b><span>ciclo 1 completo en las 31 farmacias, con Mariana</span></div>
+    <div><b>${P.refConM} de ${P.refTotal}</b><span>visitas de refuerzo hechas con Mariana (${pct}%)</span></div>
+  </div>
+
+  <section class="block">
+    <h2>Las cuatro fases</h2>
+    <p class="sub">Cada fase empieza cuando termina la anterior. Las fechas se recalculan si cambias las opciones de la barra superior.</p>
+    <div class="phases">
+      <div class="phase entrenamiento"><div class="n">1</div><div>
+        <div class="when">${flarga(F.entrenamiento[0])} al ${flarga(F.entrenamiento[1])}, ${F.entrenamiento[2]} días hábiles</div>
+        <h3>Mariana entrena a Oswaldo</h3>
+        <p>Dos días de conductas de servicio, dos de pilares de la operación (en tienda), uno de metodología de facilitación y un ensayo general donde Oswaldo facilita el kickoff completo y Mariana lo certifica.</p>
+      </div></div>
+      <div class="phase kickoff"><div class="n">2</div><div>
+        <div class="when">${flarga(F.kickoff[0])} al ${flarga(F.kickoff[1])}</div>
+        <h3>Kickoff en las 31 farmacias</h3>
+        <p>Un grupo de 2 o 3 farmacias vecinas por día, con dos talleres: 9:00 a 11:00 para el turno mañana y 14:00 a 16:00 para el turno tarde. Área 1 primero, luego Área 2 y Área 3. El último día se consolida asistencia y se arman las rutas de refuerzo.</p>
+      </div></div>
+      <div class="phase refuerzo"><div class="n">3</div><div>
+        <div class="when">${flarga(F.refuerzo[0])} al ${flarga(CONFIG.ultimoDiaMariana)}</div>
+        <h3>Refuerzo en tienda con Mariana</h3>
+        <p>Cada visita refuerza 1 conducta y 1 pilar con el equipo del turno. El turno mañana arranca una semana antes que el turno tarde, igual que en el cronograma de referencia. El liderazgo pasa gradualmente a Oswaldo:</p>
+        <ul><li>Hasta el 20 nov: Mariana lidera, Oswaldo co-facilita.</li><li>24 nov al 4 dic: co-facilitación 50/50.</li><li>Desde el 7 dic: Oswaldo lidera, Mariana observa y da feedback.</li><li>11 dic: cierre, informe por tienda y traspaso formal.</li></ul>
+      </div></div>
+      <div class="phase continuidad"><div class="n">4</div><div>
+        <div class="when">${F.continuidad ? flarga(F.continuidad[0]) + ' al ' + flarga(F.continuidad[1]) : '—'}</div>
+        <h3>Oswaldo continúa solo</h3>
+        <p>Completa el ciclo 2 y ejecuta los ciclos 3, 4 y 5 con la misma ruta y ritmo.${$('optPausa').checked ? ' Sin visitas de campo del 21 dic al 1 ene por temporada alta.' : ''} Mariana le da seguimiento remoto quincenal.</p>
+      </div></div>
+    </div>
+  </section>
+
+  <section class="block two">
+    <div class="box solid">
+      <h3>Listo antes del 13 de diciembre</h3>
+      <ul>
+        <li>Oswaldo entrenado y certificado como facilitador.</li>
+        <li>Kickoff en las 31 farmacias, ambos turnos.</li>
+        <li>Ciclo 1 (${esc(ciclo(1))}) completo en las 31 farmacias, AM y PM, el ${flarga(c1)}.</li>
+        <li>Ciclo 2 iniciado: ${hechoC2} de 62 visitas hechas, con Oswaldo liderando.</li>
+      </ul>
+    </div>
+    <div class="box stripe">
+      <h3>Lo que continúa Oswaldo</h3>
+      <ul>
+        <li>Resto del ciclo 2 y ciclos 3, 4 y 5: ${P.refTotal - P.refConM} visitas.</li>
+        <li>Cierre estimado: ${flarga(P.fin)}.</li>
+        <li>Reporte semanal a los Coordinadores de RRHH Operaciones y quincenal a Mariana.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2>Ciclos de refuerzo</h2>
+    <p class="sub">Un ciclo es una visita a cada farmacia en el turno mañana y otra en el turno tarde, con 1 conducta y 1 pilar.</p>
+    <div class="scroll"><table><thead><tr><th>Ciclo</th><th>Contenido</th><th>Inicia</th><th>Termina</th><th>Responsable</th></tr></thead><tbody>${cicloRows}</tbody></table></div>
+  </section>
+
+  <section class="block">
+    <h2>Áreas y farmacias</h2>
+    <p class="sub">Distribución de Operaciones vigente. El orden de la lista define el orden de visita.</p>
+    <div class="areas">${[1,2,3].map(a => `<div class="area a${a}"><h3>${AREAS[a].nombre} · ${AREAS[a].tiendas.length} farmacias</h3><div class="ppl">${AREAS[a].gerente}, Gerente de Área<br>${AREAS[a].coord}, Coord. RRHH Operaciones</div><ol>${AREAS[a].tiendas.map(t => `<li>${esc(t)}</li>`).join('')}</ol></div>`).join('')}</div>
+  </section>`;
+}
+
+function matriz() {
+  const hab = P.dias;
+  const semanas = [];
+  for (let s = lunes(CONFIG.inicio); s <= P.fin; s = addDays(s,7)) semanas.push(s);
+  const idx = {};
+  P.visitas.forEach(v => { const k = `${lunes(v.fecha)}|${v.turno}|${v.area}`; (idx[k] = idx[k] || []).push(v); });
+  const tr = {}; hab.filter(d => d.fase === 'entrenamiento').forEach(d => tr[lunes(d.fecha)] = (tr[lunes(d.fecha)] || 0) + 1);
+  const hol = {}; hab.filter(d => d.fase === 'inhabil').forEach(d => (hol[lunes(d.fecha)] = hol[lunes(d.fecha)] || []).push(`${flarga(d.fecha)}: ${d.titulo}`));
+  const leave = lunes(addDays(CONFIG.salidaMariana,1));
+  let h = `<h2>Cronograma semanal</h2><p class="sub">Misma lógica que el cronograma de referencia: cada fila es un área en un turno y cada columna una semana. Pasa el cursor sobre una celda para ver las farmacias. La línea punteada marca el regreso de Mariana.</p>`;
+  h += '<div class="scroll"><table class="matrix"><thead><tr class="mon"><th class="rowh"></th>';
+  let prev = -1, span = 0, cells = '';
+  const monthCells = [];
+  semanas.forEach(s => { const m = D(s).getUTCMonth(); if (m !== prev) { monthCells.push({ m, n: 1, y: D(s).getUTCFullYear() }); prev = m; } else monthCells[monthCells.length-1].n++; });
+  h += monthCells.map(c => `<th colspan="${c.n}">${MESL[c.m]}${c.y !== 2026 ? ' ' + c.y : ''}</th>`).join('');
+  h += '</tr><tr><th class="rowh">Semana del</th>' + semanas.map(s => `<th class="${s === leave ? 'leave' : ''}">${D(s).getUTCDate()}</th>`).join('') + '</tr></thead><tbody>';
+  // fila entrenamiento
+  h += '<tr><td class="rowh">Entrenamiento</td>' + semanas.map(s => { const lc = s === leave ? ' class="leave"' : ''; return tr[s] ? `<td${lc}><div class="cell t" title="${tr[s]} días de entrenamiento">E</div></td>` : `<td${lc}>${hol[s] && !idx[s+'|AM|1'] && !idx[s+'|AM|2'] && !idx[s+'|AM|3'] && !tr[s] ? '' : ''}</td>`; }).join('') + '</tr>';
+  for (const turno of ['AM','PM']) {
+    h += `<tr><td class="turn">${turno === 'AM' ? 'AM, turno mañana' : 'PM, turno tarde'}</td>${semanas.map(s => `<td class="${s === leave ? 'leave' : ''}" style="background:var(--sky)"></td>`).join('')}</tr>`;
+    for (const a of [1,2,3]) {
+      h += `<tr><td class="rowh">${chip(a)}</td>`;
+      semanas.forEach(s => {
+        const vs = idx[`${s}|${turno}|${a}`];
+        const lc = s === leave ? ' class="leave"' : '';
+        if (!vs) {
+          const pausa = $('optPausa').checked && s >= lunes(CONFIG.pausa.desde) && s <= CONFIG.pausa.hasta;
+          h += `<td${lc}>${pausa ? '<div class="cell h" title="Pausa navideña">·</div>' : ''}</td>`; return;
+        }
+        const cs = [...new Set(vs.map(v => v.ciclo))];
+        const lab = cs.map(c => c === 0 ? 'K' : 'C' + c).join('/');
+        const soloO = vs.every(v => v.fecha > CONFIG.ultimoDiaMariana);
+        const cls = cs.includes(0) ? 'k' : soloO ? 'co' : 'c';
+        const tip = vs.map(v => `${flarga(v.fecha)}: ${v.tienda}${v.ciclo ? ' (C' + v.ciclo + ')' : ' (kickoff)'}`).join('\n');
+        h += `<td${lc}><div class="cell ${cls}" title="${esc(tip)}">${lab}</div></td>`;
+      });
+      h += '</tr>';
+    }
+  }
+  h += '<tr><td class="rowh" style="font-weight:500;color:var(--muted)">Feriados</td>' + semanas.map(s => `<td class="${s === leave ? 'leave' : ''}">${hol[s] ? `<div class="cell h" title="${esc(hol[s].join('\n'))}">F</div>` : ''}</td>`).join('') + '</tr>';
+  h += '</tbody></table></div>';
+  h += `<div class="legend"><span><i style="background:var(--navy)"></i>E: entrenamiento</span><span><i style="background:var(--cyan)"></i>K: kickoff</span><span><i style="background:var(--blue)"></i>C1 a C5: ciclo con Mariana</span><span><i style="background:repeating-linear-gradient(135deg,#8DBBEB 0 6px,#A9CDF1 6px 12px)"></i>Ciclo con Oswaldo solo</span><span><i style="background:#F0F0F0"></i>F: feriado o pausa</span></div>`;
+  $('matriz').innerHTML = h;
+}
+
+const faseNombre = { entrenamiento: 'Entrenamiento', kickoff: 'Kickoff', refuerzo: 'Refuerzo con Mariana', cierre: 'Cierre y traspaso', continuidad: 'Oswaldo continúa solo', inhabil: 'No hábil' };
+let filtro = { fase: 'todas', area: 'todas' };
+function agenda() {
+  const opt = (v, t, cur) => `<option value="${v}"${v === cur ? ' selected' : ''}>${t}</option>`;
+  let h = `<h2>Agenda diaria</h2><p class="sub">Horario de lunes a viernes, 8:00 a 17:00. AM de 8:00 a 12:00 y PM de 13:00 a 17:00. Cada visita de refuerzo dura cerca de 60 minutos más el traslado.</p>
+  <div class="filters">
+    <select id="fFase" aria-label="Filtrar por fase">${opt('todas','Todas las fases',filtro.fase)}${opt('mariana','Solo mientras está Mariana',filtro.fase)}${['entrenamiento','kickoff','refuerzo','continuidad'].map(f => opt(f, faseNombre[f], filtro.fase)).join('')}</select>
+    <select id="fArea" aria-label="Filtrar por área">${opt('todas','Todas las áreas',filtro.area)}${[1,2,3].map(a => opt(String(a), AREAS[a].nombre, filtro.area)).join('')}</select>
+  </div>`;
+  const pasa = d => {
+    if (filtro.fase === 'mariana' && d.fecha > CONFIG.ultimoDiaMariana) return false;
+    if (!['todas','mariana'].includes(filtro.fase) && d.fase !== filtro.fase && !(filtro.fase === 'refuerzo' && d.fase === 'cierre')) return false;
+    if (filtro.area !== 'todas') { const a = +filtro.area; return (d.am && d.am.area === a) || (d.pm && d.pm.area === a) || d.area === a; }
+    return true;
+  };
+  const dias = P.dias.filter(pasa);
+  if (!dias.length) { $('agenda').innerHTML = h + '<div class="empty">No hay actividades con estos filtros. Cambia la fase o el área.</div>'; bindAgenda(); return; }
+  const porSemana = {};
+  dias.forEach(d => (porSemana[lunes(d.fecha)] = porSemana[lunes(d.fecha)] || []).push(d));
+  const slot = (t, b, nota) => {
+    if (!b) return nota ? `<div class="slot"><span class="t">${t}</span><span class="note">${esc(nota)}</span></div>` : '';
+    const lab = b.ciclo ? `Ciclo ${b.ciclo}: ${esc(ciclo(b.ciclo))}` : esc(b.nota || '');
+    return `<div class="slot"><span class="t">${t}</span><div>${chip(b.area)}<span class="cyc">${lab}</span><div>${b.tiendas.map(esc).join(', ')}</div></div></div>`;
+  };
+  for (const s of Object.keys(porSemana).sort()) {
+    h += `<div class="week"><h3>Semana del ${flarga(s)} al ${flarga(addDays(s,4))}</h3>`;
+    porSemana[s].forEach(d => {
+      const x = D(d.fecha);
+      h += `<article class="day ${d.fase}"><div class="date"><b>${x.getUTCDate()}</b><span>${DIA[x.getUTCDay()]} ${MES[x.getUTCMonth()]}</span></div><div>`;
+      if (d.fase === 'inhabil') h += `<div class="title">${esc(d.titulo)}</div>`;
+      else {
+        h += `<div class="meta">${faseNombre[d.fase]}. ${esc(d.rol || d.resp)}</div>`;
+        if (d.titulo) h += `<div class="title">${esc(d.titulo)}</div>`;
+        if (d.detalle) h += `<p class="det">${esc(d.detalle)}</p>`;
+        if (d.fase === 'kickoff' && d.am) h += slot('AM', d.am) + slot('PM', d.pm);
+        if (['refuerzo','continuidad'].includes(d.fase)) h += slot('AM', d.am, d.amNota) + slot('PM', d.pm, d.pmNota);
+      }
+      h += '</div></article>';
+    });
+    h += '</div>';
+  }
+  $('agenda').innerHTML = h; bindAgenda();
+}
+function bindAgenda() {
+  $('fFase').onchange = e => { filtro.fase = e.target.value; agenda(); };
+  $('fArea').onchange = e => { filtro.area = e.target.value; agenda(); };
+}
+
+let busca = '';
+function farmacias() {
+  const map = {};
+  P.visitas.forEach(v => { const m = (map[v.tienda] = map[v.tienda] || { area: v.area, c: {} }); (m.c[v.ciclo] = m.c[v.ciclo] || {})[v.turno] = v.fecha; });
+  const filas = [1,2,3].flatMap(a => AREAS[a].tiendas.map(t => ({ t, a }))).filter(r => r.t.toLowerCase().includes(busca.toLowerCase()));
+  let h = `<h2>Plan por farmacia</h2><p class="sub">Fecha de cada visita por turno. En negrita, las visitas que se hacen con Mariana; en gris, las que hace Oswaldo solo.</p>
+  <div class="filters"><input id="fBusca" type="search" placeholder="Buscar farmacia" value="${esc(busca)}" aria-label="Buscar farmacia"></div>
+  <div class="scroll"><table><thead><tr><th>Farmacia</th><th>Área</th><th>Kickoff</th>${[1,2,3,4,5].map(c => `<th title="${esc(ciclo(c))}">Ciclo ${c}</th>`).join('')}</tr></thead><tbody>`;
+  if (!filas.length) h += `<tr><td colspan="8" class="empty">Ninguna farmacia coincide con “${esc(busca)}”.</td></tr>`;
+  filas.forEach(({ t, a }) => {
+    const m = map[t];
+    h += `<tr><td><b>${esc(t)}</b></td><td>${chip(a)}</td><td class="m">${fcorta(m.c[0].AM)}</td>`;
+    for (let c = 1; c <= 5; c++) {
+      const x = m.c[c] || {};
+      const cls = x.PM && x.PM <= CONFIG.ultimoDiaMariana ? 'm' : x.AM && x.AM <= CONFIG.ultimoDiaMariana ? '' : 'o';
+      const f = (turno) => { const v = x[turno]; if (!v) return ''; const b = v <= CONFIG.ultimoDiaMariana; return `<small style="${b ? 'font-weight:700;color:var(--navy)' : 'color:var(--muted)'}">${turno} ${fcorta(v)}${v.slice(0,4) !== '2026' ? ' ' + v.slice(2,4) : ''}</small>`; };
+      h += `<td>${f('AM')}${f('PM')}</td>`;
+    }
+    h += '</tr>';
+  });
+  h += '</tbody></table></div>';
+  $('farmacias').innerHTML = h;
+  const inp = $('fBusca');
+  inp.oninput = e => { busca = e.target.value; const pos = e.target.selectionStart; farmacias(); const n = $('fBusca'); n.focus(); n.setSelectionRange(pos,pos); };
+}
+
+function supuestos() {
+  $('supuestos').innerHTML = `
+  <h2>Supuestos y riesgos</h2>
+  <p class="sub">Lo que hace que este cronograma sea alcanzable, y lo que conviene validar antes del 9 de octubre.</p>
+  <div class="warn"><b>Conclusión:</b> con Mariana en Argentina alcanza para entrenar a Oswaldo, hacer el kickoff completo, cerrar el ciclo 1 en las 31 farmacias y dejar el ciclo 2 en marcha. Los ciclos 2 al 5 los completa Oswaldo, con cierre estimado el ${flarga(P.fin)}.</div>
+  <div class="two">
+    <div class="box"><h3>Ritmo de trabajo</h3><ul>
+      <li>Capacidad por medio turno: Área 1, 2 farmacias (zona norte, mayores distancias); Área 2, 3 farmacias (CABA, trayectos cortos); Área 3, 2 farmacias.</li>
+      <li>Nunca se mezclan dos áreas en el mismo medio turno, para no perder tiempo en traslados.</li>
+      <li>El turno tarde de cada área se visita una semana después del turno mañana, como en el cronograma de referencia.</li>
+      <li>Visita de refuerzo de 60 minutos: 10 de observación del turno, 30 de refuerzo con el equipo (1 conducta y 1 pilar) y 20 de acuerdos y checklist con el líder de tienda.</li>
+    </ul></div>
+    <div class="box"><h3>Calendario</h3><ul>
+      <li>Feriados considerados: 12 oct, 23 nov (Soberanía, trasladado del 20), 8 dic y 25 dic de 2026; 1 ene, 8 y 9 feb (Carnaval) y 24 mar de 2027.</li>
+      <li>El lunes 7 de diciembre es día no laborable con fines turísticos. Por defecto no se trabaja; si RRHH Argentina lo habilita, marca la opción de la barra superior y el cronograma se adelanta.</li>
+      <li>Pausa de campo del 21 dic al 1 ene por temporada alta. Puedes desactivarla para ver el escenario sin pausa.</li>
+    </ul></div>
+    <div class="box"><h3>Por validar con cada área</h3><ul>
+      <li>Grupos de kickoff: se armaron en el orden de la lista de cada área. Conviene que el Gerente de Área los ajuste por cercanía y defina la farmacia sede de cada taller.</li>
+      <li>Liberación del personal para asistir al kickoff sin descuidar la atención en tienda.</li>
+      <li>Transporte de Mariana y Oswaldo, sobre todo para Área 1 (Pilar, KM 47,5, Nordelta).</li>
+    </ul></div>
+    <div class="box"><h3>Riesgos y cómo mitigarlos</h3><ul>
+      <li>Una visita que se cae se reprograma en el siguiente espacio de "seguimiento" de la misma semana.</li>
+      <li>Si Oswaldo no está listo el 20 oct, se agrega un día de práctica y el kickoff corre un día.</li>
+      <li>La semana del 24 al 27 nov es la más cargada (4 días hábiles): priorizarla en la agenda de las tiendas.</li>
+      <li>Sin Mariana baja el acompañamiento: se propone seguimiento remoto quincenal y una muestra de visitas observadas por el Coordinador de RRHH de cada área.</li>
+    </ul></div>
+  </div>`;
+}
+
+function exportar() {
+  if (typeof XLSX === 'undefined') { alert('No se pudo cargar la librería de Excel. Revisa tu conexión y vuelve a intentarlo.'); return; }
+  const ag = [];
+  P.dias.forEach(d => {
+    const base = { Fecha: d.fecha, Día: DIA[dow(d.fecha)], Fase: faseNombre[d.fase], Responsable: d.fase === 'inhabil' ? '' : (d.rol || d.resp) };
+    if (d.fase === 'inhabil' || d.fase === 'entrenamiento' || d.fase === 'cierre' || (d.fase === 'kickoff' && !d.am)) ag.push({ ...base, Turno: '', Área: '', Contenido: d.titulo || '', Farmacias: d.detalle || '' });
+    else [['AM', d.am, d.amNota], ['PM', d.pm, d.pmNota]].forEach(([t, b, n]) => ag.push({ ...base, Turno: t, Área: b ? AREAS[b.area].nombre : '', Contenido: b ? (b.ciclo ? `Ciclo ${b.ciclo}: ${ciclo(b.ciclo)}` : `Kickoff: ${b.nota}`) : (n || ''), Farmacias: b ? b.tiendas.join(', ') : '' }));
+  });
+  const vis = P.visitas.map(v => ({ Farmacia: v.tienda, Área: AREAS[v.area].nombre, Actividad: v.ciclo ? `Ciclo ${v.ciclo}` : 'Kickoff', Contenido: v.ciclo ? ciclo(v.ciclo) : 'Kickoff', Turno: v.turno, Fecha: v.fecha, Responsable: v.resp }));
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(ag), 'Agenda diaria');
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(vis), 'Visitas por farmacia');
+  XLSX.writeFile(wb, 'Cronograma_Mariana_Meza_Argentina.xlsx');
+}
+
+document.querySelectorAll('.tabs button').forEach(b => b.onclick = () => {
+  document.querySelectorAll('.tabs button').forEach(x => x.setAttribute('aria-selected', x === b));
+  document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === b.dataset.tab));
+});
+$('opt7').onchange = calcular;
+$('optPausa').onchange = calcular;
+$('btnXlsx').onclick = exportar;
+calcular();
+</script>
+</body>
+</html>
