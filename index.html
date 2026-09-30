@@ -213,8 +213,8 @@ const CONFIG = {
     colaboradoresPorTienda: 16,     // promedio; la mitad en turno mañana y la mitad en turno tarde
     maxPorTienda: 2,                // máximo de personas de una misma farmacia por taller
     salaPorArea: { 1: 'Sala Los Olivos', 2: 'Sala Las Heras', 3: 'Sala Los Olivos' },
-    // Cada taller dura 2 horas: Conductas en la mañana, Pilares en la tarde
-    horario: { AM: '9:30 a 11:30', PM: '14:00 a 16:00' },
+    // Cada taller dura 2,5 horas: Conductas en la mañana, Pilares en la tarde
+    horario: { AM: '9:00 a 11:30', PM: '14:00 a 16:30' },
   },
 };
 const FERIADOS = {
@@ -426,7 +426,7 @@ function resumen() {
   <div class="figures">
     <div><b>31</b><span>farmacias en 3 áreas</span></div>
     <div><b>${F.entrenamiento[2]} días</b><span>de entrenamiento a Oswaldo</span></div>
-    <div><b>${F.kickoff[2]} días</b><span>de kickoff, ${P.talleres} talleres de 2 horas en sala</span></div>
+    <div><b>${F.kickoff[2]} días</b><span>de kickoff, ${P.talleres} talleres de 2,5 horas en sala</span></div>
     <div><b>${fcorta(c1)}</b><span>ciclo 1 completo en las 31 farmacias${c1 <= CONFIG.ultimoDiaMariana ? ', con Mariana' : ', ya con Oswaldo solo'}</span></div>
     <div><b>${P.refConM} de ${P.refTotal}</b><span>visitas de refuerzo hechas con Mariana (${pct}%)</span></div>
   </div>
