@@ -121,6 +121,7 @@ th{font-weight:700;background:var(--sky);white-space:nowrap}
 .cell.c{background:var(--blue);color:#fff}
 .cell.co{background:repeating-linear-gradient(135deg,#8DBBEB 0 6px,#A9CDF1 6px 12px);color:var(--navy)}
 .cell.p{background:#9DC3EC;color:var(--navy)}
+.cell.d{background:#FFE3A3;color:var(--navy)}
 .cell.t{background:var(--navy);color:#fff}
 .cell.h{background:#F0F0F0;color:#888}
 .matrix td.leave{border-left:3px dashed var(--navy)}
@@ -148,6 +149,7 @@ th{font-weight:700;background:var(--sky);white-space:nowrap}
 .day.cierre{border:2px solid var(--navy)}
 .day.continuidad{background:repeating-linear-gradient(135deg,#fff 0 12px,#F7FAFE 12px 24px)}
 
+.dnc{margin:6px 0 0;font-size:13px;background:#FFF6DD;border-left:3px solid #E0A800;padding:6px 10px;border-radius:4px}
 .warn{background:var(--warnbg);border-left:4px solid var(--warn);padding:12px 16px;border-radius:6px;margin-bottom:22px;font-size:14px}
 .empty{padding:30px;text-align:center;color:var(--muted);background:#fff;border:1px dashed var(--line);border-radius:10px}
 td.m{font-weight:700}
@@ -278,7 +280,8 @@ function planificar(opts = {}) {
   };
   const enPausa = s => conPausa && s >= CONFIG.pausa.desde && s <= CONFIG.pausa.hasta;
   const resp = s => s <= CONFIG.ultimoDiaMariana ? 'Mariana y Oswaldo' : 'Oswaldo';
-  const rol = s => s < '2026-11-24' ? 'Conducta: facilita Mariana. Pilar: facilita Oswaldo, Mariana acompaña' : s < '2026-12-07' ? 'Conducta: Mariana y Oswaldo co-facilitan. Pilar: facilita Oswaldo' : s <= CONFIG.ultimoDiaMariana ? 'Oswaldo facilita conducta y pilar, Mariana observa y da feedback' : 'Oswaldo facilita solo';
+  let iniR = '9999-12-31';
+  const rol = s => s < addDays(iniR,7) ? 'Conducta: facilita Mariana. Pilar: facilita Oswaldo, Mariana acompaña' : s < addDays(iniR,14) ? 'Conducta: Mariana y Oswaldo co-facilitan. Pilar: facilita Oswaldo' : s <= CONFIG.ultimoDiaMariana ? 'Oswaldo facilita conducta y pilar, Mariana observa y da feedback' : 'Oswaldo facilita solo';
 
   let f = CONFIG.inicio;
   const push = (s, o) => dias.push(Object.assign({ fecha: s, resp: resp(s) }, o));
@@ -327,6 +330,7 @@ function planificar(opts = {}) {
   const qAM = mkQueue(), qPM = mkQueue();
   const iniRefuerzo = (() => { let s = f; while (!esHabil(s)) s = addDays(s,1); return s; })();
   const iniPM = addDays(iniRefuerzo, 7);
+  iniR = iniRefuerzo;
   const amIniciado = new Set();
   const tomar = (q, s, turno) => {
     while (q.length && q[0].pend.length === 0) q.shift();
@@ -356,7 +360,21 @@ function planificar(opts = {}) {
     push(f, d);
     next();
   }
-  return { dias, visitas, iniRefuerzo, iniPM, fin: dias[dias.length-1].fecha, rondas, colab, talleres: grupos.length * 2 };
+  // Diagnóstico de necesidades de capacitación (entregable de Mariana antes de irse)
+  const dnc = [];
+  const ent0 = dias.find(d => d.fase === 'entrenamiento');
+  if (ent0) { ent0.dnc = 'Reunión de arranque con Auditoría: hallazgos recientes por área y farmacia, y criterios del diagnóstico.'; dnc.push({ fecha: ent0.fecha, t: 'Reunión de arranque con Auditoría', con: 'Auditoría' }); }
+  dnc.push({ fecha: null, t: 'Levantamiento en campo durante el kickoff y las visitas: brechas por conducta y pilar en cada farmacia', con: 'Mariana y Oswaldo' });
+  const libres = dias.filter(d => d.fase === 'refuerzo' && !d.pm && d.fecha <= CONFIG.ultimoDiaMariana);
+  const tareas = [
+    ['Reunión de contraste con Auditoría: lo observado en campo frente a sus hallazgos', 'Reunión de contraste con Auditoría', 'Auditoría'],
+    ['Redacción del borrador del diagnóstico', 'Borrador del diagnóstico', 'Mariana'],
+    ['Redacción del borrador del diagnóstico y prioridades de formación', 'Borrador del diagnóstico (continuación)', 'Mariana'],
+  ];
+  tareas.forEach((t, k) => { const d = libres[k]; if (!d) return; d.pmNota = 'Diagnóstico de necesidades: ' + t[0]; d.dnc = true; dnc.push({ fecha: d.fecha, t: t[1], con: t[2] }); });
+  const cie = dias.find(d => d.fase === 'cierre');
+  if (cie) { cie.dnc = 'Entrega del diagnóstico de necesidades de capacitación y validación con Auditoría y Gerentes de Área.'; dnc.push({ fecha: cie.fecha, t: 'Entrega y validación del diagnóstico', con: 'Auditoría y Gerentes de Área' }); }
+  return { dnc, dias, visitas, iniRefuerzo, iniPM, fin: dias[dias.length-1].fecha, rondas, colab, talleres: grupos.length * 2 };
 }
 
 
@@ -460,7 +478,7 @@ function resumen() {
         <div class="when">${flarga(F.refuerzo[0])} al ${flarga(CONFIG.ultimoDiaMariana)}</div>
         <h3>Refuerzo en tienda con Mariana</h3>
         <p>Al revés que en el kickoff, aquí nadie se traslada: Mariana y Oswaldo van juntos a cada farmacia y trabajan con el equipo del turno en su propio lugar de trabajo. Cada visita dura cerca de 60 minutos y refuerza 1 conducta y 1 pilar. El turno mañana arranca una semana antes que el turno tarde, igual que en el cronograma de referencia. El liderazgo pasa gradualmente a Oswaldo:</p>
-        <ul><li>El pilar siempre lo facilita Oswaldo, con Mariana acompañando y guiando.</li><li>La conducta pasa gradualmente a Oswaldo. Hasta el 20 nov la facilita Mariana; del 24 nov al 4 dic la co-facilitan; desde el 9 dic Oswaldo facilita todo y Mariana observa y da feedback.</li><li>${flarga(CONFIG.ultimoDiaMariana)}: cierre y traspaso formal en la mañana; en la tarde, últimas visitas juntos.</li></ul>
+        <ul><li>El pilar siempre lo facilita Oswaldo, con Mariana acompañando y guiando.</li><li>La conducta pasa gradualmente a Oswaldo. La primera semana (desde el ${flarga(P.iniRefuerzo)}) la facilita Mariana; la segunda (desde el ${flarga(addDays(P.iniRefuerzo,7))}) la co-facilitan; desde el ${flarga(addDays(P.iniRefuerzo,14))} Oswaldo facilita todo y Mariana observa y da feedback.</li><li>${flarga(CONFIG.ultimoDiaMariana)}: cierre y traspaso formal en la mañana; en la tarde, últimas visitas juntos.</li></ul>
       </div></div>
       <div class="phase continuidad"><div class="n">5</div><div>
         <div class="when">${F.continuidad ? flarga(F.continuidad[0]) + ' al ' + flarga(F.continuidad[1]) : '—'}</div>
@@ -476,6 +494,7 @@ function resumen() {
       <ul>
         <li>Oswaldo entrenado y certificado como facilitador.</li>
         <li>Kickoff completo: todo el personal de las 31 farmacias, ambos turnos.</li>
+        <li>Diagnóstico de necesidades de capacitación entregado y validado con Auditoría.</li>
         ${c1 <= CONFIG.ultimoDiaMariana
           ? `<li>Ciclo 1 (${esc(ciclo(1))}) completo en las 31 farmacias, AM y PM, el ${flarga(c1)}.</li><li>Ciclo 2 iniciado: ${hechoC2} de 62 visitas hechas, con Oswaldo liderando.</li>`
           : `<li>Ciclo 1 (${esc(ciclo(1))}) avanzado: ${P.refConM} de 62 visitas hechas con Mariana. Oswaldo lo termina el ${flarga(c1)}.</li>`}
@@ -488,6 +507,20 @@ function resumen() {
         <li>Cierre estimado: ${flarga(P.fin)}.</li>
         <li>Reporte semanal a los Coordinadores de RRHH Operaciones y quincenal a Mariana.</li>
       </ul>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2>Diagnóstico de necesidades de capacitación</h2>
+    <p class="sub">Entregable de Mariana antes del ${flarga(CONFIG.salidaMariana)}, basado en lo que observa en el kickoff y en las visitas, y en sus reuniones con Auditoría. Las reuniones y la redacción usan tiempos que no quitan visitas a las farmacias.</p>
+    <div class="two">
+      <div class="scroll"><table><thead><tr><th>Cuándo</th><th>Actividad</th><th>Con quién</th></tr></thead><tbody>${P.dnc.map(x => `<tr><td>${x.fecha ? flarga(x.fecha) : 'Todo el período'}</td><td>${esc(x.t)}</td><td>${esc(x.con)}</td></tr>`).join('')}</tbody></table></div>
+      <div class="box"><h3>Qué debería incluir</h3><ul>
+        <li>Brechas observadas en cada conducta y cada pilar, por área y por farmacia.</li>
+        <li>Hallazgos de Auditoría que tienen causa en formación.</li>
+        <li>Diferencias entre turno mañana y turno tarde, y entre personal base y supervisores.</li>
+        <li>Prioridades de formación para 2027 y recomendaciones para el trabajo de Oswaldo.</li>
+      </ul></div>
     </div>
   </section>
 
@@ -522,6 +555,8 @@ function matriz() {
   h += monthCells.map(c => `<th colspan="${c.n}">${MESL[c.m]}${c.y !== 2026 ? ' ' + c.y : ''}</th>`).join('');
   h += '</tr><tr><th class="rowh">Semana del</th>' + semanas.map(s => `<th class="${s === leave ? 'leave' : ''}">${D(s).getUTCDate()}</th>`).join('') + '</tr></thead><tbody>';
   h += '<tr><td class="rowh">Preparación</td>' + semanas.map(s => `<td${s === leave ? ' class="leave"' : ''}>${pr[s] ? `<div class="cell p" title="${esc(pr[s].join('\n'))}">P</div>` : ''}</td>`).join('') + '</tr>';
+  const dn = {}; hab.filter(d => d.dnc).forEach(d => (dn[lunes(d.fecha)] = dn[lunes(d.fecha)] || []).push(`${flarga(d.fecha)}: ${typeof d.dnc === 'string' ? d.dnc : d.pmNota}`));
+  h += '<tr><td class="rowh">Diagnóstico</td>' + semanas.map(s => `<td${s === leave ? ' class="leave"' : ''}>${dn[s] ? `<div class="cell d" title="${esc(dn[s].join('\n'))}">D</div>` : ''}</td>`).join('') + '</tr>';
   // fila entrenamiento
   h += '<tr><td class="rowh">Entrenamiento</td>' + semanas.map(s => { const lc = s === leave ? ' class="leave"' : ''; return tr[s] ? `<td${lc}><div class="cell t" title="${tr[s]} días de entrenamiento">E</div></td>` : `<td${lc}>${hol[s] && !idx[s+'|AM|1'] && !idx[s+'|AM|2'] && !idx[s+'|AM|3'] && !tr[s] ? '' : ''}</td>`; }).join('') + '</tr>';
   for (const turno of ['AM','PM']) {
@@ -547,7 +582,7 @@ function matriz() {
   }
   h += '<tr><td class="rowh" style="font-weight:500;color:var(--muted)">Feriados</td>' + semanas.map(s => `<td class="${s === leave ? 'leave' : ''}">${hol[s] ? `<div class="cell h" title="${esc(hol[s].join('\n'))}">F</div>` : ''}</td>`).join('') + '</tr>';
   h += '</tbody></table></div>';
-  h += `<div class="legend"><span><i style="background:#9DC3EC"></i>P: preparación de Mariana</span><span><i style="background:var(--navy)"></i>E: entrenamiento a Oswaldo</span><span><i style="background:var(--cyan)"></i>K: kickoff</span><span><i style="background:var(--blue)"></i>C1 a C5: ciclo con Mariana</span><span><i style="background:repeating-linear-gradient(135deg,#8DBBEB 0 6px,#A9CDF1 6px 12px)"></i>Ciclo con Oswaldo solo</span><span><i style="background:#F0F0F0"></i>F: feriado o pausa</span></div>`;
+  h += `<div class="legend"><span><i style="background:#9DC3EC"></i>P: preparación de Mariana</span><span><i style="background:var(--navy)"></i>E: entrenamiento a Oswaldo</span><span><i style="background:#FFE3A3"></i>D: diagnóstico de necesidades</span><span><i style="background:var(--cyan)"></i>K: kickoff</span><span><i style="background:var(--blue)"></i>C1 a C5: ciclo con Mariana</span><span><i style="background:repeating-linear-gradient(135deg,#8DBBEB 0 6px,#A9CDF1 6px 12px)"></i>Ciclo con Oswaldo solo</span><span><i style="background:#F0F0F0"></i>F: feriado o pausa</span></div>`;
   $('matriz').innerHTML = h;
 }
 
@@ -585,6 +620,7 @@ function agenda() {
         h += `<div class="meta">${faseNombre[d.fase]}. ${esc(d.rol || d.resp)}</div>`;
         if (d.titulo) h += `<div class="title">${esc(d.titulo)}</div>`;
         if (d.detalle) h += `<p class="det">${esc(d.detalle)}</p>`;
+        if (typeof d.dnc === 'string') h += `<p class="dnc">Diagnóstico de necesidades: ${esc(d.dnc)}</p>`;
         if (d.fase === 'kickoff') h += slot('AM', d.am, d.amNota) + slot('PM', d.pm, d.pmNota);
         if (['refuerzo','continuidad','cierre'].includes(d.fase)) h += slot('AM', d.am, d.amNota) + slot('PM', d.pm, d.pmNota);
       }
@@ -668,6 +704,8 @@ function exportar() {
     if (d.fase === 'inhabil' || d.fase === 'preparacion' || d.fase === 'entrenamiento') ag.push({ ...base, Turno: '', Área: '', Contenido: d.titulo || '', Farmacias: d.detalle || '' });
     else [['AM', d.am, d.amNota], ['PM', d.pm, d.pmNota]].forEach(([t, b, n]) => ag.push({ ...base, Turno: t, Área: b ? AREAS[b.area].nombre : '', Contenido: b ? (b.ciclo ? `Ciclo ${b.ciclo}: ${ciclo(b.ciclo)}` : `Kickoff: ${b.nota}`) : (n || ''), Farmacias: b ? (b.resumen ? b.resumen + ': ' : '') + b.tiendas.join(', ') : '' }));
   });
+  P.dias.filter(d => typeof d.dnc === 'string').forEach(d => ag.push({ Fecha: d.fecha, Día: DIA[dow(d.fecha)], Fase: 'Diagnóstico de necesidades', Responsable: 'Mariana', Turno: '', Área: '', Contenido: d.dnc, Farmacias: '' }));
+  ag.sort((a, b) => a.Fecha.localeCompare(b.Fecha));
   const vis = P.visitas.map(v => ({ Farmacia: v.tienda, Área: AREAS[v.area].nombre, Actividad: v.ciclo ? `Ciclo ${v.ciclo}` : 'Kickoff', Contenido: v.ciclo ? ciclo(v.ciclo) : 'Kickoff', Turno: v.turno, Fecha: v.fecha, Responsable: v.resp }));
   const wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(ag), 'Agenda diaria');
