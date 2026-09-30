@@ -168,7 +168,7 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:20px}
   <div class="wrap">
     <div class="brand">FARMATODO <span>Capacitación, VP de Recursos Humanos</span></div>
     <h1>Plan de capacitación Argentina</h1>
-    <p class="lead">Tras su preparación del 29 de septiembre al 8 de octubre, Mariana llega a Argentina el 14 de octubre y hasta el 13 de diciembre entrena a Oswaldo Saldivia en las 5 conductas de servicio y los 5 pilares de la operación, y juntos las llevan a las 31 farmacias de las 3 áreas de Operaciones.</p>
+    <p class="lead">Tras su preparación del 29 de septiembre al 8 de octubre, Mariana llega a Argentina el 14 de octubre y hasta el 17 de diciembre entrena a Oswaldo Saldivia y lo acompaña a llevar las 5 conductas de servicio y los 5 pilares de la operación a las 31 farmacias de las 3 áreas de Operaciones.</p>
     <div id="timeline" class="timeline" aria-label="Línea de tiempo de las fases"></div>
   </div>
 </header>
@@ -183,7 +183,6 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:20px}
       <button role="tab" aria-selected="false" data-tab="supuestos">Supuestos y riesgos</button>
     </div>
     <div class="controls">
-      <label>Kickoff <select id="optKick" style="border:1px solid var(--line);border-radius:6px;padding:5px 6px"><option value="mismo">Ambos talleres el mismo día</option><option value="separado">Un taller por día</option></select></label>
       <label>Colaboradores por farmacia <input type="number" id="optColab" value="16" min="2" max="60" style="width:62px;border:1px solid var(--line);border-radius:6px;padding:5px 6px"></label>
       <label><input type="checkbox" id="opt7"> Trabajar el lun 7-dic (no laborable)</label>
       <label><input type="checkbox" id="optPausa" checked> Pausa navideña</label>
@@ -204,8 +203,8 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:20px}
 // ===== CONFIGURACIÓN EDITABLE =====
 const CONFIG = {
   inicio: '2026-10-14',
-  ultimoDiaMariana: '2026-12-11',   // viernes; regresa el 13-dic
-  salidaMariana: '2026-12-13',
+  ultimoDiaMariana: '2026-12-17',   // jueves; último día de Mariana en Argentina
+  salidaMariana: '2026-12-17',
   pausa: { desde: '2026-12-21', hasta: '2027-01-01', motivo: 'Temporada alta navideña: sin visitas de campo' },
   capacidad: { 1: 2, 2: 3, 3: 2 },  // tiendas por medio turno (AM 8–12 / PM 13–17)
   conductas: ['Conducta 1','Conducta 2','Conducta 3','Conducta 4','Conducta 5'],
@@ -214,9 +213,8 @@ const CONFIG = {
     colaboradoresPorTienda: 16,     // promedio; la mitad en turno mañana y la mitad en turno tarde
     maxPorTienda: 2,                // máximo de personas de una misma farmacia por taller
     salaPorArea: { 1: 'Sala Los Olivos', 2: 'Sala Las Heras', 3: 'Sala Los Olivos' },
-    // Cada taller (Conductas y Pilares) dura 2 horas
-    mismoDia: { AM: 'Conductas 8:00 a 10:00 y Pilares 10:15 a 12:15', PM: 'Conductas 12:45 a 14:45 y Pilares 15:00 a 17:00' },
-    separado: { AM: '9:30 a 11:30', PM: '14:00 a 16:00' },
+    // Cada taller dura 2 horas: Conductas en la mañana, Pilares en la tarde
+    horario: { AM: '9:30 a 11:30', PM: '14:00 a 16:00' },
   },
 };
 const FERIADOS = {
@@ -252,13 +250,13 @@ const PREPARACION = [
   { fecha: '2026-10-08', t: 'Formaciones de kickoff (día 3)', resp: 'Monica Urdaneta', d: 'Práctica de facilitación de Mariana con feedback y ajustes finales del material antes de viajar.' },
 ];
 const ENTRENAMIENTO = [
-  { t: 'Llegada, inducción y alineación', d: 'Reunión con Coordinadores de RRHH Operaciones y Gerentes de Área. Revisión del plan, materiales y logística. Reserva de las salas Las Heras y Los Olivos.' },
-  { t: '5 conductas de servicio · teoría y modelaje', d: 'Mariana presenta y modela las 5 conductas. Oswaldo observa y toma notas de facilitación.' },
-  { t: '5 conductas de servicio · práctica', d: 'Role play, casos reales de tienda y teach-back de Oswaldo con feedback.' },
-  { t: '5 pilares de la operación · teoría en tienda', d: 'Recorrido guiado en una tienda cercana aplicando el checklist de los 5 pilares.' },
-  { t: '5 pilares de la operación · práctica', d: 'Oswaldo aplica el checklist en tienda y explica cada pilar al equipo con acompañamiento.' },
-  { t: 'Metodología de facilitación y guion del kickoff', d: 'Estructura del taller, dinámicas, manejo de grupo y cómo registrar asistencia y evidencias.' },
-  { t: 'Ensayo general y certificación', d: 'Oswaldo facilita el kickoff completo. Validación de Mariana, ajustes finales y envío de convocatorias: máximo 2 personas por farmacia en cada taller.' },
+  { t: 'Alineación con Oswaldo y el equipo de Operaciones', d: 'Primer día: Mariana se reúne con Oswaldo, los Gerentes de Área y los Coordinadores de RRHH Operaciones para alinear plan, roles, materiales y logística. Reserva de las salas Las Heras y Los Olivos.' },
+  { t: '5 conductas de servicio, teoría y modelaje', d: 'Mariana presenta y modela las 5 conductas. Oswaldo observa y toma notas de facilitación.' },
+  { t: '5 conductas de servicio, práctica', d: 'Role play, casos reales de tienda y teach-back de Oswaldo con feedback de Mariana.' },
+  { t: '5 pilares de la operación, preparación de Oswaldo', d: 'Oswaldo prepara el taller de pilares, que él facilitará. Mariana lo acompaña y lo guía en un recorrido en tienda con el checklist.' },
+  { t: '5 pilares de la operación, práctica', d: 'Oswaldo aplica el checklist en tienda y practica cómo explicar cada pilar al equipo, con la guía de Mariana.' },
+  { t: 'Metodología de facilitación y guion del kickoff', d: 'Estructura de los talleres, dinámicas, manejo de grupo y cómo registrar asistencia y evidencias.' },
+  { t: 'Ensayo general y certificación', d: 'Ensayo del kickoff completo: Mariana facilita Conductas y Oswaldo facilita Pilares. Oswaldo también practica Conductas, que facilitará solo cuando Mariana regrese. Ajustes finales y envío de convocatorias: máximo 2 personas por farmacia en cada taller.' },
 ];
 
 // ===== utilidades de fecha (UTC) =====
@@ -280,7 +278,7 @@ function planificar(opts = {}) {
   };
   const enPausa = s => conPausa && s >= CONFIG.pausa.desde && s <= CONFIG.pausa.hasta;
   const resp = s => s <= CONFIG.ultimoDiaMariana ? 'Mariana y Oswaldo' : 'Oswaldo';
-  const rol = s => s < '2026-11-24' ? 'Mariana lidera, Oswaldo co-facilita' : s < '2026-12-07' ? 'Co-facilitación 50/50' : s <= CONFIG.ultimoDiaMariana ? 'Oswaldo lidera, Mariana observa y da feedback' : 'Oswaldo facilita solo';
+  const rol = s => s < '2026-11-24' ? 'Conducta: facilita Mariana. Pilar: facilita Oswaldo, Mariana acompaña' : s < '2026-12-07' ? 'Conducta: Mariana y Oswaldo co-facilitan. Pilar: facilita Oswaldo' : s <= CONFIG.ultimoDiaMariana ? 'Oswaldo facilita conducta y pilar, Mariana observa y da feedback' : 'Oswaldo facilita solo';
 
   let f = CONFIG.inicio;
   const push = (s, o) => dias.push(Object.assign({ fecha: s, resp: resp(s) }, o));
@@ -302,28 +300,26 @@ function planificar(opts = {}) {
   // Fase 2: kickoff en salas de capacitación, máximo 2 personas por farmacia por taller
   const K = CONFIG.kickoff;
   const colab = opts.colaboradores || K.colaboradoresPorTienda;
-  const porTurno = Math.ceil(Math.ceil(colab / 2) / K.maxPorTienda);
-  const separado = !!opts.kickoffSeparado;
-  const sesiones = [];
-  for (let r = 1; r <= porTurno; r++) {
-    if (separado) { for (const tl of ['Conductas','Pilares']) for (const a of [1,2,3]) sesiones.push({ area: a, ronda: r, taller: tl }); }
-    else for (const a of [1,2,3]) sesiones.push({ area: a, ronda: r, taller: 'Conductas y Pilares' });
-  }
+  // Cada día: taller de Conductas en la mañana y de Pilares en la tarde, con grupos distintos.
+  // Cada grupo (2 personas por farmacia de un área) hace Conductas un día en la mañana y Pilares el día siguiente en la tarde.
+  const rondas = Math.ceil(colab / K.maxPorTienda);
+  const grupos = [];
+  for (let r = 1; r <= rondas; r++) for (const a of [1,2,3]) grupos.push({ area: a, ronda: r });
+  const sesionTxt = (g, tl) => ({ area: g.area, tiendas: AREAS[g.area].tiendas, ronda: g.ronda, taller: tl,
+    nota: `Taller de ${tl}, ${K.salaPorArea[g.area]}, ${tl === 'Conductas' ? K.horario.AM + ' (facilita Mariana)' : K.horario.PM + ' (facilita Oswaldo)'}. Grupo ${g.ronda} de ${rondas}`,
+    resumen: `${AREAS[g.area].tiendas.length} farmacias, hasta ${K.maxPorTienda} personas por farmacia (${AREAS[g.area].tiendas.length * K.maxPorTienda} participantes)` });
   i = 0;
-  while (i <= sesiones.length) {
+  while (i <= grupos.length) {
     if (!esHabil(f)) { registraInhabil(f); next(); continue; }
-    if (i < sesiones.length) {
-      const g = sesiones[i], ar = AREAS[g.area], n = ar.tiendas.length, sala = K.salaPorArea[g.area];
-      const H = separado ? K.separado : K.mismoDia;
-      const tl = separado ? `taller de ${g.taller}, ` : '';
-      const resumen = `${n} farmacias del área, hasta ${K.maxPorTienda} personas por farmacia (${n * K.maxPorTienda} participantes)`;
-      push(f, { fase: 'kickoff', area: g.area, titulo: `Kickoff ${ar.nombre}, ronda ${g.ronda} de ${porTurno}: ${separado ? 'taller de ' + g.taller : 'Conductas y Pilares'}`, sala,
-        am: { area: g.area, tiendas: ar.tiendas, nota: `${sala}, ${tl}${H.AM}, turno mañana`, resumen },
-        pm: { area: g.area, tiendas: ar.tiendas, nota: `${sala}, ${tl}${H.PM}, turno tarde`, resumen } });
-      ar.tiendas.forEach(t => { visitas.push({ tienda: t, area: g.area, ciclo: 0, turno: 'AM', fecha: f, resp: resp(f), sala }); visitas.push({ tienda: t, area: g.area, ciclo: 0, turno: 'PM', fecha: f, resp: resp(f), sala }); });
-    } else {
-      push(f, { fase: 'kickoff', titulo: 'Cierre del kickoff', detalle: 'Consolidar asistencia por farmacia, citar a quienes faltaron y ajustar el material del ciclo 1. Armar rutas de refuerzo con cada Gerente de Área.' });
-    }
+    const gAM = grupos[i], gPM = i > 0 ? grupos[i-1] : null;
+    const am = gAM ? sesionTxt(gAM, 'Conductas') : null;
+    const pm = gPM ? sesionTxt(gPM, 'Pilares') : null;
+    const d = { fase: 'kickoff', am, pm };
+    if (!am) { d.titulo = 'Último taller de Pilares y cierre del kickoff'; d.detalle = 'Mañana: consolidar asistencia por farmacia, citar a quienes faltaron y armar las rutas de refuerzo con cada Gerente de Área.'; d.amNota = 'Cierre del kickoff'; }
+    else d.titulo = pm ? `Conductas ${AREAS[gAM.area].nombre} y Pilares ${AREAS[gPM.area].nombre}` : `Inicio del kickoff: Conductas ${AREAS[gAM.area].nombre}`;
+    if (!pm) d.pmNota = 'Preparación de la sala y del material de Pilares';
+    push(f, d);
+    [[am,'AM'],[pm,'PM']].forEach(([b,t]) => b && b.tiendas.forEach(ti => visitas.push({ tienda: ti, area: b.area, ciclo: 0, turno: t, fecha: f, resp: resp(f), sala: K.salaPorArea[b.area], taller: b.taller })));
     i++; next();
   }
   // Fase 3/4: refuerzo por ciclos (1 conducta + 1 pilar), AM y PM desfasados una semana
@@ -360,7 +356,7 @@ function planificar(opts = {}) {
     push(f, d);
     next();
   }
-  return { dias, visitas, iniRefuerzo, iniPM, fin: dias[dias.length-1].fecha, porTurno, colab, separado, sesiones: sesiones.length };
+  return { dias, visitas, iniRefuerzo, iniPM, fin: dias[dias.length-1].fecha, rondas, colab, talleres: grupos.length * 2 };
 }
 
 
@@ -378,7 +374,7 @@ const $ = id => document.getElementById(id);
 
 let P;
 function calcular() {
-  P = planificar({ trabajar7dic: $('opt7').checked, pausa: $('optPausa').checked, kickoffSeparado: $('optKick').value === 'separado', colaboradores: Math.max(2, Math.min(60, +$('optColab').value || CONFIG.kickoff.colaboradoresPorTienda)) });
+  P = planificar({ trabajar7dic: $('opt7').checked, pausa: $('optPausa').checked, colaboradores: Math.max(2, Math.min(60, +$('optColab').value || CONFIG.kickoff.colaboradoresPorTienda)) });
   const hab = P.dias.filter(d => d.fase !== 'inhabil');
   const rango = f => { const x = hab.filter(d => d.fase === f); return x.length ? [x[0].fecha, x[x.length-1].fecha, x.length] : null; };
   P.fases = { entrenamiento: rango('entrenamiento'), kickoff: rango('kickoff'), refuerzo: rango('refuerzo'), cierre: rango('cierre'), continuidad: rango('continuidad') };
@@ -409,7 +405,7 @@ function timeline() {
       h += seg('continuidad', addDays(CONFIG.pausa.hasta,1), F.continuidad[1], 'Oswaldo continúa solo', `hasta ${flarga(F.continuidad[1])}`);
     } else h += seg('continuidad', F.continuidad[0], F.continuidad[1], 'Oswaldo continúa solo', `hasta ${flarga(F.continuidad[1])}`);
   }
-  h += `<div class="tl-mark" style="left:${pos(CONFIG.salidaMariana)}%"><span>13 dic, regresa Mariana</span></div></div><div class="tl-months">`;
+  h += `<div class="tl-mark" style="left:${pos(CONFIG.salidaMariana)}%"><span>${fcorta(CONFIG.salidaMariana)}, regresa Mariana</span></div></div><div class="tl-months">`;
   if (D(ini).getUTCDate() < 20) h += `<span style="left:0;transform:none">${MES[D(ini).getUTCMonth()]}</span>`;
   let m = D(ini); m = new Date(Date.UTC(m.getUTCFullYear(), m.getUTCMonth()+1, 1));
   while (S(m) <= fin) { h += `<span style="left:${pos(S(m))}%">${MES[m.getUTCMonth()]}</span>`; m = new Date(Date.UTC(m.getUTCFullYear(), m.getUTCMonth()+1, 1)); }
@@ -430,8 +426,8 @@ function resumen() {
   <div class="figures">
     <div><b>31</b><span>farmacias en 3 áreas</span></div>
     <div><b>${F.entrenamiento[2]} días</b><span>de entrenamiento a Oswaldo</span></div>
-    <div><b>${F.kickoff[2]-1} días</b><span>de kickoff, ${P.sesiones * 2 * (P.separado ? 1 : 2)} talleres de 2 horas en sala</span></div>
-    <div><b>${fcorta(c1)}</b><span>ciclo 1 completo en las 31 farmacias, con Mariana</span></div>
+    <div><b>${F.kickoff[2]} días</b><span>de kickoff, ${P.talleres} talleres de 2 horas en sala</span></div>
+    <div><b>${fcorta(c1)}</b><span>ciclo 1 completo en las 31 farmacias${c1 <= CONFIG.ultimoDiaMariana ? ', con Mariana' : ', ya con Oswaldo solo'}</span></div>
     <div><b>${P.refConM} de ${P.refTotal}</b><span>visitas de refuerzo hechas con Mariana (${pct}%)</span></div>
   </div>
 
@@ -448,25 +444,23 @@ function resumen() {
       <div class="phase entrenamiento"><div class="n">2</div><div>
         <div class="when">${flarga(F.entrenamiento[0])} al ${flarga(F.entrenamiento[1])}, ${F.entrenamiento[2]} días hábiles</div>
         <h3>Mariana entrena a Oswaldo</h3>
-        <p>Dos días de conductas de servicio, dos de pilares de la operación (en tienda), uno de metodología de facilitación y un ensayo general donde Oswaldo facilita el kickoff completo y Mariana lo certifica.</p>
+        <p>El primer día Mariana se alinea con Oswaldo y el equipo de Operaciones. Luego vienen dos días de conductas de servicio, que enseña Mariana; dos de pilares de la operación en tienda, donde Oswaldo prepara su taller con la guía de Mariana; uno de metodología de facilitación y un ensayo general del kickoff con certificación.</p>
       </div></div>
       <div class="phase kickoff"><div class="n">3</div><div>
         <div class="when">${flarga(F.kickoff[0])} al ${flarga(F.kickoff[1])}</div>
         <h3>Kickoff en las 31 farmacias</h3>
-        <p>Los talleres se hacen en las salas de capacitación Las Heras y Los Olivos, y los participantes van presencialmente. Para no dejar las farmacias sin personal, a cada taller van como máximo ${CONFIG.kickoff.maxPorTienda} personas de una misma farmacia. Por eso cada área necesita varias rondas: con ${P.colab} colaboradores por farmacia son ${P.porTurno} rondas por turno.</p>
-        <ul><li>Cada participante recibe dos talleres de 2 horas: Conductas y Pilares. Mariana y Oswaldo facilitan juntos, un taller a la vez, nunca en paralelo.</li>
-        ${P.separado
-          ? `<li>Un taller por visita a la sala: primero Conductas y, tres días después, Pilares. Turno mañana ${CONFIG.kickoff.separado.AM} y turno tarde ${CONFIG.kickoff.separado.PM}. El participante va dos veces a la sala, pero se ausenta solo 2 horas de su farmacia cada vez.</li>`
-          : `<li>Ambos talleres el mismo día, en un solo traslado. Turno mañana: ${CONFIG.kickoff.mismoDia.AM}. Turno tarde: ${CONFIG.kickoff.mismoDia.PM}. Es una jornada completa para Mariana y Oswaldo.</li>`}
-        <li>Las áreas se alternan día a día (Área 1, Área 2, Área 3), así cada farmacia envía personal solo un día de cada tres.</li>
+        <p>Los talleres se hacen en las salas de capacitación Las Heras y Los Olivos, y los participantes van presencialmente. A cada taller van como máximo ${CONFIG.kickoff.maxPorTienda} personas de una misma farmacia, así que con ${P.colab} colaboradores por farmacia cada área necesita ${P.rondas} grupos.</p>
+        <ul><li>Cada día hay un solo taller en la mañana y uno en la tarde, con grupos distintos. <b>Mañana, ${CONFIG.kickoff.horario.AM}: Conductas</b>, lo facilita Mariana con Oswaldo de apoyo. <b>Tarde, ${CONFIG.kickoff.horario.PM}: Pilares</b>, lo facilita Oswaldo con Mariana acompañándolo y guiándolo.</li>
+        <li>Cada grupo hace Conductas un día en la mañana y vuelve al día siguiente en la tarde para Pilares. Así el grupo de la mañana nunca es el mismo que el de la tarde.</li>
+        <li>Las áreas se alternan día a día (Área 1, Área 2, Área 3), para repartir las ausencias entre farmacias.</li>
         <li>${[1,2,3].map(a => `${AREAS[a].nombre}: ${CONFIG.kickoff.salaPorArea[a]}`).join('; ')}.</li>
-        <li>El último día se consolida la asistencia y se arman las rutas de refuerzo.</li></ul>
+        <li>El primer día la tarde queda para preparar la sala; el último día la mañana queda para consolidar asistencia y armar las rutas de refuerzo.</li></ul>
       </div></div>
       <div class="phase refuerzo"><div class="n">4</div><div>
         <div class="when">${flarga(F.refuerzo[0])} al ${flarga(CONFIG.ultimoDiaMariana)}</div>
         <h3>Refuerzo en tienda con Mariana</h3>
         <p>Al revés que en el kickoff, aquí nadie se traslada: Mariana y Oswaldo van juntos a cada farmacia y trabajan con el equipo del turno en su propio lugar de trabajo. Cada visita dura cerca de 60 minutos y refuerza 1 conducta y 1 pilar. El turno mañana arranca una semana antes que el turno tarde, igual que en el cronograma de referencia. El liderazgo pasa gradualmente a Oswaldo:</p>
-        <ul><li>Hasta el 20 nov: Mariana lidera, Oswaldo co-facilita.</li><li>24 nov al 4 dic: co-facilitación 50/50.</li><li>Desde el 7 dic: Oswaldo lidera, Mariana observa y da feedback.</li><li>11 dic: cierre y traspaso formal en la mañana; en la tarde, últimas visitas juntos.</li></ul>
+        <ul><li>El pilar siempre lo facilita Oswaldo, con Mariana acompañando y guiando.</li><li>La conducta pasa gradualmente a Oswaldo. Hasta el 20 nov la facilita Mariana; del 24 nov al 4 dic la co-facilitan; desde el 9 dic Oswaldo facilita todo y Mariana observa y da feedback.</li><li>${flarga(CONFIG.ultimoDiaMariana)}: cierre y traspaso formal en la mañana; en la tarde, últimas visitas juntos.</li></ul>
       </div></div>
       <div class="phase continuidad"><div class="n">5</div><div>
         <div class="when">${F.continuidad ? flarga(F.continuidad[0]) + ' al ' + flarga(F.continuidad[1]) : '—'}</div>
@@ -478,12 +472,13 @@ function resumen() {
 
   <section class="block two">
     <div class="box solid">
-      <h3>Listo antes del 13 de diciembre</h3>
+      <h3>Listo antes del ${flarga(CONFIG.salidaMariana)}</h3>
       <ul>
         <li>Oswaldo entrenado y certificado como facilitador.</li>
         <li>Kickoff completo: todo el personal de las 31 farmacias, ambos turnos.</li>
-        <li>Ciclo 1 (${esc(ciclo(1))}) completo en las 31 farmacias, AM y PM, el ${flarga(c1)}.</li>
-        <li>Ciclo 2 iniciado: ${hechoC2} de 62 visitas hechas, con Oswaldo liderando.</li>
+        ${c1 <= CONFIG.ultimoDiaMariana
+          ? `<li>Ciclo 1 (${esc(ciclo(1))}) completo en las 31 farmacias, AM y PM, el ${flarga(c1)}.</li><li>Ciclo 2 iniciado: ${hechoC2} de 62 visitas hechas, con Oswaldo liderando.</li>`
+          : `<li>Ciclo 1 (${esc(ciclo(1))}) avanzado: ${P.refConM} de 62 visitas hechas con Mariana. Oswaldo lo termina el ${flarga(c1)}.</li>`}
       </ul>
     </div>
     <div class="box stripe">
@@ -590,7 +585,7 @@ function agenda() {
         h += `<div class="meta">${faseNombre[d.fase]}. ${esc(d.rol || d.resp)}</div>`;
         if (d.titulo) h += `<div class="title">${esc(d.titulo)}</div>`;
         if (d.detalle) h += `<p class="det">${esc(d.detalle)}</p>`;
-        if (d.fase === 'kickoff' && d.am) h += slot('AM', d.am) + slot('PM', d.pm);
+        if (d.fase === 'kickoff') h += slot('AM', d.am, d.amNota) + slot('PM', d.pm, d.pmNota);
         if (['refuerzo','continuidad','cierre'].includes(d.fase)) h += slot('AM', d.am, d.amNota) + slot('PM', d.pm, d.pmNota);
       }
       h += '</div></article>';
@@ -609,14 +604,14 @@ function farmacias() {
   const map = {};
   P.visitas.forEach(v => { const m = (map[v.tienda] = map[v.tienda] || { area: v.area, c: {} }); (m.c[v.ciclo] = m.c[v.ciclo] || {})[v.turno] = v.fecha; });
   const filas = [1,2,3].flatMap(a => AREAS[a].tiendas.map(t => ({ t, a }))).filter(r => r.t.toLowerCase().includes(busca.toLowerCase()));
-  let h = `<h2>Plan por farmacia</h2><p class="sub">Kickoff: días en que la farmacia envía hasta 2 personas por turno a la sala. Ciclos: fecha de cada visita por turno. En negrita, las visitas que se hacen con Mariana; en gris, las que hace Oswaldo solo.</p>
+  let h = `<h2>Plan por farmacia</h2><p class="sub">Kickoff: días en que la farmacia envía hasta 2 personas a la sala. Ciclos: fecha de cada visita por turno. En negrita, las visitas que se hacen con Mariana; en gris, las que hace Oswaldo solo.</p>
   <div class="filters"><input id="fBusca" type="search" placeholder="Buscar farmacia" value="${esc(busca)}" aria-label="Buscar farmacia"></div>
   <div class="scroll"><table><thead><tr><th>Farmacia</th><th>Área</th><th>Kickoff</th>${[1,2,3,4,5].map(c => `<th title="${esc(ciclo(c))}">Ciclo ${c}</th>`).join('')}</tr></thead><tbody>`;
   if (!filas.length) h += `<tr><td colspan="8" class="empty">Ninguna farmacia coincide con “${esc(busca)}”.</td></tr>`;
   filas.forEach(({ t, a }) => {
     const m = map[t];
     const ko = [...new Set(P.visitas.filter(v => v.ciclo === 0 && v.tienda === t).map(v => v.fecha))].sort();
-    h += `<tr><td><b>${esc(t)}</b></td><td>${chip(a)}</td><td class="m"><small>${ko.length} días, AM y PM</small><small style="font-weight:500">${fcorta(ko[0])} a ${fcorta(ko[ko.length-1])}</small></td>`;
+    h += `<tr><td><b>${esc(t)}</b></td><td>${chip(a)}</td><td class="m"><small>${ko.length} días en sala</small><small style="font-weight:500">${fcorta(ko[0])} a ${fcorta(ko[ko.length-1])}</small></td>`;
     for (let c = 1; c <= 5; c++) {
       const x = m.c[c] || {};
       const cls = x.PM && x.PM <= CONFIG.ultimoDiaMariana ? 'm' : x.AM && x.AM <= CONFIG.ultimoDiaMariana ? '' : 'o';
@@ -635,7 +630,7 @@ function supuestos() {
   $('supuestos').innerHTML = `
   <h2>Supuestos y riesgos</h2>
   <p class="sub">Lo que hace que este cronograma sea alcanzable, y lo que conviene validar antes de que Mariana llegue el 14 de octubre.</p>
-  <div class="warn"><b>Conclusión:</b> con Mariana en Argentina alcanza para entrenar a Oswaldo, hacer el kickoff completo, cerrar el ciclo 1 en las 31 farmacias y dejar el ciclo 2 en marcha. Los ciclos 2 al 5 los completa Oswaldo, con cierre estimado el ${flarga(P.fin)}.</div>
+  <div class="warn"><b>Conclusión:</b> con Mariana en Argentina alcanza para entrenar a Oswaldo, hacer el kickoff completo y ${P.finCiclo[1] <= CONFIG.ultimoDiaMariana ? 'cerrar el ciclo 1 en las 31 farmacias' : `avanzar ${P.refConM} visitas de refuerzo del ciclo 1`}. El resto lo completa Oswaldo, con cierre estimado el ${flarga(P.fin)}.</div>
   <div class="two">
     <div class="box"><h3>Ritmo de trabajo</h3><ul>
       <li>Capacidad por medio turno: Área 1, 2 farmacias (zona norte, mayores distancias); Área 2, 3 farmacias (CABA, trayectos cortos); Área 3, 2 farmacias.</li>
@@ -652,14 +647,14 @@ function supuestos() {
       <li>Colaboradores por farmacia: el cálculo usa ${P.colab} en promedio (mitad por turno). Cambia el número en la barra superior y el kickoff se recalcula; las farmacias con más personal pueden necesitar una ronda extra.</li>
       <li>Sala por área: ${[1,2,3].map(a => `${AREAS[a].nombre} en ${CONFIG.kickoff.salaPorArea[a]}`).join(', ')}. Confirmar con cada Gerente de Área según los traslados de su equipo.</li>
       <li>Capacidad de las salas: cada taller reúne hasta 22 personas (Área 3: 11 farmacias por 2 personas).</li>
-      <li>Traslado de los participantes a la sala y regreso a tiempo para su turno. En la modalidad de un día, cada participante está fuera de su farmacia unas 4 horas y media más el traslado.</li>
+      <li>Traslado de los participantes a la sala y regreso a tiempo para su turno.</li>
       <li>Transporte de Mariana y Oswaldo, sobre todo para Área 1 (Pilar, KM 47,5, Nordelta).</li>
     </ul></div>
     <div class="box"><h3>Riesgos y cómo mitigarlos</h3><ul>
       <li>Una visita que se cae se reprograma en el siguiente espacio de "seguimiento" de la misma semana.</li>
       <li>Si Oswaldo no está listo el ${flarga(P.fases.entrenamiento[1])}, se agrega un día de práctica y el kickoff corre un día.</li>
       <li>Quien falte a su ronda de kickoff se cita en la siguiente ronda de su área, respetando el máximo de 2 por farmacia.</li>
-      <li>La semana del 24 al 27 nov es la más cargada (4 días hábiles): priorizarla en la agenda de las tiendas.</li>
+      <li>Algunos días el taller de la mañana y el de la tarde son en salas distintas. Entre las 11:30 y las 14:00 hay tiempo para almorzar y trasladarse de Las Heras a Los Olivos, o al revés.</li>
       <li>Sin Mariana baja el acompañamiento: se propone seguimiento remoto quincenal y una muestra de visitas observadas por el Coordinador de RRHH de cada área.</li>
     </ul></div>
   </div>`;
@@ -670,7 +665,7 @@ function exportar() {
   const ag = [];
   P.dias.forEach(d => {
     const base = { Fecha: d.fecha, Día: DIA[dow(d.fecha)], Fase: faseNombre[d.fase], Responsable: d.fase === 'inhabil' ? '' : (d.rol || d.resp) };
-    if (d.fase === 'inhabil' || d.fase === 'preparacion' || d.fase === 'entrenamiento' || (d.fase === 'kickoff' && !d.am)) ag.push({ ...base, Turno: '', Área: '', Contenido: d.titulo || '', Farmacias: d.detalle || '' });
+    if (d.fase === 'inhabil' || d.fase === 'preparacion' || d.fase === 'entrenamiento') ag.push({ ...base, Turno: '', Área: '', Contenido: d.titulo || '', Farmacias: d.detalle || '' });
     else [['AM', d.am, d.amNota], ['PM', d.pm, d.pmNota]].forEach(([t, b, n]) => ag.push({ ...base, Turno: t, Área: b ? AREAS[b.area].nombre : '', Contenido: b ? (b.ciclo ? `Ciclo ${b.ciclo}: ${ciclo(b.ciclo)}` : `Kickoff: ${b.nota}`) : (n || ''), Farmacias: b ? (b.resumen ? b.resumen + ': ' : '') + b.tiendas.join(', ') : '' }));
   });
   const vis = P.visitas.map(v => ({ Farmacia: v.tienda, Área: AREAS[v.area].nombre, Actividad: v.ciclo ? `Ciclo ${v.ciclo}` : 'Kickoff', Contenido: v.ciclo ? ciclo(v.ciclo) : 'Kickoff', Turno: v.turno, Fecha: v.fecha, Responsable: v.resp }));
@@ -687,7 +682,6 @@ document.querySelectorAll('.tabs button').forEach(b => b.onclick = () => {
 $('opt7').onchange = calcular;
 $('optPausa').onchange = calcular;
 $('optColab').onchange = calcular;
-$('optKick').onchange = calcular;
 $('btnXlsx').onclick = exportar;
 calcular();
 </script>
