@@ -488,7 +488,7 @@ thead th.week-even .date-box { background:#eef2fb; }
     <div class="cap-grid" id="nxCards"></div>
     <div class="section-label">Actividades de refuerzo de las Conductas en tienda</div>
     <div class="cap-grid" id="nxActs"></div>
-    <div class="footer-note"><div class="footer-note-icon">💡</div><div class="footer-note-text"><strong>Supuestos del plan.</strong> 16 colaboradores por farmacia en promedio; 1 persona por farmacia en cada grupo del kickoff; Área 1 sola en Sala Los Olivos (10 participantes) y Áreas 2 y 3 juntas en Sala Las Heras (21 participantes); feriados de Argentina y pausa navideña del 21 de diciembre al 1 de enero. En el kickoff, Mariana facilita Conductas y Oswaldo facilita Pilares con su guía; desde el 18 de diciembre, Oswaldo continúa solo con el refuerzo en tienda.</div></div>
+    <div class="footer-note"><div class="footer-note-icon">💡</div><div class="footer-note-text"><strong>Supuestos del plan.</strong> 16 colaboradores por farmacia en promedio; 1 persona por farmacia en cada grupo del kickoff; Área 1 sola, siempre en la mañana en Sala Las Heras (10 participantes), y Áreas 2 y 3 juntas, siempre en la tarde en Sala Los Olivos (21 participantes); cada grupo hace Conductas un día y Pilares el día hábil siguiente; feriados de Argentina y pausa navideña del 21 de diciembre al 1 de enero. En el kickoff, Mariana facilita Conductas y Oswaldo facilita Pilares con su guía; desde el 18 de diciembre, Oswaldo continúa solo con el refuerzo en tienda.</div></div>
   </div>
 </div>
 
@@ -1204,7 +1204,8 @@ const CONFIG = {
     colaboradoresPorTienda: 16,     // promedio; la mitad en turno mañana y la mitad en turno tarde
     maxPorTienda: 1,                // máximo de personas de una misma farmacia por taller
     grupos: [[1],[2,3]],            // Área 1 sola; Áreas 2 y 3 juntas
-    salaPorArea: { 1: 'Sala Los Olivos', 2: 'Sala Las Heras', 3: 'Sala Las Heras' },
+    turnos: { AM: [1], PM: [2,3] },  // la mañana siempre en una sala y la tarde siempre en la otra
+    salaPorArea: { 1: 'Sala Las Heras', 2: 'Sala Los Olivos', 3: 'Sala Los Olivos' },
     // Cada taller dura 2,5 horas: Conductas en la mañana, Pilares en la tarde
     horario: { AM: '9:00 a 11:30', PM: '14:00 a 16:30' },
   },
@@ -1297,19 +1298,20 @@ function planificar(opts = {}) {
   // Cada día: taller de Conductas en la mañana y de Pilares en la tarde, con grupos distintos.
   // Cada grupo (2 personas por farmacia de un área) hace Conductas un día en la mañana y Pilares el día siguiente en la tarde.
   const rondas = Math.ceil(colab / K.maxPorTienda);
-  const pools = opts.pools || K.grupos;   // áreas que comparten cada grupo
+  // Cada turno tiene siempre la misma sala y el mismo grupo de áreas: AM y PM no se alternan.
   const areaDe = {}; [1,2,3].forEach(a => AREAS[a].tiendas.forEach(t => areaDe[t] = a));
-  const grupos = [];
-  for (let r = 1; r <= rondas; r++) pools.forEach(p => grupos.push({ areas: p, ronda: r }));
   const etq = p => p.length === 1 ? AREAS[p[0]].nombre : 'Áreas ' + p.slice(0,-1).join(', ') + ' y ' + p[p.length-1];
-  const sesionTxt = (g, tl) => { const tiendas = g.areas.flatMap(a => AREAS[a].tiendas); const sala = K.salaPorArea[g.areas[0]];
-    return { area: g.areas[0], areas: g.areas, areaLabel: etq(g.areas), sala, tiendas, ronda: g.ronda, taller: tl,
-      nota: `Taller de ${tl}, ${sala}, ${tl === 'Conductas' ? K.horario.AM : K.horario.PM}. Grupo ${g.ronda} de ${rondas}`,
+  const colaTurno = p => { const q = []; for (let r = 1; r <= rondas; r++) for (const tl of ['Conductas','Pilares']) q.push({ areas: p, ronda: r, taller: tl }); return q; };
+  const qK = { AM: colaTurno(K.turnos.AM), PM: colaTurno(K.turnos.PM) };
+  const nGruposK = rondas * 2;
+  const sesionTxt = (g, slot) => { const tiendas = g.areas.flatMap(a => AREAS[a].tiendas); const sala = K.salaPorArea[g.areas[0]];
+    return { area: g.areas[0], areas: g.areas, areaLabel: etq(g.areas), sala, tiendas, ronda: g.ronda, taller: g.taller, slot,
+      nota: `Taller de ${g.taller}, ${sala}, ${K.horario[slot]}. Grupo ${g.ronda} de ${rondas}`,
       resumen: `${tiendas.length} farmacias, ${K.maxPorTienda === 1 ? '1 persona' : 'hasta ' + K.maxPorTienda + ' personas'} por farmacia (${tiendas.length * K.maxPorTienda} participantes)` }; };
   const prevHabil = x => { let y = addDays(x, -1); while (!esHabil(y)) y = addDays(y, -1); return y; };
   const r3 = CONFIG.ultimoDiaMariana, r2 = prevHabil(r3), r1 = prevHabil(r2);
-  i = 0;
-  while (i <= grupos.length) {
+  let cerrado = false;
+  while (!cerrado) {
     if (!esHabil(f) || enPausa(f)) { registraInhabil(f); next(); continue; }
     if (f === r1 || f === r2) {
       push(f, { fase: 'diagnostico', titulo: f === r1 ? 'Diagnóstico: reunión de contraste con Delitze (Auditoría Argentina) y borrador' : 'Diagnóstico: redacción final y preparación del traspaso',
@@ -1320,16 +1322,18 @@ function planificar(opts = {}) {
       push(f, { fase: 'cierre', titulo: 'Cierre y traspaso a Oswaldo', detalle: 'Informe de avance del kickoff por farmacia, entrega del diagnóstico, reunión con Gerentes de Área y plan de continuidad de Oswaldo.' });
       next(); continue;
     }
-    const gAM = grupos[i], gPM = i > 0 ? grupos[i-1] : null;
-    const am = gAM ? sesionTxt(gAM, 'Conductas') : null;
-    const pm = gPM ? sesionTxt(gPM, 'Pilares') : null;
-    const d = { fase: 'kickoff', am, pm };
-    if (!am) { d.titulo = 'Último taller de Pilares y cierre del kickoff'; d.detalle = 'Mañana: consolidar asistencia por farmacia, citar a quienes faltaron y armar las rutas de refuerzo con cada Gerente de Área.'; d.amNota = 'Cierre del kickoff'; }
-    else d.titulo = pm ? `Conductas ${am.areaLabel} y Pilares ${pm.areaLabel}` : `Inicio del kickoff: Conductas ${am.areaLabel}`;
-    if (!pm) d.pmNota = 'Preparación de la sala y del material de Pilares';
+    if (!qK.AM.length && !qK.PM.length) {
+      push(f, { fase: 'kickoff', titulo: 'Cierre del kickoff', detalle: 'Consolidar asistencia por farmacia, citar a quienes faltaron y armar las rutas de refuerzo con cada Gerente de Área.', am: null, pm: null, amNota: 'Cierre del kickoff', pmNota: 'Cierre del kickoff' });
+      cerrado = true; next(); break;
+    }
+    const gAM = qK.AM.shift(), gPM = qK.PM.shift();
+    const am = gAM ? sesionTxt(gAM, 'AM') : null;
+    const pm = gPM ? sesionTxt(gPM, 'PM') : null;
+    const d = { fase: 'kickoff', am, pm, titulo: [am, pm].filter(Boolean).map(b => `${b.taller} ${b.areaLabel}`).join(' y ') };
+    if (!am) d.amNota = 'Sin taller'; if (!pm) d.pmNota = 'Sin taller';
     push(f, d);
     [[am,'AM'],[pm,'PM']].forEach(([b,t]) => b && b.tiendas.forEach(ti => visitas.push({ tienda: ti, area: areaDe[ti], ciclo: 0, turno: t, fecha: f, resp: resp(f), sala: b.sala, taller: b.taller })));
-    i++; next();
+    next();
   }
   // Fase 3/4: refuerzo por ciclos (1 conducta + 1 pilar), AM y PM desfasados una semana
   const mkQueue = () => { const q = []; for (let c = 1; c <= 5; c++) for (const a of [1,2,3]) q.push({ ciclo: c, area: a, pend: AREAS[a].tiendas.slice() }); return q; };
@@ -1383,7 +1387,7 @@ function planificar(opts = {}) {
   dnc.sort((a, b) => (a.fecha || '2026-10-15z') < (b.fecha || '2026-10-15z') ? -1 : 1);
   const cie = dias.find(d => d.fase === 'cierre');
   if (cie) { cie.dnc = 'Entrega del diagnóstico de necesidades de capacitación y validación con Delitze (Auditoría Argentina) y los Gerentes de Área.'; dnc.push({ fecha: cie.fecha, t: 'Entrega y validación del diagnóstico', con: 'Delitze (Auditoría Argentina) y Gerentes de Área' }); }
-  return { dncModo, dnc, dias, visitas, iniRefuerzo, iniPM, fin: dias[dias.length-1].fecha, rondas, colab, talleres: grupos.length * 2, nGrupos: grupos.length };
+  return { dncModo, dnc, dias, visitas, iniRefuerzo, iniPM, fin: dias[dias.length-1].fecha, rondas, colab, talleres: nGruposK * 2, nGrupos: nGruposK };
 }
 
 
@@ -1436,14 +1440,14 @@ const NC = [
     facilitators:'Mariana Meza', status:'Por iniciar', start:R.ent[0] },
   { id:2, short:'5 Conductas', name:'Taller 5 Conductas de Servicio', population:'Personal de las 31 farmacias', duration:'2.5 horas',
     dates:rangoMes(R.kick[0], R.kick[1]), range:`${nf(R.kick[0])} – ${nf(R.kick[1])}`, prog:{ total:participantes, unit:'formados', dash:true }, groups:`${nGrupos} grupos · ${tam} c/u`, people:`${participantes} participantes`,
-    invest:`${nGrupos} mañanas, ${CONFIG.kickoff.horario.AM}`,
-    content:`Las 5 conductas de servicio aplicadas a situaciones reales de tienda · En sala, ${MAXT === 1 ? '1 persona' : 'máximo ' + MAXT + ' personas'} por farmacia en cada grupo`,
+    invest:`${nGrupos} sesiones de 2.5 horas`,
+    content:`Las 5 conductas de servicio aplicadas a situaciones reales de tienda · ${MAXT === 1 ? '1 persona' : 'Máximo ' + MAXT + ' personas'} por farmacia en cada grupo · ${CONFIG.kickoff.turnos.AM.length === 1 ? 'Área ' + CONFIG.kickoff.turnos.AM[0] : 'Áreas ' + CONFIG.kickoff.turnos.AM.join(' y ')}: mañanas en ${salaTxt(CONFIG.kickoff.turnos.AM[0])} · ${CONFIG.kickoff.turnos.PM.length === 1 ? 'Área ' + CONFIG.kickoff.turnos.PM[0] : 'Áreas ' + CONFIG.kickoff.turnos.PM.join(' y ')}: tardes en ${salaTxt(CONFIG.kickoff.turnos.PM[0])}`,
     facilitators: `Mariana Meza, con Oswaldo Saldivia de apoyo${R.kick[1] > ULT ? ', hasta el 17 dic; desde el 18 dic, Oswaldo Saldivia' : ''}<br>${salaBadges(NX_COLORS[2])}`,
     status:'Por iniciar', start:R.kick[0] },
   { id:3, short:'5 Pilares', name:'Taller 5 Pilares de la Operación', population:'Personal de las 31 farmacias', duration:'2.5 horas',
     dates:rangoMes(R.kick[0], R.kick[1]), range:`${nf(R.kick[0])} – ${nf(R.kick[1])}`, prog:{ total:participantes, unit:'formados', dash:true }, groups:`${nGrupos} grupos · ${tam} c/u`, people:`${participantes} participantes`,
-    invest:`${nGrupos} tardes, ${CONFIG.kickoff.horario.PM}`,
-    content:'Los 5 pilares de la operación · Cada grupo va a Pilares en la tarde del día siguiente a su taller de Conductas',
+    invest:`${nGrupos} sesiones de 2.5 horas`,
+    content:`Los 5 pilares de la operación · Cada grupo va a Pilares el día hábil siguiente a su taller de Conductas, en el mismo horario y sala · ${CONFIG.kickoff.turnos.AM.length === 1 ? 'Área ' + CONFIG.kickoff.turnos.AM[0] : 'Áreas ' + CONFIG.kickoff.turnos.AM.join(' y ')}: mañanas en ${salaTxt(CONFIG.kickoff.turnos.AM[0])} · ${CONFIG.kickoff.turnos.PM.length === 1 ? 'Área ' + CONFIG.kickoff.turnos.PM[0] : 'Áreas ' + CONFIG.kickoff.turnos.PM.join(' y ')}: tardes en ${salaTxt(CONFIG.kickoff.turnos.PM[0])}`,
     facilitators: `Oswaldo Saldivia, con Mariana Meza acompañando y guiando${R.kick[1] > ULT ? ' hasta el 17 dic' : ''}<br>${salaBadges(NX_COLORS[3])}`,
     status:'Por iniciar', start:R.kick[0] },
   { id:4, short:'Refuerzo en tienda', name:'Refuerzo en tienda: 1 conducta + 1 pilar', population:'Equipos de las 31 farmacias', duration:'60 min por visita',
@@ -1467,8 +1471,9 @@ NP.dias.forEach(d => {
   if (d.fase === 'preparacion') NS.push({ date:f, cid:0, group:d.titulo, facilitator:d.responsable, detail:d.detalle });
   if (d.fase === 'entrenamiento') NS.push({ date:f, cid:1, group:d.titulo, facilitator:'Mariana Meza', detail:d.detalle });
   if (d.fase === 'kickoff') {
-    if (d.am) NS.push({ date:f, cid:2, slot:'am', group:`G${d.am.ronda}`, area:d.am.areaLabel, sala:d.am.sala, tiendas:d.am.tiendas, facilitator: f <= ULT ? 'Mariana Meza, con Oswaldo Saldivia' : 'Oswaldo Saldivia', hours:CONFIG.kickoff.horario.AM });
-    if (d.pm) NS.push({ date:f, cid:3, slot:'pm', group:`G${d.pm.ronda}`, area:d.pm.areaLabel, sala:d.pm.sala, tiendas:d.pm.tiendas, facilitator: f <= ULT ? 'Oswaldo Saldivia, con Mariana Meza' : 'Oswaldo Saldivia', hours:CONFIG.kickoff.horario.PM });
+    [['am', d.am], ['pm', d.pm]].forEach(([sl, b]) => { if (!b) return; const cond = b.taller === 'Conductas';
+      NS.push({ date:f, cid: cond ? 2 : 3, slot:sl, group:`G${b.ronda}`, area:b.areaLabel, sala:b.sala, tiendas:b.tiendas, hours:CONFIG.kickoff.horario[sl.toUpperCase()],
+        facilitator: f <= ULT ? (cond ? 'Mariana Meza, con Oswaldo Saldivia' : 'Oswaldo Saldivia, con Mariana Meza') : 'Oswaldo Saldivia' }); });
   }
   if (['refuerzo','continuidad','cierre'].includes(d.fase)) {
     [['am', d.am], ['pm', d.pm]].forEach(([sl, b]) => { if (b) NS.push({ date:f, cid:4, slot:sl, group:`Ciclo ${b.ciclo}`, area:AREAS[b.area].nombre, tiendas:b.tiendas, ciclo:b.ciclo,
