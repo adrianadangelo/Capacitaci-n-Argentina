@@ -204,7 +204,8 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:20px}
 <script>
 // ===== CONFIGURACIÓN EDITABLE =====
 const CONFIG = {
-  inicio: '2026-10-14',
+  llegada: '2026-10-14',
+  inicio: '2026-10-15',   // primer día de trabajo en Argentina
   ultimoDiaMariana: '2026-12-17',   // jueves; último día de Mariana en Argentina
   salidaMariana: '2026-12-17',
   pausa: { desde: '2026-12-21', hasta: '2027-01-01', motivo: 'Temporada alta navideña: sin visitas de campo' },
@@ -245,7 +246,7 @@ const PREPARACION = [
   { fecha: '2026-09-29', t: 'Presentación del cronograma', resp: 'Adriana', d: 'Recorrido por el plan completo en Argentina: fases, áreas, farmacias, responsables y entregables.' },
   { fecha: '2026-09-30', t: 'Taller Cultura de Servicio, personal base', resp: 'Adriana', d: 'Mariana vive el taller como participante y toma nota de la secuencia, dinámicas y mensajes clave para replicarlo.' },
   { fecha: '2026-10-01', t: 'Taller Cultura de Servicio, supervisores', resp: 'Adriana', d: 'Versión para líderes de tienda: cómo sostener las conductas en el día a día y dar feedback al equipo.' },
-  { fecha: '2026-10-02', t: 'Inducción 5 pilares de la operación', resp: 'GT David', d: 'Contenido de los 5 pilares y cómo se ven en tienda.' },
+  { fecha: '2026-10-02', t: 'Inducción 5 pilares de la operación', resp: 'Álvaro Bermúdez', d: 'Contenido de los 5 pilares y cómo se ven en tienda.' },
   { fecha: '2026-10-05', t: 'Entrenamiento en Pilares de la operación, tienda Graciela (día 1)', resp: 'Álvaro Bermúdez', d: 'Mariana acompaña la operación real de la tienda y ve cómo se aplica cada pilar en el día a día.' },
   { fecha: '2026-10-06', t: 'Entrenamiento en Pilares de la operación, tienda Graciela (día 2)', resp: 'Álvaro Bermúdez', d: 'Mariana aplica el checklist de los pilares en tienda con la guía de Álvaro, para luego acompañar y guiar a Oswaldo.' },
   { fecha: '2026-10-07', t: 'Formaciones de kickoff (día 1)', resp: 'Monica Urdaneta', d: 'Guion, materiales y dinámicas de los talleres de Conductas y Pilares.' },
@@ -293,6 +294,7 @@ function planificar(opts = {}) {
 
   // Fase 0: preparación antes del viaje
   PREPARACION.forEach(p => dias.push({ fecha: p.fecha, fase: 'preparacion', titulo: p.t, detalle: p.d, resp: 'Responsable: ' + p.resp, responsable: p.resp }));
+  dias.push({ fecha: CONFIG.llegada, fase: 'inhabil', titulo: 'Llegada de Mariana a Argentina e instalación en su apartamento. No va a la oficina.', resp: '' });
   // Fase 1: entrenamiento
   let i = 0;
   while (i < ENTRENAMIENTO.length) {
@@ -363,17 +365,17 @@ function planificar(opts = {}) {
   // Diagnóstico de necesidades de capacitación (entregable de Mariana antes de irse)
   const dnc = [];
   const ent0 = dias.find(d => d.fase === 'entrenamiento');
-  if (ent0) { ent0.dnc = 'Reunión de arranque con Auditoría: hallazgos recientes por área y farmacia, y criterios del diagnóstico.'; dnc.push({ fecha: ent0.fecha, t: 'Reunión de arranque con Auditoría', con: 'Auditoría' }); }
+  if (ent0) { ent0.dnc = 'Reunión de arranque con Delitze, de Auditoría Argentina: hallazgos recientes por área y farmacia, y criterios del diagnóstico.'; dnc.push({ fecha: ent0.fecha, t: 'Reunión de arranque con Auditoría', con: 'Delitze, Auditoría Argentina' }); }
   dnc.push({ fecha: null, t: 'Levantamiento en campo durante el kickoff y las visitas: brechas por conducta y pilar en cada farmacia', con: 'Mariana y Oswaldo' });
   const libres = dias.filter(d => d.fase === 'refuerzo' && !d.pm && d.fecha <= CONFIG.ultimoDiaMariana);
   const tareas = [
-    ['Reunión de contraste con Auditoría: lo observado en campo frente a sus hallazgos', 'Reunión de contraste con Auditoría', 'Auditoría'],
+    ['Reunión de contraste con Delitze, de Auditoría Argentina: lo observado en campo frente a sus hallazgos', 'Reunión de contraste con Auditoría', 'Delitze, Auditoría Argentina'],
     ['Redacción del borrador del diagnóstico', 'Borrador del diagnóstico', 'Mariana'],
     ['Redacción del borrador del diagnóstico y prioridades de formación', 'Borrador del diagnóstico (continuación)', 'Mariana'],
   ];
   tareas.forEach((t, k) => { const d = libres[k]; if (!d) return; d.pmNota = 'Diagnóstico de necesidades: ' + t[0]; d.dnc = true; dnc.push({ fecha: d.fecha, t: t[1], con: t[2] }); });
   const cie = dias.find(d => d.fase === 'cierre');
-  if (cie) { cie.dnc = 'Entrega del diagnóstico de necesidades de capacitación y validación con Auditoría y Gerentes de Área.'; dnc.push({ fecha: cie.fecha, t: 'Entrega y validación del diagnóstico', con: 'Auditoría y Gerentes de Área' }); }
+  if (cie) { cie.dnc = 'Entrega del diagnóstico de necesidades de capacitación y validación con Delitze (Auditoría Argentina) y los Gerentes de Área.'; dnc.push({ fecha: cie.fecha, t: 'Entrega y validación del diagnóstico', con: 'Delitze (Auditoría Argentina) y Gerentes de Área' }); }
   return { dnc, dias, visitas, iniRefuerzo, iniPM, fin: dias[dias.length-1].fecha, rondas, colab, talleres: grupos.length * 2 };
 }
 
