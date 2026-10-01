@@ -1439,19 +1439,19 @@ const NC = [
     content:'Mariana llega el 14 oct · Alineación con Oswaldo, Operaciones y Auditoría · 5 conductas de servicio · 5 pilares en tienda · Metodología de facilitación · Ensayo general y certificación',
     facilitators:'Mariana Meza', status:'Por iniciar', start:R.ent[0] },
   { id:2, short:'5 Conductas', name:'Taller 5 Conductas de Servicio', population:'Personal de las 31 farmacias', duration:'2.5 horas',
-    dates:rangoMes(R.kick[0], R.kick[1]), range:`${nf(R.kick[0])} – ${nf(R.kick[1])}`, prog:{ total:participantes, unit:'formados', dash:true }, groups:`${nGrupos} grupos · ${tam} c/u`, people:`${participantes} participantes`,
+    dates:rangoMes(R.kick[0], R.kick[1]), range:`${nf(R.kick[0])} – ${nf(R.kick[1])}`, prog:{ total:participantes, unit:'formados', live:true }, groups:`${nGrupos} grupos · ${tam} c/u`, people:`${participantes} participantes`,
     invest:`${nGrupos} sesiones de 2.5 horas`,
     content:`Las 5 conductas de servicio aplicadas a situaciones reales de tienda · ${MAXT === 1 ? '1 persona' : 'Máximo ' + MAXT + ' personas'} por farmacia en cada grupo · ${CONFIG.kickoff.turnos.AM.length === 1 ? 'Área ' + CONFIG.kickoff.turnos.AM[0] : 'Áreas ' + CONFIG.kickoff.turnos.AM.join(' y ')}: mañanas en ${salaTxt(CONFIG.kickoff.turnos.AM[0])} · ${CONFIG.kickoff.turnos.PM.length === 1 ? 'Área ' + CONFIG.kickoff.turnos.PM[0] : 'Áreas ' + CONFIG.kickoff.turnos.PM.join(' y ')}: tardes en ${salaTxt(CONFIG.kickoff.turnos.PM[0])}`,
     facilitators: `Mariana Meza, con Oswaldo Saldivia de apoyo${R.kick[1] > ULT ? ', hasta el 17 dic; desde el 18 dic, Oswaldo Saldivia' : ''}<br>${salaBadges(NX_COLORS[2])}`,
     status:'Por iniciar', start:R.kick[0] },
   { id:3, short:'5 Pilares', name:'Taller 5 Pilares de la Operación', population:'Personal de las 31 farmacias', duration:'2.5 horas',
-    dates:rangoMes(R.kick[0], R.kick[1]), range:`${nf(R.kick[0])} – ${nf(R.kick[1])}`, prog:{ total:participantes, unit:'formados', dash:true }, groups:`${nGrupos} grupos · ${tam} c/u`, people:`${participantes} participantes`,
+    dates:rangoMes(R.kick[0], R.kick[1]), range:`${nf(R.kick[0])} – ${nf(R.kick[1])}`, prog:{ total:participantes, unit:'formados', live:true }, groups:`${nGrupos} grupos · ${tam} c/u`, people:`${participantes} participantes`,
     invest:`${nGrupos} sesiones de 2.5 horas`,
     content:`Los 5 pilares de la operación · Cada grupo va a Pilares el día hábil siguiente a su taller de Conductas, en el mismo horario y sala · ${CONFIG.kickoff.turnos.AM.length === 1 ? 'Área ' + CONFIG.kickoff.turnos.AM[0] : 'Áreas ' + CONFIG.kickoff.turnos.AM.join(' y ')}: mañanas en ${salaTxt(CONFIG.kickoff.turnos.AM[0])} · ${CONFIG.kickoff.turnos.PM.length === 1 ? 'Área ' + CONFIG.kickoff.turnos.PM[0] : 'Áreas ' + CONFIG.kickoff.turnos.PM.join(' y ')}: tardes en ${salaTxt(CONFIG.kickoff.turnos.PM[0])}`,
     facilitators: `Oswaldo Saldivia, con Mariana Meza acompañando y guiando${R.kick[1] > ULT ? ' hasta el 17 dic' : ''}<br>${salaBadges(NX_COLORS[3])}`,
     status:'Por iniciar', start:R.kick[0] },
   { id:4, short:'Refuerzo en tienda', name:'Refuerzo en tienda: 1 conducta + 1 pilar', population:'Equipos de las 31 farmacias', duration:'60 min por visita',
-    dates:rangoMes(refVis.map(v=>v.fecha).sort()[0], NP.fin), range:`${nf(refVis.map(v=>v.fecha).sort()[0])} – ${nf(NP.fin)}`, prog:{ total:refVis.length, unit:'visitas' }, groups:'5 ciclos', people:`🏪 ${refVis.length} visitas`,
+    dates:rangoMes(refVis.map(v=>v.fecha).sort()[0], NP.fin), range:`${nf(refVis.map(v=>v.fecha).sort()[0])} – ${nf(NP.fin)}`, prog:{ total:refVis.length, unit:'visitas', live:true }, groups:'5 ciclos', people:`🏪 ${refVis.length} visitas`,
     invest:'2 a 3 farmacias por medio turno',
     content:'Un ciclo por conducta, con su actividad: Bingo, Rally contra el tiempo, Ruleta de las soluciones, STOP del cliente y Chapa del Deleite · Turno mañana y tarde · Los colaboradores no se trasladan',
     facilitators: (refConM ? `${areaBadge('HASTA 17 DIC', NX_COLORS[4])} Mariana Meza y Oswaldo Saldivia (${refConM} visitas)</span><br>${areaBadge('DESDE 18 DIC', NX_COLORS[4])} Oswaldo Saldivia</span><br>` : 'Oswaldo Saldivia<br>') + `<span style="font-size:11px;color:var(--muted)">Reporte semanal a Adriana D'Angelo y José Ignacio Thorne</span>`,
@@ -1537,24 +1537,45 @@ window.nxOpenAct = n => { const a = ACTS[n-1], c = NX_COLORS[2];
     + mf('🔁 Dinámica', a.dinamica.map((x, i) => `${i+1}. ${nesc(x)}`).join('<br>'), true) + mf('💬 Cierre', a.cierre, true) + mf('🗓 Visitas del ciclo', actRango(n), true)); };
 
 // ---- Progreso (mismo formato que Mónica) ----
+// ▼▼▼ PEGA AQUÍ ENTRE LAS COMILLAS LA URL DE TU APPS SCRIPT (termina en /exec) ▼▼▼
+const PROGRESO_API = '';
+// ▲▲▲ ─────────────────────────────────────────────────────────────── ▲▲▲
 const HOY = (() => { const t = new Date(); return `${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,'0')}-${String(t.getDate()).padStart(2,'0')}`; })();
 function nxProgress(c) {
   const p = c.prog;
   const hechos = p.byDate ? NS.filter(x => x.cid === c.id && x.date < HOY).length : 0;
   const pct = Math.round(hechos / p.total * 100);
-  const nota = hechos ? `${pct}% completado${p.byDate ? ' según cronograma' : ''}` : `0% completado · inicia ${nf(c.start)}`;
+  const nota = p.live ? (PROGRESO_API ? 'Cargando...' : `0% completado · inicia ${nf(c.start)}`) : (hechos ? `${pct}% completado según cronograma` : `0% completado · inicia ${nf(c.start)}`);
+  const refresh = p.live && PROGRESO_API ? `<button onclick="nxFetchProgress()" style="background:none;border:none;cursor:pointer;font-size:11px;color:${c.color};padding:0;line-height:1" title="Actualizar">↻</button>` : '';
   return `<div style="margin:10px 0 6px;background:${c.lt};border-radius:8px;padding:10px 12px;border:1px solid ${c.bd}" onclick="event.stopPropagation()">
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
           <span style="font-size:10px;font-weight:800;color:${c.color};text-transform:uppercase;letter-spacing:.06em;white-space:nowrap">Progreso de formación</span>
-          <span style="font-size:11px;font-weight:800;color:${c.color};margin-left:auto;white-space:nowrap">${hechos} / ${p.total} ${p.unit}</span>
+          <span id="nxp-count-${c.id}" style="font-size:11px;font-weight:800;color:${c.color};margin-left:auto;white-space:nowrap">${hechos} / ${p.total} ${p.unit}</span>${refresh}
         </div>
-        <div style="background:#fff;border-radius:6px;height:10px;overflow:hidden;border:1px solid ${c.bd}"><div style="height:100%;background:${c.color};border-radius:6px;width:${pct}%;transition:width .8s ease"></div></div>
+        <div style="background:#fff;border-radius:6px;height:10px;overflow:hidden;border:1px solid ${c.bd}"><div id="nxp-bar-${c.id}" style="height:100%;background:${c.color};border-radius:6px;width:${pct}%;transition:width .8s ease"></div></div>
         <div style="margin-top:5px;display:flex;justify-content:space-between">
-          <span style="font-size:9px;color:#999;font-weight:600">${nota}</span>
-          ${p.dash ? '<a href="evaluaciones.html" target="_blank" rel="noopener" style="font-size:9px;color:' + c.color + ';font-weight:700;text-decoration:none">Ver dashboard →</a>' : ''}
+          <span id="nxp-pct-${c.id}" style="font-size:9px;color:#999;font-weight:600">${nota}</span>
         </div>
       </div>`;
 }
+function nxSetBar(id, n, total) {
+  const c = NC[id], pct = total ? Math.min(100, Math.round(n / total * 100)) : 0;
+  const b = document.getElementById('nxp-bar-' + id), l = document.getElementById('nxp-count-' + id), q = document.getElementById('nxp-pct-' + id);
+  if (b) b.style.width = pct + '%'; if (l) l.textContent = `${n} / ${total} ${c.prog.unit}`; if (q) q.textContent = `${pct}% completado`;
+}
+window.nxFetchProgress = async () => {
+  if (!PROGRESO_API) return;
+  try {
+    const r = await fetch(PROGRESO_API, { cache: 'no-store' });
+    const j = await r.json();
+    const tot = j.nomina > 0 ? j.nomina : participantes;
+    nxSetBar(2, j.conductas || 0, tot);
+    nxSetBar(3, j.pilares || 0, tot);
+    nxSetBar(4, j.visitas || 0, j.visitasPlan || refVis.length);
+  } catch (e) {
+    [2,3,4].forEach(id => { const q = document.getElementById('nxp-pct-' + id); if (q) q.textContent = 'No se pudo cargar el progreso'; });
+  }
+};
 
 // ---- Tarjetas ----
 function nxRenderCards() {
@@ -1664,7 +1685,7 @@ window.nxClose = () => document.getElementById('nxOverlay').classList.remove('op
 document.addEventListener('keydown', e => { if (e.key === 'Escape') nxClose(); });
 
 let nxInit = false;
-window.nxInitOnce = () => { if (nxInit) return; nxInit = true; nxRenderCards(); nxRenderActs(); nxRenderKPIs(); nxRenderFilters(); nxRenderCalendar(); };
+window.nxInitOnce = () => { if (nxInit) return; nxInit = true; nxRenderCards(); nxRenderActs(); nxFetchProgress(); nxRenderKPIs(); nxRenderFilters(); nxRenderCalendar(); };
 
 })();
 </script>
