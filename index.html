@@ -253,18 +253,18 @@ thead th.week-even .date-box { background:#eef2fb; }
         <div style="font-size:13px;font-weight:500;color:var(--muted);line-height:1.55;flex:1;margin-bottom:20px">Resumen y cronograma detallado de las 6 formaciones planificadas para Operaciones Argentina 2026: población, duración, facilitadores y calendario por grupo.</div>
         <span style="font-size:13px;font-weight:800;color:var(--blue2)">Ver planificación →</span>
       </a>
-      <a href="evaluaciones.html" style="background:#fff;border-radius:18px;padding:32px 28px;text-align:left;text-decoration:none;display:flex;flex-direction:column;border-top:4px solid #e74c3c;transition:transform .2s,box-shadow .2s">
-        <div style="margin-bottom:16px;line-height:1"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="4" y1="20" x2="20" y2="20" stroke="#e74c3c" stroke-width="1.6" stroke-linecap="round"/><rect x="6" y="12" width="3.2" height="8" rx="0.6" fill="#e74c3c"/><rect x="11" y="8" width="3.2" height="12" rx="0.6" fill="#e74c3c"/><rect x="16" y="4.5" width="3.2" height="15.5" rx="0.6" fill="#e74c3c"/></svg></div>
-        <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:#e74c3c;margin-bottom:6px">Lo realizado · en vivo</div><div style="font-size:19px;font-weight:800;color:var(--navy);margin-bottom:8px;line-height:1.25">Estatus de participación de las formaciones</div>
-        <div style="font-size:13px;font-weight:500;color:var(--muted);line-height:1.55;flex:1;margin-bottom:20px">Estatus de participación en vivo por formación: nómina, respuestas, notas y % de aprobación, con detalle por tienda y por área.</div>
-        <span style="font-size:13px;font-weight:800;color:#e74c3c">Ver dashboard →</span>
-      </a>
+      
       <a href="#" onclick="goToNext();return false;" style="background:#fff;border-radius:18px;padding:32px 28px;text-align:left;text-decoration:none;display:flex;flex-direction:column;border-top:4px solid #27ae60;transition:transform .2s,box-shadow .2s">
         <div style="margin-bottom:16px;line-height:1"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="5" cy="18" r="2.2" stroke="#27ae60" stroke-width="1.6"/><circle cx="19" cy="6" r="2.2" stroke="#27ae60" stroke-width="1.6"/><path d="M7.2 18H15a3 3 0 0 0 0-6H9a3 3 0 0 1 0-6h7.8" stroke="#27ae60" stroke-width="1.6" stroke-linecap="round" fill="none"/></svg></div>
         <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:#27ae60;margin-bottom:6px">Lo que viene · Oct 2026 – Abr 2027</div>
         <div style="font-size:19px;font-weight:800;color:var(--navy);margin-bottom:8px;line-height:1.25">Planificación de lo que viene</div>
         <div style="font-size:13px;font-weight:500;color:var(--muted);line-height:1.55;flex:1;margin-bottom:20px">Resumen y cronograma de las 6 actividades para llevar las 5 conductas y los 5 pilares a las 31 farmacias: preparación, entrenamiento, talleres en sala, refuerzo en tienda y diagnóstico.</div>
         <span style="font-size:13px;font-weight:800;color:#27ae60">Ver planificación →</span>
+      </a><a href="#" onclick="goToStatus();return false;" style="background:#fff;border-radius:18px;padding:32px 28px;text-align:left;text-decoration:none;display:flex;flex-direction:column;border-top:4px solid #e74c3c;transition:transform .2s,box-shadow .2s">
+        <div style="margin-bottom:16px;line-height:1"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="4" y1="20" x2="20" y2="20" stroke="#e74c3c" stroke-width="1.6" stroke-linecap="round"/><rect x="6" y="12" width="3.2" height="8" rx="0.6" fill="#e74c3c"/><rect x="11" y="8" width="3.2" height="12" rx="0.6" fill="#e74c3c"/><rect x="16" y="4.5" width="3.2" height="15.5" rx="0.6" fill="#e74c3c"/></svg></div>
+        <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:#e74c3c;margin-bottom:6px">Lo que viene · en vivo</div><div style="font-size:19px;font-weight:800;color:var(--navy);margin-bottom:8px;line-height:1.25">Estatus de participación de Conductas y Pilares</div>
+        <div style="font-size:13px;font-weight:500;color:var(--muted);line-height:1.55;flex:1;margin-bottom:20px">Avance en vivo del kickoff de 5 Conductas y 5 Pilares y de las visitas de refuerzo, con detalle por área y por farmacia.</div>
+        <span style="font-size:13px;font-weight:800;color:#e74c3c">Ver dashboard →</span>
       </a>
     </div>
   </div>
@@ -483,7 +483,8 @@ thead th.week-even .date-box { background:#eef2fb; }
   <div class="content-ex">
     <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px">
       <div class="section-label" style="margin-bottom:0">Actividades</div>
-      <a href="#" onclick="goToPlanning();return false;" style="display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:800;color:var(--blue2);background:var(--blue-lt);border:1px solid #c5d0f8;border-radius:100px;padding:7px 16px;text-decoration:none;white-space:nowrap">← Ver lo realizado (jun – ago 2026)</a>
+<div style="display:flex;gap:10px;flex-wrap:wrap">      <a href="#" onclick="goToPlanning();return false;" style="display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:800;color:var(--blue2);background:var(--blue-lt);border:1px solid #c5d0f8;border-radius:100px;padding:7px 16px;text-decoration:none;white-space:nowrap">← Ver lo realizado (jun – ago 2026)</a>
+      <a href="#" onclick="goToStatus();return false;" style="display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:800;color:#e74c3c;background:#fdecea;border:1px solid #f5c2bd;border-radius:100px;padding:7px 16px;text-decoration:none;white-space:nowrap">Ver estatus de participación →</a></div>
     </div>
     <div class="cap-grid" id="nxCards"></div>
     <div class="section-label">Actividades de refuerzo de las Conductas en tienda</div>
@@ -518,6 +519,25 @@ thead th.week-even .date-box { background:#eef2fb; }
   </div>
 </div>
 
+<!-- ══ VISTA 5: LO QUE VIENE · ESTATUS DE PARTICIPACIÓN ══ -->
+<div id="nstatus" style="display:none;background:var(--offwhite)">
+  <div class="hero-ex">
+    <div class="hero-flag">
+      <svg class="flag-svg" width="42" height="28" viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg"><rect width="900" height="200" y="0" fill="#74acdf"/><rect width="900" height="200" y="200" fill="#fff"/><rect width="900" height="200" y="400" fill="#74acdf"/><g transform="translate(450,300)"><circle r="55" fill="#F6B40E" stroke="#85340A" stroke-width="5"/><circle r="36" fill="#F6B40E"/><g stroke="#85340A" stroke-width="5"><line x1="0" y1="-67" x2="0" y2="-82"/><line x1="0" y1="67" x2="0" y2="82"/><line x1="-67" y1="0" x2="-82" y2="0"/><line x1="67" y1="0" x2="82" y2="0"/><line x1="-47" y1="-47" x2="-58" y2="-58"/><line x1="47" y1="-47" x2="58" y2="-58"/><line x1="-47" y1="47" x2="-58" y2="58"/><line x1="47" y1="47" x2="58" y2="58"/><line x1="-25" y1="-64" x2="-31" y2="-77"/><line x1="25" y1="-64" x2="31" y2="-77"/><line x1="-64" y1="-25" x2="-77" y2="-31"/><line x1="64" y1="-25" x2="77" y2="-31"/><line x1="-25" y1="64" x2="-31" y2="77"/><line x1="25" y1="64" x2="31" y2="77"/><line x1="-64" y1="25" x2="-77" y2="31"/><line x1="64" y1="25" x2="77" y2="31"/></g><ellipse cx="0" cy="-8" rx="12" ry="16" fill="#85340A"/><circle cx="-8" cy="-3" r="4" fill="#85340A"/><circle cx="8" cy="-3" r="4" fill="#85340A"/><path d="M -12 5 Q 0 18 12 5" stroke="#85340A" stroke-width="3" fill="none"/></g></svg>
+      <span class="hero-tag">Lo que viene · en vivo</span>
+    </div>
+    <h1 class="hero-title-ex">Estatus de participación<br><span>Conductas y Pilares</span></h1>
+    <p class="hero-sub-ex">Avance del kickoff (talleres de 5 Conductas y 5 Pilares) y de las visitas de refuerzo en tienda, por área y por farmacia. Solo se muestran totales.</p>
+  </div>
+  <div class="content-ex">
+    <div style="display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap;margin-bottom:20px">
+      <a href="#" onclick="goToNext();return false;" style="display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:800;color:var(--blue2);background:var(--blue-lt);border:1px solid #c5d0f8;border-radius:100px;padding:7px 16px;text-decoration:none">Ver planificación de lo que viene →</a>
+      <a href="#" onclick="nsRefresh();return false;" style="display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:800;color:#fff;background:var(--navy);border-radius:100px;padding:7px 16px;text-decoration:none">↻ Actualizar</a>
+    </div>
+    <div id="nsContent"></div>
+  </div>
+</div>
+
 <!-- ══ BOTÓN INICIO ══ -->
 <a href="#" id="homeBtn" onclick="goHome();return false;" style="position:fixed;top:18px;right:24px;z-index:1000;background:#fff;color:#0f1e4a;border:1.5px solid #d0d9ee;border-radius:8px;padding:9px 16px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;cursor:pointer;display:none;align-items:center;gap:8px;box-shadow:0 2px 10px rgba(15,30,74,0.15);text-decoration:none;transition:all .2s">
   <span>←</span><span>Inicio</span>
@@ -528,6 +548,7 @@ thead th.week-even .date-box { background:#eef2fb; }
 let currentView = 'home';
 
 function goToPlanning(){
+  document.getElementById('nstatus').style.display='none';
   document.getElementById('nexec').style.display='none';
   document.getElementById('ndetail').style.display='none';
   document.getElementById('home').classList.remove('active');
@@ -551,9 +572,21 @@ function goToNext(){
   currentView = 'next';
   window.scrollTo({top:0,behavior:'smooth'});
   if (window.nxInitOnce) window.nxInitOnce();
+  document.getElementById('nstatus').style.display='none';
+}
+
+function goToStatus(){
+  ['home','exec','detail','nexec','ndetail'].forEach(id => document.getElementById(id).style.display='none');
+  document.getElementById('home').classList.remove('active');
+  document.getElementById('nstatus').style.display='block';
+  document.getElementById('homeBtn').style.display='flex';
+  currentView = 'status';
+  window.scrollTo({top:0,behavior:'smooth'});
+  if (window.nsInitOnce) window.nsInitOnce();
 }
 
 function goHome(){
+  document.getElementById('nstatus').style.display='none';
   document.getElementById('nexec').style.display='none';
   document.getElementById('ndetail').style.display='none';
   document.getElementById('exec').style.display='none';
@@ -1568,12 +1601,14 @@ window.nxFetchProgress = async () => {
   try {
     const r = await fetch(PROGRESO_API, { cache: 'no-store' });
     const j = await r.json();
+    NXDATA = j; nsRender();
     const tot = j.nomina > 0 ? j.nomina : participantes;
     nxSetBar(2, j.conductas || 0, tot);
     nxSetBar(3, j.pilares || 0, tot);
     nxSetBar(4, j.visitas || 0, j.visitasPlan || refVis.length);
   } catch (e) {
     [2,3,4].forEach(id => { const q = document.getElementById('nxp-pct-' + id); if (q) q.textContent = 'No se pudo cargar el progreso'; });
+    NXDATA = { error: String(e) }; nsRender();
   }
 };
 
@@ -1686,6 +1721,64 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') nxClose(); }
 
 let nxInit = false;
 window.nxInitOnce = () => { if (nxInit) return; nxInit = true; nxRenderCards(); nxRenderActs(); nxFetchProgress(); nxRenderKPIs(); nxRenderFilters(); nxRenderCalendar(); };
+
+// ===== Vista: Estatus de participación de lo que viene =====
+const normaT = v => String(v || '').toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/^FARMACIA\s+/, '').replace(/,/g, '.').replace(/\s+/g, ' ').trim();
+let NXDATA = null, nsArea = 0, nsInit = false;
+function nsKey(nombre, keys) {
+  const n = normaT(nombre);
+  if (keys.includes(n)) return n;
+  return keys.find(k => k.length > 3 && (n.includes(k) || k.includes(n))) || null;
+}
+function nsFila(t, a) {
+  const pfD = (NXDATA && NXDATA.porFarmacia) || {}, keys = Object.keys(pfD);
+  const k = nsKey(t, keys), x = k ? pfD[k] : {};
+  return { t, a, nomina: x.nomina || 0, conductas: x.conductas || 0, pilares: x.pilares || 0, visitas: x.visitas || 0, visitasPlan: x.visitasPlan || 10 };
+}
+const nsBar = (lbl, n, tot, col, unit) => { const pct = tot ? Math.min(100, Math.round(n / tot * 100)) : 0;
+  return `<div style="margin:8px 0"><div style="display:flex;justify-content:space-between;font-size:11px;font-weight:800;color:${col};margin-bottom:4px"><span style="text-transform:uppercase;letter-spacing:.05em">${lbl}</span><span>${n} / ${tot} ${unit} · ${pct}%</span></div><div style="background:#fff;border-radius:6px;height:10px;overflow:hidden;border:1px solid var(--border)"><div style="height:100%;width:${pct}%;background:${col};border-radius:6px;transition:width .8s ease"></div></div></div>`; };
+const nsMini = (n, tot, col) => { const pct = tot ? Math.min(100, Math.round(n / tot * 100)) : 0;
+  return `<div style="display:flex;align-items:center;gap:8px"><div style="flex:1;min-width:60px;background:#eef1f8;border-radius:5px;height:8px;overflow:hidden"><div style="height:100%;width:${pct}%;background:${col}"></div></div><span style="font-size:12px;font-weight:800;color:var(--navy);white-space:nowrap">${n}${tot ? ' / ' + tot : ''}</span></div>`; };
+function nsRender() {
+  const box = document.getElementById('nsContent'); if (!box) return;
+  const C = NX_COLORS[2].color, Pl = NX_COLORS[3].color, V = NX_COLORS[4].color;
+  if (!PROGRESO_API) { box.innerHTML = '<div class="footer-note"><div class="footer-note-icon">ℹ️</div><div class="footer-note-text">Conecta la hoja de progreso para ver el estatus.</div></div>'; return; }
+  if (!NXDATA) { box.innerHTML = '<p style="text-align:center;color:var(--muted);font-weight:700;padding:30px">Cargando estatus...</p>'; return; }
+  if (NXDATA.error) { box.innerHTML = `<div class="footer-note"><div class="footer-note-icon">⚠️</div><div class="footer-note-text">No se pudo cargar el estatus. ${nesc(NXDATA.error)}</div></div>`; return; }
+  const filas = [1,2,3].flatMap(a => AREAS[a].tiendas.map(t => nsFila(t, a)));
+  const hayNomT = filas.some(f => f.nomina > 0);
+  const totG = NXDATA.nomina > 0 ? NXDATA.nomina : participantes;
+  const kpis = [
+    { v:`${NXDATA.conductas || 0}`, l:`formados en Conductas de ${totG}`, c:C },
+    { v:`${NXDATA.pilares || 0}`, l:`formados en Pilares de ${totG}`, c:Pl },
+    { v:`${NXDATA.visitas || 0}`, l:`visitas de refuerzo de ${NXDATA.visitasPlan || refVis.length}`, c:V },
+    { v:`${totG}`, l: NXDATA.nomina > 0 ? 'colaboradores en nómina' : 'participantes (supuesto)', c:'var(--blue2)' },
+  ];
+  let h = `<div class="kpi-row" style="margin-bottom:34px">${kpis.map(k => `<div class="kpi"><div class="kpi-val" style="color:${k.c}">${k.v}</div><div class="kpi-lbl">${k.l}</div><div class="kpi-bar" style="background:${k.c}"></div></div>`).join('')}</div>`;
+  h += `<div class="section-label">Por área</div><div class="cap-grid">`;
+  [1,2,3].forEach(a => {
+    const fs = filas.filter(f => f.a === a), sum = key => fs.reduce((s, f) => s + f[key], 0);
+    const den = hayNomT && sum('nomina') ? sum('nomina') : fs.length * NP.colab;
+    h += `<div class="cap-card" style="border-top-color:${[,'#3b5fe2','#16a085','#8e44ad'][a]};cursor:default">
+      <div class="cap-population" style="color:${[,'#3b5fe2','#16a085','#8e44ad'][a]}">${AREAS[a].nombre} · ${fs.length} farmacias</div>
+      <div class="cap-name">${AREAS[a].gerente}</div>
+      <div class="cap-tags"><span class="cap-tag">${salaTxt(a)}</span><span class="cap-tag">👥 ${den} ${hayNomT && sum('nomina') ? 'en nómina' : 'estimados'}</span></div>
+      ${nsBar('Conductas', sum('conductas'), den, C, 'formados')}${nsBar('Pilares', sum('pilares'), den, Pl, 'formados')}${nsBar('Visitas', sum('visitas'), sum('visitasPlan'), V, 'visitas')}
+    </div>`;
+  });
+  h += `</div><div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:14px"><div class="section-label" style="margin-bottom:0">Por farmacia</div><div class="filters" style="margin:0">${['Todas','Área 1','Área 2','Área 3'].map((t, i) => `<button class="filter-btn ${nsArea === i ? 'active' : 'inactive'}" onclick="nsSetArea(${i})">${t}</button>`).join('')}</div></div>`;
+  const vis = filas.filter(f => !nsArea || f.a === nsArea);
+  h += `<div class="cal-wrap"><div class="cal-scroll"><table style="width:100%;border-collapse:collapse;font-size:13px;min-width:720px"><thead><tr style="background:#f8f9fd">${['Farmacia','Área', hayNomT ? 'Nómina' : '', 'Conductas','Pilares','Visitas de refuerzo'].filter(Boolean).map(x => `<th style="text-align:left;padding:12px 14px;font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border)">${x}</th>`).join('')}</tr></thead><tbody>`;
+  vis.forEach(f => { const den = f.nomina || (hayNomT ? 0 : NP.colab);
+    h += `<tr style="border-bottom:1px solid #eef0f6"><td style="padding:10px 14px;font-weight:800;color:var(--navy)">${nesc(f.t)}</td><td style="padding:10px 14px;color:var(--muted);font-weight:700">${AREAS[f.a].nombre}</td>${hayNomT ? `<td style="padding:10px 14px;font-weight:700">${f.nomina || '—'}</td>` : ''}<td style="padding:10px 14px">${nsMini(f.conductas, den, C)}</td><td style="padding:10px 14px">${nsMini(f.pilares, den, Pl)}</td><td style="padding:10px 14px">${nsMini(f.visitas, f.visitasPlan, V)}</td></tr>`; });
+  h += '</tbody></table></div></div>';
+  const fecha = NXDATA.actualizado ? new Date(NXDATA.actualizado) : null;
+  h += `<p style="font-size:11px;color:var(--text-soft);font-weight:700;margin-top:12px">${fecha ? 'Actualizado: ' + fecha.toLocaleString('es-AR') + ' · ' : ''}Fuente de nómina: ${nesc(NXDATA.nominaFuente || 'supuesto de 16 por farmacia')}${hayNomT ? '' : ' · Sin detalle de nómina por farmacia: se estiman 16 colaboradores por tienda'}</p>`;
+  box.innerHTML = h;
+}
+window.nsSetArea = i => { nsArea = i; nsRender(); };
+window.nsRefresh = () => { NXDATA = null; nsRender(); nxFetchProgress(); };
+window.nsInitOnce = () => { if (!nsInit) { nsInit = true; nxFetchProgress(); } nsRender(); };
 
 })();
 </script>
