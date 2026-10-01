@@ -1397,36 +1397,36 @@ const salaTxt = a => CONFIG.kickoff.salaPorArea[a];
 // ---- Actividades (equivalente a COURSES) ----
 const NC = [
   { id:0, short:'Preparación', name:'Preparación de Mariana antes del viaje', population:'Mariana Meza', duration:`${R.prep[2]} días`,
-    dates:`${nf(R.prep[0])} – ${nf(R.prep[1])}`, groups:`${PREPARACION.length} jornadas`, people:'1 participante',
+    dates:'Sep – Oct', range:`${nf(R.prep[0])} – ${nf(R.prep[1])}`, prog:{ total:PREPARACION.length, unit:'jornadas', byDate:true }, groups:`${PREPARACION.length} jornadas`, people:'1 participante',
     invest:'8 días hábiles antes de viajar',
     content: PREPARACION.map(p => p.t).filter((t, i, a) => a.indexOf(t) === i).map(t => t.replace(/ \(día \d\)/, '')).filter((t, i, a) => a.indexOf(t) === i).join(' · '),
     facilitators: `${areaBadge('CULTURA DE SERVICIO', NX_COLORS[0])} Adriana D'Angelo</span><br>${areaBadge('PILARES', NX_COLORS[0])} Álvaro Bermúdez</span><br>${areaBadge('KICKOFF', NX_COLORS[0])} Monica Urdaneta</span>`,
     status:'Por iniciar', start:R.prep[0] },
   { id:1, short:'Entrenamiento', name:'Entrenamiento de Oswaldo como facilitador', population:'Oswaldo Saldivia', duration:`${R.ent[2]} días`,
-    dates:`${nf(R.ent[0])} – ${nf(R.ent[1])}`, groups:'Llegada de Mariana: 14 oct', people:'1 participante',
+    dates:'Oct', range:`${nf(R.ent[0])} – ${nf(R.ent[1])}`, prog:{ total:R.ent[2], unit:'días', byDate:true }, groups:'Llegada de Mariana: 14 oct', people:'1 participante',
     invest:`${R.ent[2]} días completos`,
     content:'Alineación con Oswaldo, Operaciones y Auditoría · 5 conductas de servicio · 5 pilares en tienda · Metodología de facilitación · Ensayo general y certificación',
     facilitators:'Mariana Meza', status:'Por iniciar', start:R.ent[0] },
   { id:2, short:'5 Conductas', name:'Taller 5 Conductas de Servicio', population:'Personal de las 31 farmacias', duration:'2.5 horas',
-    dates:`${nf(R.kick[0])} – ${nf(R.kick[1])}`, groups:`${nGrupos} grupos · 20–22 c/u`, people:`${participantes} participantes`,
+    dates:'Oct – Nov', range:`${nf(R.kick[0])} – ${nf(R.kick[1])}`, prog:{ total:participantes, unit:'formados', dash:true }, groups:`${nGrupos} grupos · 20–22 c/u`, people:`${participantes} participantes`,
     invest:`${nGrupos} mañanas, ${CONFIG.kickoff.horario.AM}`,
     content:`Las 5 conductas de servicio aplicadas a situaciones reales de tienda · En sala, máximo ${CONFIG.kickoff.maxPorTienda} personas por farmacia por grupo`,
     facilitators: `Mariana Meza, con Oswaldo Saldivia de apoyo<br>${[1,2,3].map(a => `${areaBadge('ÁREA ' + a, NX_COLORS[2])} ${salaTxt(a)}</span>`).join('<br>')}`,
     status:'Por iniciar', start:R.kick[0] },
   { id:3, short:'5 Pilares', name:'Taller 5 Pilares de la Operación', population:'Personal de las 31 farmacias', duration:'2.5 horas',
-    dates:`${nf(R.kick[0])} – ${nf(R.kick[1])}`, groups:`${nGrupos} grupos · 20–22 c/u`, people:`${participantes} participantes`,
+    dates:'Oct – Nov', range:`${nf(R.kick[0])} – ${nf(R.kick[1])}`, prog:{ total:participantes, unit:'formados', dash:true }, groups:`${nGrupos} grupos · 20–22 c/u`, people:`${participantes} participantes`,
     invest:`${nGrupos} tardes, ${CONFIG.kickoff.horario.PM}`,
     content:'Los 5 pilares de la operación · Cada grupo va a Pilares en la tarde del día siguiente a su taller de Conductas',
     facilitators: `Oswaldo Saldivia, con Mariana Meza acompañando y guiando<br>${[1,2,3].map(a => `${areaBadge('ÁREA ' + a, NX_COLORS[3])} ${salaTxt(a)}</span>`).join('<br>')}`,
     status:'Por iniciar', start:R.kick[0] },
   { id:4, short:'Refuerzo en tienda', name:'Refuerzo en tienda: 1 conducta + 1 pilar', population:'Equipos de las 31 farmacias', duration:'60 min por visita',
-    dates:`${nf(R.ref[0])} – ${nf(NP.fin)}`, groups:'5 ciclos', people:`🏪 ${refVis.length} visitas`,
+    dates:'Dic – Abr', range:`${nf(R.ref[0])} – ${nf(NP.fin)}`, prog:{ total:refVis.length, unit:'visitas' }, groups:'5 ciclos', people:`🏪 ${refVis.length} visitas`,
     invest:'2 a 3 farmacias por medio turno',
     content:'Turno mañana y turno tarde · En cada visita: observación del turno, refuerzo con el equipo y acuerdos con el líder de tienda · Los colaboradores no se trasladan',
     facilitators: `${areaBadge('HASTA 17 DIC', NX_COLORS[4])} Mariana Meza y Oswaldo Saldivia (${refConM} visitas)</span><br>${areaBadge('DESDE 18 DIC', NX_COLORS[4])} Oswaldo Saldivia</span><br><span style="font-size:11px;color:var(--muted)">Reporte semanal a Adriana D'Angelo y José Ignacio Thorne</span>`,
     status:'Por iniciar', start:R.ref[0] },
   { id:5, short:'Diagnóstico', name:'Diagnóstico de necesidades de capacitación', population:'Gerencia de Capacitación', duration:'Entregable',
-    dates:`${nf(NP.dnc[0].fecha)} – ${nf(ULT)}`, groups:'3 reuniones con Auditoría', people:'📄 Entrega 17 dic',
+    dates:'Oct – Dic', range:`${nf(NP.dnc[0].fecha)} – ${nf(ULT)}`, prog:{ total:1, unit:'entregado' }, groups:'3 reuniones con Auditoría', people:'📄 Entrega 17 dic',
     invest:'Tardes libres del refuerzo',
     content:'Brechas por conducta y pilar en cada farmacia · Hallazgos de Auditoría con causa en formación · Prioridades de formación 2027',
     facilitators:'Mariana Meza, con Delitze (Auditoría Argentina)', status:'Por iniciar', start:NP.dnc[0].fecha },
@@ -1455,6 +1455,26 @@ NP.dias.filter(d => d.fase === 'inhabil').forEach(d => { NHOL[d.fecha] = d.titul
 let nActive = new Set(NC.map(c => c.id));
 let nConCont = false;
 
+// ---- Progreso (mismo formato que Mónica) ----
+const HOY = (() => { const t = new Date(); return `${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,'0')}-${String(t.getDate()).padStart(2,'0')}`; })();
+function nxProgress(c) {
+  const p = c.prog;
+  const hechos = p.byDate ? NS.filter(x => x.cid === c.id && x.date < HOY).length : 0;
+  const pct = Math.round(hechos / p.total * 100);
+  const nota = hechos ? `${pct}% completado${p.byDate ? ' según cronograma' : ''}` : `0% completado · inicia ${nf(c.start)}`;
+  return `<div style="margin:10px 0 6px;background:${c.lt};border-radius:8px;padding:10px 12px;border:1px solid ${c.bd}" onclick="event.stopPropagation()">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+          <span style="font-size:10px;font-weight:800;color:${c.color};text-transform:uppercase;letter-spacing:.06em;white-space:nowrap">Progreso de formación</span>
+          <span style="font-size:11px;font-weight:800;color:${c.color};margin-left:auto;white-space:nowrap">${hechos} / ${p.total} ${p.unit}</span>
+        </div>
+        <div style="background:#fff;border-radius:6px;height:10px;overflow:hidden;border:1px solid ${c.bd}"><div style="height:100%;background:${c.color};border-radius:6px;width:${pct}%;transition:width .8s ease"></div></div>
+        <div style="margin-top:5px;display:flex;justify-content:space-between">
+          <span style="font-size:9px;color:#999;font-weight:600">${nota}</span>
+          ${p.dash ? '<a href="evaluaciones.html" target="_blank" rel="noopener" style="font-size:9px;color:' + c.color + ';font-weight:700;text-decoration:none">Ver dashboard →</a>' : ''}
+        </div>
+      </div>`;
+}
+
 // ---- Tarjetas ----
 function nxRenderCards() {
   document.getElementById('nxCards').innerHTML = NC.map(c => `
@@ -1464,12 +1484,7 @@ function nxRenderCards() {
       <div class="cap-tags"><span class="cap-tag">${c.duration}</span><span class="cap-tag">${c.dates}</span><span class="cap-tag">${c.groups}</span><span class="cap-tag" style="background:${c.lt};color:${c.color};border-color:${c.bd}">${/^[🏪📄]/u.test(c.people) ? c.people : '👥 ' + c.people}</span></div>
       <div class="cap-tags" style="margin-top:-6px"><span class="cap-tag" style="background:#f0f9ff;color:#0369a1;border-color:#bae6fd">⏱ Inversión de tiempo facilitador: ${c.invest}</span></div>
       <div class="cap-capacidades"><strong>Contenido</strong>${c.content}</div>
-      <div style="margin:10px 0 6px;background:${c.lt};border-radius:8px;padding:10px 12px;border:1px solid ${c.bd}">
-        <div style="display:flex;align-items:center;gap:8px">
-          <span style="font-size:10px;font-weight:800;color:${c.color};text-transform:uppercase;letter-spacing:.06em;white-space:nowrap">Estado</span>
-          <span style="font-size:11px;font-weight:800;color:${c.color};margin-left:auto;white-space:nowrap">${c.status} · inicia ${nf(c.start)}</span>
-        </div>
-      </div>
+      ${nxProgress(c)}
       <div class="cap-facilitators"><span class="cap-facilitators-icon">🎓</span><span><span class="cap-facilitators-label">Facilitadores: </span><br>${c.facilitators}</span></div>
       <div class="cap-content-link" style="color:${c.color}">📋 Ver detalle →</div>
     </div>`).join('');
@@ -1553,7 +1568,7 @@ function nxModal(c, eyebrow, title, date, grid) {
 }
 const mf = (lbl, val, wide) => `<div class="mfield${wide ? ' wide' : ''}"><div class="mfield-lbl">${lbl}</div><div class="mfield-val">${val}</div></div>`;
 window.nxOpenCourse = id => { const c = NC[id];
-  nxModal(c, '📋 Resumen de la actividad', c.name, c.dates,
+  nxModal(c, '📋 Resumen de la actividad', c.name, c.range,
     mf('👥 Población', c.population) + mf('⏱ Duración', c.duration) + mf('📅 Grupos', c.groups) + mf('🔢 Alcance', c.people.replace(/^[🏪📄] /u, '')) + mf('📚 Contenido', c.content, true) + mf('🎓 Facilitador(es)', c.facilitators, true)); };
 window.nxOpenSession = i => { const s = NS[i], c = NC[s.cid];
   const turno = s.slot === 'am' ? ' · Turno Mañana' : s.slot === 'pm' ? ' · Turno Tarde' : '';
