@@ -258,7 +258,7 @@ thead th.week-even .date-box { background:#eef2fb; }
         <div style="margin-bottom:16px;line-height:1"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="5" cy="18" r="2.2" stroke="#27ae60" stroke-width="1.6"/><circle cx="19" cy="6" r="2.2" stroke="#27ae60" stroke-width="1.6"/><path d="M7.2 18H15a3 3 0 0 0 0-6H9a3 3 0 0 1 0-6h7.8" stroke="#27ae60" stroke-width="1.6" stroke-linecap="round" fill="none"/></svg></div>
         <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:#27ae60;margin-bottom:6px">Lo que viene · Oct 2026 – Abr 2027</div>
         <div style="font-size:19px;font-weight:800;color:var(--navy);margin-bottom:8px;line-height:1.25">Planificación de lo que viene</div>
-        <div style="font-size:13px;font-weight:500;color:var(--muted);line-height:1.55;flex:1;margin-bottom:20px">Resumen y cronograma de las 6 actividades para llevar las 5 conductas y los 5 pilares a las 31 farmacias: preparación, entrenamiento, talleres en sala, refuerzo en tienda y diagnóstico.</div>
+        <div style="font-size:13px;font-weight:500;color:var(--muted);line-height:1.55;flex:1;margin-bottom:20px">Resumen y cronograma de las 6 actividades para llevar las 5 conductas y los 5 pilares a las 35 farmacias: preparación, entrenamiento, talleres en sala, refuerzo en tienda y diagnóstico.</div>
         <span style="font-size:13px;font-weight:800;color:#27ae60">Ver planificación →</span>
       </a><a href="#" onclick="goToStatus();return false;" style="background:#fff;border-radius:18px;padding:32px 28px;text-align:left;text-decoration:none;display:flex;flex-direction:column;border-top:4px solid #e74c3c;transition:transform .2s,box-shadow .2s">
         <div style="margin-bottom:16px;line-height:1"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="4" y1="20" x2="20" y2="20" stroke="#e74c3c" stroke-width="1.6" stroke-linecap="round"/><rect x="6" y="12" width="3.2" height="8" rx="0.6" fill="#e74c3c"/><rect x="11" y="8" width="3.2" height="12" rx="0.6" fill="#e74c3c"/><rect x="16" y="4.5" width="3.2" height="15.5" rx="0.6" fill="#e74c3c"/></svg></div>
@@ -450,7 +450,7 @@ thead th.week-even .date-box { background:#eef2fb; }
   <div class="main-det">
     <div class="filters" id="filterBar"></div>
     <div id="calContent"></div>
-    <a href="#" onclick="goToNext();return false;" style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;background:var(--navy);color:#fff;border-radius:16px;padding:22px 26px;margin:40px auto 0;max-width:1100px;text-decoration:none;box-shadow:0 6px 28px rgba(15,30,74,0.25)"><div><div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:var(--sky);margin-bottom:4px">Lo que viene · octubre 2026 – abril 2027</div><div style="font-size:18px;font-weight:800">Conductas y Pilares en las 31 farmacias</div></div><span style="font-size:13px;font-weight:800;background:#fff;color:var(--navy);border-radius:100px;padding:8px 16px;white-space:nowrap">Ver planificación →</span></a>
+    <a href="#" onclick="goToNext();return false;" style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;background:var(--navy);color:#fff;border-radius:16px;padding:22px 26px;margin:40px auto 0;max-width:1100px;text-decoration:none;box-shadow:0 6px 28px rgba(15,30,74,0.25)"><div><div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:var(--sky);margin-bottom:4px">Lo que viene · octubre 2026 – abril 2027</div><div style="font-size:18px;font-weight:800">Conductas y Pilares en las 35 farmacias</div></div><span style="font-size:13px;font-weight:800;background:#fff;color:var(--navy);border-radius:100px;padding:8px 16px;white-space:nowrap">Ver planificación →</span></a>
   </div>
 
   <div class="overlay" id="overlay" onclick="overlayClick(event)">
@@ -478,7 +478,7 @@ thead th.week-even .date-box { background:#eef2fb; }
       <span class="hero-tag">Plan de Capacitación · Argentina 2026 – 2027</span>
     </div>
     <h1 class="hero-title-ex">Planificación de lo que viene<br><span>Octubre 2026 – Abril 2027</span></h1>
-    <p class="hero-sub-ex">Mariana Meza se prepara antes de viajar, entrena a Oswaldo Saldivia en Argentina del 14 de octubre al 17 de diciembre, y juntos llevan las 5 conductas de servicio y los 5 pilares de la operación a las 31 farmacias.</p>
+    <p class="hero-sub-ex">Mariana Meza se prepara antes de viajar, entrena a Oswaldo Saldivia en Argentina del 14 de octubre al 17 de diciembre, y juntos llevan las 5 conductas de servicio y los 5 pilares de la operación a las 35 farmacias.</p>
   </div>
   <div class="content-ex">
     <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px">
@@ -1255,13 +1255,15 @@ const FERIADOS = {
 };
 const NO_LABORABLES = { '2026-12-07': 'Día no laborable con fines turísticos (puente)' };
 
+// Personal flotante de cada área: participa del kickoff, no recibe visitas de refuerzo
+const FLOTANTES = { 1: ['Flotantes Área 1'], 2: ['Flotantes Área 2'], 3: ['Flotantes Área 3'] };
 const AREAS = {
   1: { nombre: 'Área 1', gerente: 'Miguel González', coord: 'Mariano Murta',
        tiendas: ['Colectora','Quinta 46','Soria','KM 47,5','Iglesia','Alesel','Walker','Sanfar','San Isidro','Nordelta'] },
   2: { nombre: 'Área 2', gerente: 'Karol Brinkmann', coord: 'Reinaldo Contreras',
-       tiendas: ['Las Heras','Salguero','Gran Ferrari','Perdriel','Lupo','Patricios','Caballito','Juncal','Parque Chacabuco','Villa del Parque I'] },
+       tiendas: ['Las Heras','Salguero','Gran Ferrari','Perdriel','Lupo','Patricios','Caballito','Juncal','Parque Chacabuco','Villa del Parque I','Callao','Juncal Podium'] },
   3: { nombre: 'Área 3', gerente: 'Eduardo Páez', coord: 'Alejandra Zacarías',
-       tiendas: ['Olleros','Botánico','Mark','Rivadavia','Devoto','25 de Mayo (Nobleza)','San Martín','Scalabrini','Olivos','Villa del Parque II','Villa Devoto'] },
+       tiendas: ['Olleros','Botánico','Mark','Rivadavia','Devoto','25 de Mayo (Nobleza)','San Martín','Scalabrini','Olivos','Villa del Parque II','Villa Devoto','SM Center','Mayol'] },
 };
 
 // Preparación de Mariana antes de viajar (fechas propuestas, editables)
@@ -1332,15 +1334,15 @@ function planificar(opts = {}) {
   // Cada grupo (2 personas por farmacia de un área) hace Conductas un día en la mañana y Pilares el día siguiente en la tarde.
   const rondas = Math.ceil(colab / K.maxPorTienda);
   // Cada turno tiene siempre la misma sala y el mismo grupo de áreas: AM y PM no se alternan.
-  const areaDe = {}; [1,2,3].forEach(a => AREAS[a].tiendas.forEach(t => areaDe[t] = a));
+  const areaDe = {}; [1,2,3].forEach(a => AREAS[a].tiendas.concat(FLOTANTES[a]).forEach(t => areaDe[t] = a));
   const etq = p => p.length === 1 ? AREAS[p[0]].nombre : 'Áreas ' + p.slice(0,-1).join(', ') + ' y ' + p[p.length-1];
   const colaTurno = p => { const q = []; for (let r = 1; r <= rondas; r++) for (const tl of ['Conductas','Pilares']) q.push({ areas: p, ronda: r, taller: tl }); return q; };
   const qK = { AM: colaTurno(K.turnos.AM), PM: colaTurno(K.turnos.PM) };
   const nGruposK = rondas * 2;
-  const sesionTxt = (g, slot) => { const tiendas = g.areas.flatMap(a => AREAS[a].tiendas); const sala = K.salaPorArea[g.areas[0]];
+  const sesionTxt = (g, slot) => { const tiendas = g.areas.flatMap(a => AREAS[a].tiendas.concat(FLOTANTES[a])); const sala = K.salaPorArea[g.areas[0]];
     return { area: g.areas[0], areas: g.areas, areaLabel: etq(g.areas), sala, tiendas, ronda: g.ronda, taller: g.taller, slot,
       nota: `Taller de ${g.taller}, ${sala}, ${K.horario[slot]}. Grupo ${g.ronda} de ${rondas}`,
-      resumen: `${tiendas.length} farmacias, ${K.maxPorTienda === 1 ? '1 persona' : 'hasta ' + K.maxPorTienda + ' personas'} por farmacia (${tiendas.length * K.maxPorTienda} participantes)` }; };
+      resumen: `${tiendas.length} farmacias y equipos flotantes, ${K.maxPorTienda === 1 ? '1 persona' : 'hasta ' + K.maxPorTienda + ' personas'} por farmacia (${tiendas.length * K.maxPorTienda} participantes)` }; };
   const prevHabil = x => { let y = addDays(x, -1); while (!esHabil(y)) y = addDays(y, -1); return y; };
   const r3 = CONFIG.ultimoDiaMariana, r2 = prevHabil(r3), r1 = prevHabil(r2);
   let cerrado = false;
@@ -1450,10 +1452,11 @@ const refConM = refVis.filter(v => v.fecha <= ULT).length;
 const finC1 = refVis.filter(v => v.ciclo === 1).map(v => v.fecha).sort().pop();
 const nGrupos = NP.nGrupos;
 const MAXT = CONFIG.kickoff.maxPorTienda;
-const tam = (() => { const t = CONFIG.kickoff.grupos.map(p => p.reduce((n, a) => n + AREAS[a].tiendas.length, 0) * MAXT); return Math.min(...t) === Math.max(...t) ? `${t[0]}` : `${Math.min(...t)}–${Math.max(...t)}`; })();
+const tam = (() => { const t = CONFIG.kickoff.grupos.map(p => p.reduce((n, a) => n + AREAS[a].tiendas.length + FLOTANTES[a].length, 0) * MAXT); return Math.min(...t) === Math.max(...t) ? `${t[0]}` : `${Math.min(...t)}–${Math.max(...t)}`; })();
 const kMes = s => NMONTHS[D(s).getUTCMonth()].slice(0,3);
 const rangoMes = (a, b) => kMes(a) === kMes(b) ? kMes(a) : `${kMes(a)} – ${kMes(b)}`;
-const participantes = Object.values(AREAS).reduce((a, x) => a + x.tiendas.length, 0) * NP.colab;
+const NTI = Object.values(AREAS).reduce((a, x) => a + x.tiendas.length, 0);
+const participantes = NTI * NP.colab;
 const salaTxt = a => CONFIG.kickoff.salaPorArea[a];
 const poolEtq = p => p.length === 1 ? 'ÁREA ' + p[0] : 'ÁREAS ' + p.join(' Y ');
 const salaBadges = col => CONFIG.kickoff.grupos.map(p => `${areaBadge(poolEtq(p), col)} ${salaTxt(p[0])}</span>`).join('<br>');
@@ -1471,19 +1474,19 @@ const NC = [
     invest:`${R.ent[2]} días completos`,
     content:'Mariana llega el 14 oct · Alineación con Oswaldo, Operaciones y Auditoría · 5 conductas de servicio · 5 pilares en tienda · Metodología de facilitación · Ensayo general y certificación',
     facilitators:'Mariana Meza', status:'Por iniciar', start:R.ent[0] },
-  { id:2, short:'5 Conductas', name:'Taller 5 Conductas de Servicio', population:'Personal de las 31 farmacias', duration:'2.5 horas',
+  { id:2, short:'5 Conductas', name:'Taller 5 Conductas de Servicio', population:`Personal de las ${NTI} farmacias`, duration:'2.5 horas',
     dates:rangoMes(R.kick[0], R.kick[1]), range:`${nf(R.kick[0])} – ${nf(R.kick[1])}`, prog:{ total:participantes, unit:'formados', live:true }, groups:`${nGrupos} grupos · ${tam} c/u`, people:`${participantes} participantes`,
     invest:`${nGrupos} sesiones de 2.5 horas`,
-    content:`Las 5 conductas de servicio aplicadas a situaciones reales de tienda · ${MAXT === 1 ? '1 persona' : 'Máximo ' + MAXT + ' personas'} por farmacia en cada grupo · ${CONFIG.kickoff.turnos.AM.length === 1 ? 'Área ' + CONFIG.kickoff.turnos.AM[0] : 'Áreas ' + CONFIG.kickoff.turnos.AM.join(' y ')}: mañanas en ${salaTxt(CONFIG.kickoff.turnos.AM[0])} · ${CONFIG.kickoff.turnos.PM.length === 1 ? 'Área ' + CONFIG.kickoff.turnos.PM[0] : 'Áreas ' + CONFIG.kickoff.turnos.PM.join(' y ')}: tardes en ${salaTxt(CONFIG.kickoff.turnos.PM[0])}`,
+    content:`Las 5 conductas de servicio aplicadas a situaciones reales de tienda · Incluye al personal flotante de cada área · ${MAXT === 1 ? '1 persona' : 'Máximo ' + MAXT + ' personas'} por farmacia en cada grupo · ${CONFIG.kickoff.turnos.AM.length === 1 ? 'Área ' + CONFIG.kickoff.turnos.AM[0] : 'Áreas ' + CONFIG.kickoff.turnos.AM.join(' y ')}: mañanas en ${salaTxt(CONFIG.kickoff.turnos.AM[0])} · ${CONFIG.kickoff.turnos.PM.length === 1 ? 'Área ' + CONFIG.kickoff.turnos.PM[0] : 'Áreas ' + CONFIG.kickoff.turnos.PM.join(' y ')}: tardes en ${salaTxt(CONFIG.kickoff.turnos.PM[0])}`,
     facilitators: `Mariana Meza, con Oswaldo Saldivia de apoyo${R.kick[1] > ULT ? ', hasta el 17 dic; desde el 18 dic, Oswaldo Saldivia' : ''}<br>${salaBadges(NX_COLORS[2])}`,
     status:'Por iniciar', start:R.kick[0] },
-  { id:3, short:'5 Pilares', name:'Taller 5 Pilares de la Operación', population:'Personal de las 31 farmacias', duration:'2.5 horas',
+  { id:3, short:'5 Pilares', name:'Taller 5 Pilares de la Operación', population:`Personal de las ${NTI} farmacias`, duration:'2.5 horas',
     dates:rangoMes(R.kick[0], R.kick[1]), range:`${nf(R.kick[0])} – ${nf(R.kick[1])}`, prog:{ total:participantes, unit:'formados', live:true }, groups:`${nGrupos} grupos · ${tam} c/u`, people:`${participantes} participantes`,
     invest:`${nGrupos} sesiones de 2.5 horas`,
     content:`Los 5 pilares de la operación · Cada grupo va a Pilares el día hábil siguiente a su taller de Conductas, en el mismo horario y sala · ${CONFIG.kickoff.turnos.AM.length === 1 ? 'Área ' + CONFIG.kickoff.turnos.AM[0] : 'Áreas ' + CONFIG.kickoff.turnos.AM.join(' y ')}: mañanas en ${salaTxt(CONFIG.kickoff.turnos.AM[0])} · ${CONFIG.kickoff.turnos.PM.length === 1 ? 'Área ' + CONFIG.kickoff.turnos.PM[0] : 'Áreas ' + CONFIG.kickoff.turnos.PM.join(' y ')}: tardes en ${salaTxt(CONFIG.kickoff.turnos.PM[0])}`,
     facilitators: `Oswaldo Saldivia, con Mariana Meza acompañando y guiando${R.kick[1] > ULT ? ' hasta el 17 dic' : ''}<br>${salaBadges(NX_COLORS[3])}`,
     status:'Por iniciar', start:R.kick[0] },
-  { id:4, short:'Refuerzo en tienda', name:'Refuerzo en tienda: 1 conducta + 1 pilar', population:'Equipos de las 31 farmacias', duration:'60 min por visita',
+  { id:4, short:'Refuerzo en tienda', name:'Refuerzo en tienda: 1 conducta + 1 pilar', population:`Equipos de las ${NTI} farmacias`, duration:'60 min por visita',
     dates:rangoMes(refVis.map(v=>v.fecha).sort()[0], NP.fin), range:`${nf(refVis.map(v=>v.fecha).sort()[0])} – ${nf(NP.fin)}`, prog:{ total:refVis.length, unit:'visitas', live:true }, groups:'5 ciclos', people:`🏪 ${refVis.length} visitas`,
     invest:'2 a 3 farmacias por medio turno',
     content:'Un ciclo por conducta, con su actividad: Bingo, Rally contra el tiempo, Ruleta de las soluciones, STOP del cliente y Chapa del Deleite · Turno mañana y tarde · Los colaboradores no se trasladan',
@@ -1631,7 +1634,7 @@ function nxRenderCards() {
 function nxRenderKPIs() {
   const k = [
     { val:'6', lbl:'Actividades planificadas', color:'var(--blue2)' },
-    { val:'31', lbl:'Tiendas incluidas', color:'var(--purple)' },
+    { val:String(NTI), lbl:'Tiendas incluidas', color:'var(--purple)' },
     { val:String(nGrupos * 2), lbl:'Talleres en sala', color:'var(--orange)' },
     { val:String(refVis.length), lbl:'Visitas de refuerzo', color:'var(--green)' },
   ];
@@ -1725,15 +1728,18 @@ window.nxInitOnce = () => { if (nxInit) return; nxInit = true; nxRenderCards(); 
 // ===== Vista: Estatus de participación de lo que viene =====
 const normaT = v => String(v || '').toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/^FARMACIA\s+/, '').replace(/,/g, '.').replace(/\s+/g, ' ').trim();
 let NXDATA = null, nsArea = 0, nsInit = false;
+// Equivalencias confirmadas entre el nombre en el plan y el nombre en la nómina
+const NS_ALIAS = { '25 DE MAYO (NOBLEZA)': 'LA NOBLEZA', 'PATRICIOS': 'MS PATRICIOS', 'VILLA DEL PARQUE II': 'VILLA DEL PARQUE' };
 function nsKey(nombre, keys) {
-  const n = normaT(nombre);
-  if (keys.includes(n)) return n;
-  return keys.find(k => k.length > 3 && (n.includes(k) || k.includes(n))) || null;
+  const n = normaT(nombre), a = NS_ALIAS[n];
+  if (a && keys.includes(a)) return a;
+  return keys.includes(n) ? n : null;
 }
 function nsFila(t, a) {
   const pfD = (NXDATA && NXDATA.porFarmacia) || {}, keys = Object.keys(pfD);
   const k = nsKey(t, keys), x = k ? pfD[k] : {};
-  return { t, a, nomina: x.nomina || 0, conductas: x.conductas || 0, pilares: x.pilares || 0, visitas: x.visitas || 0, visitasPlan: x.visitasPlan || 10 };
+  const flot = /^FLOTANTES/.test(normaT(t));
+  return { t, a, flot, nomina: x.nomina || 0, conductas: x.conductas || 0, pilares: x.pilares || 0, visitas: x.visitas || 0, visitasPlan: flot ? 0 : (x.visitasPlan || 10) };
 }
 const nsBar = (lbl, n, tot, col, unit) => { const pct = tot ? Math.min(100, Math.round(n / tot * 100)) : 0;
   return `<div style="margin:8px 0"><div style="display:flex;justify-content:space-between;font-size:11px;font-weight:800;color:${col};margin-bottom:4px"><span style="text-transform:uppercase;letter-spacing:.05em">${lbl}</span><span>${n} / ${tot} ${unit} · ${pct}%</span></div><div style="background:#fff;border-radius:6px;height:10px;overflow:hidden;border:1px solid var(--border)"><div style="height:100%;width:${pct}%;background:${col};border-radius:6px;transition:width .8s ease"></div></div></div>`; };
@@ -1745,7 +1751,7 @@ function nsRender() {
   if (!PROGRESO_API) { box.innerHTML = '<div class="footer-note"><div class="footer-note-icon">ℹ️</div><div class="footer-note-text">Conecta la hoja de progreso para ver el estatus.</div></div>'; return; }
   if (!NXDATA) { box.innerHTML = '<p style="text-align:center;color:var(--muted);font-weight:700;padding:30px">Cargando estatus...</p>'; return; }
   if (NXDATA.error) { box.innerHTML = `<div class="footer-note"><div class="footer-note-icon">⚠️</div><div class="footer-note-text">No se pudo cargar el estatus. ${nesc(NXDATA.error)}</div></div>`; return; }
-  const filas = [1,2,3].flatMap(a => AREAS[a].tiendas.map(t => nsFila(t, a)));
+  const filas = [1,2,3].flatMap(a => AREAS[a].tiendas.concat(FLOTANTES[a]).map(t => nsFila(t, a)));
   const hayNomT = filas.some(f => f.nomina > 0);
   const totG = NXDATA.nomina > 0 ? NXDATA.nomina : participantes;
   const kpis = [
@@ -1760,7 +1766,7 @@ function nsRender() {
     const fs = filas.filter(f => f.a === a), sum = key => fs.reduce((s, f) => s + f[key], 0);
     const den = hayNomT && sum('nomina') ? sum('nomina') : fs.length * NP.colab;
     h += `<div class="cap-card" style="border-top-color:${[,'#3b5fe2','#16a085','#8e44ad'][a]};cursor:default">
-      <div class="cap-population" style="color:${[,'#3b5fe2','#16a085','#8e44ad'][a]}">${AREAS[a].nombre} · ${fs.length} farmacias</div>
+      <div class="cap-population" style="color:${[,'#3b5fe2','#16a085','#8e44ad'][a]}">${AREAS[a].nombre} · ${fs.filter(f => !f.flot).length} farmacias + flotantes</div>
       <div class="cap-name">${AREAS[a].gerente}</div>
       <div class="cap-tags"><span class="cap-tag">${salaTxt(a)}</span><span class="cap-tag">👥 ${den} ${hayNomT && sum('nomina') ? 'en nómina' : 'estimados'}</span></div>
       ${nsBar('Conductas', sum('conductas'), den, C, 'formados')}${nsBar('Pilares', sum('pilares'), den, Pl, 'formados')}${nsBar('Visitas', sum('visitas'), sum('visitasPlan'), V, 'visitas')}
@@ -1769,13 +1775,13 @@ function nsRender() {
   h += `</div><div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:14px"><div class="section-label" style="margin-bottom:0">Por farmacia</div><div class="filters" style="margin:0">${['Todas','Área 1','Área 2','Área 3'].map((t, i) => `<button class="filter-btn ${nsArea === i ? 'active' : 'inactive'}" onclick="nsSetArea(${i})">${t}</button>`).join('')}</div></div>`;
   const vis = filas.filter(f => !nsArea || f.a === nsArea);
   h += `<div class="cal-wrap"><div class="cal-scroll"><table style="width:100%;border-collapse:collapse;font-size:13px;min-width:720px"><thead><tr style="background:#f8f9fd">${['Farmacia','Área', hayNomT ? 'Nómina' : '', 'Conductas','Pilares','Visitas de refuerzo'].filter(Boolean).map(x => `<th style="text-align:left;padding:12px 14px;font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border)">${x}</th>`).join('')}</tr></thead><tbody>`;
-  vis.forEach(f => { const den = f.nomina || (hayNomT ? 0 : NP.colab);
-    h += `<tr style="border-bottom:1px solid #eef0f6"><td style="padding:10px 14px;font-weight:800;color:var(--navy)">${nesc(f.t)}</td><td style="padding:10px 14px;color:var(--muted);font-weight:700">${AREAS[f.a].nombre}</td>${hayNomT ? `<td style="padding:10px 14px;font-weight:700">${f.nomina || '—'}</td>` : ''}<td style="padding:10px 14px">${nsMini(f.conductas, den, C)}</td><td style="padding:10px 14px">${nsMini(f.pilares, den, Pl)}</td><td style="padding:10px 14px">${nsMini(f.visitas, f.visitasPlan, V)}</td></tr>`; });
+  vis.forEach(f => { const den = f.nomina || (hayNomT ? 0 : (f.flot ? 0 : NP.colab));
+    h += `<tr style="border-bottom:1px solid #eef0f6"><td style="padding:10px 14px;font-weight:800;color:var(--navy)">${nesc(f.t)}</td><td style="padding:10px 14px;color:var(--muted);font-weight:700">${AREAS[f.a].nombre}</td>${hayNomT ? `<td style="padding:10px 14px;font-weight:700">${f.nomina || '—'}</td>` : ''}<td style="padding:10px 14px">${nsMini(f.conductas, den, C)}</td><td style="padding:10px 14px">${nsMini(f.pilares, den, Pl)}</td><td style="padding:10px 14px">${f.flot ? '<span style="font-size:11px;color:var(--text-soft);font-weight:700">No aplica</span>' : nsMini(f.visitas, f.visitasPlan, V)}</td></tr>`; });
   h += '</tbody></table></div></div>';
   const fecha = NXDATA.actualizado ? new Date(NXDATA.actualizado) : null;
   const usadas = new Set(filas.map(f => nsKey(f.t, Object.keys(NXDATA.porFarmacia || {}))).filter(Boolean));
   const sinCruce = (NXDATA.nominaTiendas || []).filter(k => !usadas.has(k));
-  if (sinCruce.length) h += `<p style="font-size:11px;color:#c0392b;font-weight:700;margin-top:12px">Tiendas de la nómina que no coinciden con ninguna farmacia del plan: ${sinCruce.map(nesc).join(' · ')}</p>`;
+  if (sinCruce.length) h += `<p style="font-size:11px;color:#c0392b;font-weight:700;margin-top:12px">Tiendas de la nómina que no coinciden con ninguna farmacia del plan (no se cuentan en el detalle): ${sinCruce.map(nesc).join(' · ')}</p>`;
   h += `<p style="font-size:11px;color:var(--text-soft);font-weight:700;margin-top:12px">${fecha ? 'Actualizado: ' + fecha.toLocaleString('es-AR') + ' · ' : ''}Fuente de nómina: ${nesc(NXDATA.nominaFuente || 'supuesto de 16 por farmacia')}${hayNomT ? ' · Nómina filtrada por VP de Operaciones, tienda según la columna M' : ' · Sin detalle de nómina por farmacia: se estiman ' + NP.colab + ' colaboradores por tienda'}</p>`;
   box.innerHTML = h;
 }
