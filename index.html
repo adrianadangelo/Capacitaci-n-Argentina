@@ -1773,7 +1773,10 @@ function nsRender() {
     h += `<tr style="border-bottom:1px solid #eef0f6"><td style="padding:10px 14px;font-weight:800;color:var(--navy)">${nesc(f.t)}</td><td style="padding:10px 14px;color:var(--muted);font-weight:700">${AREAS[f.a].nombre}</td>${hayNomT ? `<td style="padding:10px 14px;font-weight:700">${f.nomina || '—'}</td>` : ''}<td style="padding:10px 14px">${nsMini(f.conductas, den, C)}</td><td style="padding:10px 14px">${nsMini(f.pilares, den, Pl)}</td><td style="padding:10px 14px">${nsMini(f.visitas, f.visitasPlan, V)}</td></tr>`; });
   h += '</tbody></table></div></div>';
   const fecha = NXDATA.actualizado ? new Date(NXDATA.actualizado) : null;
-  h += `<p style="font-size:11px;color:var(--text-soft);font-weight:700;margin-top:12px">${fecha ? 'Actualizado: ' + fecha.toLocaleString('es-AR') + ' · ' : ''}Fuente de nómina: ${nesc(NXDATA.nominaFuente || 'supuesto de 16 por farmacia')}${hayNomT ? '' : ' · Sin detalle de nómina por farmacia: se estiman 16 colaboradores por tienda'}</p>`;
+  const usadas = new Set(filas.map(f => nsKey(f.t, Object.keys(NXDATA.porFarmacia || {}))).filter(Boolean));
+  const sinCruce = (NXDATA.nominaTiendas || []).filter(k => !usadas.has(k));
+  if (sinCruce.length) h += `<p style="font-size:11px;color:#c0392b;font-weight:700;margin-top:12px">Tiendas de la nómina que no coinciden con ninguna farmacia del plan: ${sinCruce.map(nesc).join(' · ')}</p>`;
+  h += `<p style="font-size:11px;color:var(--text-soft);font-weight:700;margin-top:12px">${fecha ? 'Actualizado: ' + fecha.toLocaleString('es-AR') + ' · ' : ''}Fuente de nómina: ${nesc(NXDATA.nominaFuente || 'supuesto de 16 por farmacia')}${hayNomT ? ' · Nómina filtrada por VP de Operaciones, tienda según la columna M' : ' · Sin detalle de nómina por farmacia: se estiman ' + NP.colab + ' colaboradores por tienda'}</p>`;
   box.innerHTML = h;
 }
 window.nsSetArea = i => { nsArea = i; nsRender(); };
