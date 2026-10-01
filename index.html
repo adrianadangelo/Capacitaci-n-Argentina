@@ -485,7 +485,7 @@ function resumen() {
       <div class="phase continuidad"><div class="n">5</div><div>
         <div class="when">${F.continuidad ? flarga(F.continuidad[0]) + ' al ' + flarga(F.continuidad[1]) : '—'}</div>
         <h3>Oswaldo continúa solo</h3>
-        <p>Completa el ciclo 2 y ejecuta los ciclos 3, 4 y 5 con la misma ruta y ritmo.${$('optPausa').checked ? ' Sin visitas de campo del 21 dic al 1 ene por temporada alta.' : ''} Mariana le da seguimiento remoto quincenal.</p>
+        <p>Completa el ciclo 2 y ejecuta los ciclos 3, 4 y 5 con la misma ruta y ritmo.${$('optPausa').checked ? ' Sin visitas de campo del 21 dic al 1 ene por temporada alta.' : ''} Oswaldo envía un reporte semanal de avance a Adriana D'Angelo y José Ignacio Thorne.</p>
       </div></div>
     </div>
   </section>
@@ -505,9 +505,9 @@ function resumen() {
     <div class="box stripe">
       <h3>Lo que continúa Oswaldo</h3>
       <ul>
-        <li>Resto del ciclo 2 y ciclos 3, 4 y 5: ${P.refTotal - P.refConM} visitas.</li>
+        <li>${c1 <= CONFIG.ultimoDiaMariana ? 'Resto del ciclo 2 y ciclos 3, 4 y 5' : 'Resto del ciclo 1 y ciclos 2, 3, 4 y 5'}: ${P.refTotal - P.refConM} visitas.</li>
         <li>Cierre estimado: ${flarga(P.fin)}.</li>
-        <li>Reporte semanal a los Coordinadores de RRHH Operaciones y quincenal a Mariana.</li>
+        <li>Reporte semanal de avance a Adriana D'Angelo y José Ignacio Thorne.</li>
       </ul>
     </div>
   </section>
@@ -693,7 +693,7 @@ function supuestos() {
       <li>Si Oswaldo no está listo el ${flarga(P.fases.entrenamiento[1])}, se agrega un día de práctica y el kickoff corre un día.</li>
       <li>Quien falte a su ronda de kickoff se cita en la siguiente ronda de su área, respetando el máximo de 2 por farmacia.</li>
       <li>Algunos días el taller de la mañana y el de la tarde son en salas distintas. Entre las 11:30 y las 14:00 hay tiempo para almorzar y trasladarse de Las Heras a Los Olivos, o al revés.</li>
-      <li>Sin Mariana baja el acompañamiento: se propone seguimiento remoto quincenal y una muestra de visitas observadas por el Coordinador de RRHH de cada área.</li>
+      <li>Sin Mariana baja el acompañamiento: el reporte semanal de Oswaldo a Adriana D'Angelo y José Ignacio Thorne permite detectar a tiempo atrasos o farmacias con dificultades.</li>
     </ul></div>
   </div>`;
 }
