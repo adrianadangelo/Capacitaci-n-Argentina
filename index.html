@@ -258,7 +258,7 @@ thead th.week-even .date-box { background:#eef2fb; }
         <div style="margin-bottom:16px;line-height:1"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="5" cy="18" r="2.2" stroke="#27ae60" stroke-width="1.6"/><circle cx="19" cy="6" r="2.2" stroke="#27ae60" stroke-width="1.6"/><path d="M7.2 18H15a3 3 0 0 0 0-6H9a3 3 0 0 1 0-6h7.8" stroke="#27ae60" stroke-width="1.6" stroke-linecap="round" fill="none"/></svg></div>
         <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:#27ae60;margin-bottom:6px">Lo que viene · Oct 2026 – Abr 2027</div>
         <div style="font-size:19px;font-weight:800;color:var(--navy);margin-bottom:8px;line-height:1.25">Planificación de lo que viene</div>
-        <div style="font-size:13px;font-weight:500;color:var(--muted);line-height:1.55;flex:1;margin-bottom:20px">Resumen y cronograma de las 7 actividades para llevar las 5 conductas y los 5 pilares a las 35 farmacias: preparación, entrenamiento, talleres en sala, refuerzo en tienda, diagnóstico y formación de facilitadores.</div>
+        <div style="font-size:13px;font-weight:500;color:var(--muted);line-height:1.55;flex:1;margin-bottom:20px">Resumen y cronograma de las 8 actividades para llevar las 5 conductas y los 5 pilares a las 35 farmacias: preparación, formación Cultura de Servicio Base, entrenamiento, talleres en sala, refuerzo en tienda, diagnóstico y formación de facilitadores.</div>
         <span style="font-size:13px;font-weight:800;color:#27ae60">Ver planificación →</span>
       </a><a href="#" onclick="goToStatus();return false;" style="background:#fff;border-radius:18px;padding:32px 28px;text-align:left;text-decoration:none;display:flex;flex-direction:column;border-top:4px solid #e74c3c;transition:transform .2s,box-shadow .2s">
         <div style="margin-bottom:16px;line-height:1"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="4" y1="20" x2="20" y2="20" stroke="#e74c3c" stroke-width="1.6" stroke-linecap="round"/><rect x="6" y="12" width="3.2" height="8" rx="0.6" fill="#e74c3c"/><rect x="11" y="8" width="3.2" height="12" rx="0.6" fill="#e74c3c"/><rect x="16" y="4.5" width="3.2" height="15.5" rx="0.6" fill="#e74c3c"/></svg></div>
@@ -478,7 +478,7 @@ thead th.week-even .date-box { background:#eef2fb; }
       <span class="hero-tag">Plan de Capacitación · Argentina 2026 – 2027</span>
     </div>
     <h1 class="hero-title-ex">Planificación de lo que viene<br><span>Octubre 2026 – Abril 2027</span></h1>
-    <p class="hero-sub-ex">Mariana Meza se prepara antes de viajar, entrena a Oswaldo Saldivia en Argentina del 14 de octubre al 17 de diciembre, y juntos llevan las 5 conductas de servicio y los 5 pilares de la operación a las 35 farmacias.</p>
+    <p class="hero-sub-ex">Mariana Meza se forma en Cultura de Servicio Base antes de viajar, entrena a Oswaldo Saldivia en Argentina del 14 de octubre al 17 de diciembre, y juntos llevan las 5 conductas de servicio y los 5 pilares de la operación a las 35 farmacias.</p>
   </div>
   <div class="content-ex">
     <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px">
@@ -1269,7 +1269,7 @@ const AREAS = {
 
 // Preparación de Mariana antes de viajar (fechas propuestas, editables)
 const PREPARACION = [
-  { fecha: '2026-09-29', t: 'Presentación del cronograma', resp: 'Adriana', d: 'Recorrido por el plan completo en Argentina: fases, áreas, farmacias, responsables y entregables.' },
+  { fecha: '2026-09-29', t: 'Definición del cronograma', resp: 'Adriana', fase: 'preparacion', d: 'Recorrido por el plan completo en Argentina: fases, áreas, farmacias, responsables y entregables.' },
   { fecha: '2026-09-30', t: 'Taller Cultura de Servicio, personal base', resp: 'Adriana', d: 'Mariana vive el taller como participante y toma nota de la secuencia, dinámicas y mensajes clave para replicarlo.' },
   { fecha: '2026-10-01', t: 'Taller Cultura de Servicio, supervisores', resp: 'Adriana', d: 'Versión para líderes de tienda: cómo sostener las conductas en el día a día y dar feedback al equipo.' },
   { fecha: '2026-10-02', t: 'Inducción 5 pilares de la operación', resp: 'Álvaro Bermúdez', d: 'Contenido de los 5 pilares y cómo se ven en tienda.' },
@@ -1319,7 +1319,7 @@ function planificar(opts = {}) {
   };
 
   // Fase 0: preparación antes del viaje
-  PREPARACION.forEach(p => dias.push({ fecha: p.fecha, fase: 'preparacion', titulo: p.t, detalle: p.d, resp: 'Responsable: ' + p.resp, responsable: p.resp }));
+  PREPARACION.forEach(p => dias.push({ fecha: p.fecha, fase: p.fase || 'formacion', titulo: p.t, detalle: p.d, resp: 'Responsable: ' + p.resp, responsable: p.resp }));
   dias.push({ fecha: CONFIG.llegada, fase: 'inhabil', titulo: 'Llegada de Mariana a Argentina e instalación en su apartamento. No va a la oficina.', resp: '' });
   // Fase 1: entrenamiento
   let i = 0;
@@ -1438,6 +1438,7 @@ const NX_COLORS = [
   { color:'#27ae60', lt:'#e9f7ef', bd:'#b7e4c7' },
   { color:'#16a085', lt:'#e8f8f5', bd:'#b3e5da' },
   { color:'#c8972c', lt:'#fdf6e7', bd:'#f1dfb0' },
+  { color:'#0e7490', lt:'#ecfeff', bd:'#a5f3fc' },
 ];
 const NDAYS = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
 const NMONTHS = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
@@ -1450,7 +1451,7 @@ const areaBadge = (txt, c) => `<span style="display:inline-flex;align-items:cent
 const NP = planificar({});
 const ULT = CONFIG.ultimoDiaMariana;
 const range = f => { const x = NP.dias.filter(d => d.fase === f); return x.length ? [x[0].fecha, x[x.length-1].fecha, x.length] : null; };
-const R = { prep: range('preparacion'), ent: range('entrenamiento'), kick: range('kickoff'), ref: range('refuerzo'), cont: range('continuidad') };
+const R = { form: range('formacion'), prep: range('preparacion'), ent: range('entrenamiento'), kick: range('kickoff'), ref: range('refuerzo'), cont: range('continuidad') };
 const refVis = NP.visitas.filter(v => v.ciclo > 0);
 const refConM = refVis.filter(v => v.fecha <= ULT).length;
 const finC1 = refVis.filter(v => v.ciclo === 1).map(v => v.fecha).sort().pop();
@@ -1472,12 +1473,16 @@ const FF_MES = '2027-04-01';
 
 // ---- Actividades (equivalente a COURSES) ----
 const NC = [
-  { id:0, short:'Preparación', name:'Preparación de Mariana antes del viaje', population:'Mariana Meza', duration:`${R.prep[2]} días`,
-    dates:'Sep – Oct', range:`${nf(R.prep[0])} – ${nf(R.prep[1])}`, prog:{ total:PREPARACION.length, unit:'jornadas', byDate:true }, groups:'N/A', people:'1 participante',
-    invest:'8 días hábiles antes de viajar',
-    content: PREPARACION.map(p => p.t).filter((t, i, a) => a.indexOf(t) === i).map(t => t.replace(/ \(día \d\)/, '')).filter((t, i, a) => a.indexOf(t) === i).join(' · '),
-    facilitators: `${areaBadge('CULTURA DE SERVICIO', NX_COLORS[0])} Adriana D'Angelo</span><br>${areaBadge('PILARES', NX_COLORS[0])} Álvaro Bermúdez</span><br>${areaBadge('KICKOFF', NX_COLORS[0])} Monica Urdaneta</span>`,
-    status:'Por iniciar', start:R.prep[0] },
+  { id:0, short:'Preparación', name:'Preparación: definición del cronograma', population:'Capacitación', duration:`${R.prep[2]} día`,
+    dates:'Sep', range:`${nf(R.prep[0])}`, prog:{ total:R.prep[2], unit:'jornada', byDate:true }, groups:'N/A', people:'Equipo de Capacitación',
+    invest:`${R.prep[2]} jornada`, content:'Definición y presentación del cronograma del plan',
+    facilitators:"Adriana D'Angelo", status:'Por iniciar', start:R.prep[0] },
+  { id:7, short:'Formación CS Base', name:'Formación Cultura de Servicio Base', population:'Mariana Meza', duration:`${R.form[2]} días`,
+    dates:'Sep – Oct', range:`${nf(R.form[0])} – ${nf(R.form[1])}`, prog:{ total:R.form[2], unit:'jornadas', byDate:true }, groups:'N/A', people:'1 participante',
+    invest:`${R.form[2]} días hábiles antes de viajar`,
+    content: PREPARACION.filter(p => p.fase !== 'preparacion').map(p => p.t.replace(/ \(día \d\)/, '')).filter((t, i, a) => a.indexOf(t) === i).join(' · '),
+    facilitators: `${areaBadge('CULTURA DE SERVICIO', NX_COLORS[7])} Adriana D'Angelo</span><br>${areaBadge('PILARES', NX_COLORS[7])} Álvaro Bermúdez</span><br>${areaBadge('KICKOFF', NX_COLORS[7])} Monica Urdaneta</span>`,
+    status:'Por iniciar', start:R.form[0] },
   { id:1, short:'Entrenamiento', name:'Entrenamiento de Oswaldo como facilitador', population:'Oswaldo Saldivia', duration:`${R.ent[2]} días`,
     dates:'Oct', range:`${nf(R.ent[0])} – ${nf(R.ent[1])}`, prog:{ total:R.ent[2], unit:'días', byDate:true }, groups:'N/A', people:'1 participante',
     invest:`${R.ent[2]} días completos`,
@@ -1513,12 +1518,14 @@ const NC = [
     facilitators:'Cuestiónica', status:'Por iniciar', start: FF_FECHAS[0] || FF_MES, startTxt: FF_FECHAS.length ? null : 'abr 2027 · fechas por confirmar' },
 ];
 NC.forEach(c => Object.assign(c, NX_COLORS[c.id]));
+const NCI = id => NC.find(c => c.id === id);
 
 // ---- Sesiones (equivalente a SESSIONS) ----
 const NS = [];
 NP.dias.forEach(d => {
   const f = d.fecha;
-  if (d.fase === 'preparacion') NS.push({ date:f, cid:0, group:d.titulo, facilitator:d.responsable, detail:d.detalle });
+  if (d.fase === 'preparacion') NS.push({ date:f, cid:0, group:d.titulo, facilitator:d.responsable === 'Adriana' ? "Adriana D'Angelo" : d.responsable, detail:d.detalle });
+  if (d.fase === 'formacion') NS.push({ date:f, cid:7, group:d.titulo, facilitator:d.responsable === 'Adriana' ? "Adriana D'Angelo" : d.responsable, detail:d.detalle });
   if (d.fase === 'entrenamiento') NS.push({ date:f, cid:1, group:d.titulo, facilitator:'Mariana Meza', detail:d.detalle });
   if (d.fase === 'kickoff') {
     [['am', d.am], ['pm', d.pm]].forEach(([sl, b]) => { if (!b) return; const cond = b.taller === 'Conductas';
@@ -1611,7 +1618,7 @@ function nxProgress(c) {
       </div>`;
 }
 function nxSetBar(id, n, total) {
-  const c = NC[id], pct = total ? Math.min(100, Math.round(n / total * 100)) : 0;
+  const c = NCI(id), pct = total ? Math.min(100, Math.round(n / total * 100)) : 0;
   const b = document.getElementById('nxp-bar-' + id), l = document.getElementById('nxp-count-' + id), q = document.getElementById('nxp-pct-' + id);
   if (b) b.style.width = pct + '%'; if (l) l.textContent = `${n} / ${total} ${c.prog.unit}`; if (q) q.textContent = `${pct}% completado`;
 }
@@ -1626,6 +1633,7 @@ window.nxFetchProgress = async () => {
     nxSetBar(3, j.pilares || 0, tot);
     nxSetBar(4, j.visitas || 0, j.visitasPlan || refVis.length);
     if (j.preparacion && j.preparacion.plan) nxSetBar(0, j.preparacion.hechas, j.preparacion.plan);
+    if (j.formacion && j.formacion.plan) nxSetBar(7, j.formacion.hechas, j.formacion.plan);
     if (j.entrenamiento && j.entrenamiento.plan) nxSetBar(1, j.entrenamiento.hechas, j.entrenamiento.plan);
   } catch (e) {
     [2,3,4].forEach(id => { const q = document.getElementById('nxp-pct-' + id); if (q) q.textContent = 'No se pudo cargar el progreso'; });
@@ -1702,7 +1710,7 @@ function nxRenderCalendar() {
         const slot = se.slot === 'am' ? 'AM' : se.slot === 'pm' ? 'PM' : '';
         const area = se.area ? `<span style="background:${c.color};color:#fff;border-radius:3px;padding:0 4px;font-size:7px;font-weight:800;margin-left:2px">${se.area.replace('Áreas ', 'A').replace('Área ', 'A').replace(' y ', '+')}</span>` : '';
         const solo = se.cid >= 2 && se.cid <= 4 && s > ULT;
-        const sub = se.cid <= 1 || se.cid === 5 ? '' : se.cid === 6 ? 'Cuestiónica' : (se.cid === 4 ? (solo ? 'Oswaldo' : 'Mariana y Oswaldo') : (solo ? 'Oswaldo' : se.facilitator.split(',')[0].split(' ')[0]));
+        const sub = se.cid <= 1 || se.cid === 5 || se.cid === 7 ? '' : se.cid === 6 ? 'Cuestiónica' : (se.cid === 4 ? (solo ? 'Oswaldo' : 'Mariana y Oswaldo') : (solo ? 'Oswaldo' : se.facilitator.split(',')[0].split(' ')[0]));
         h += `<div onclick="nxOpenSession(${idx})" style="background:${solo ? 'repeating-linear-gradient(135deg,' + c.lt + ' 0 6px,#fff 6px 12px)' : c.lt};border-left:3px solid ${c.color};border-radius:7px;padding:5px 7px;cursor:pointer;display:flex;flex-direction:column;justify-content:center;min-height:${arr.length === 1 ? '56px' : '24px'};">
           <div style="display:flex;align-items:center;gap:3px;flex-wrap:wrap">${slot ? `<span style="color:${c.color};font-size:7px;font-weight:700;opacity:.7">${slot}</span>` : ''}<span style="font-size:8px;font-weight:800;color:var(--navy);line-height:1.2">${nesc(se.group)}</span>${area}</div>
           ${sub ? `<div style="font-size:7.5px;color:${c.color};font-weight:600;margin-top:1px;line-height:1.2;opacity:.9">${sub}</div>` : ''}</div>`;
@@ -1726,13 +1734,13 @@ function nxModal(c, eyebrow, title, date, grid) {
   document.getElementById('nxOverlay').classList.add('open');
 }
 const mf = (lbl, val, wide) => `<div class="mfield${wide ? ' wide' : ''}"><div class="mfield-lbl">${lbl}</div><div class="mfield-val">${val}</div></div>`;
-window.nxOpenCourse = id => { const c = NC[id];
+window.nxOpenCourse = id => { const c = NCI(id);
   nxModal(c, '📋 Resumen de la actividad', c.name, c.range,
     mf('👥 Población', c.population) + mf('⏱ Duración', c.duration) + mf('📅 Grupos', c.groups) + mf('🔢 Alcance', c.people.replace(/^[🏪📄] /u, '')) + mf('📚 Contenido', c.content, true) + mf('🎓 Facilitador(es)', c.facilitators, true)); };
-window.nxOpenSession = i => { const s = NS[i], c = NC[s.cid];
+window.nxOpenSession = i => { const s = NS[i], c = NCI(s.cid);
   const turno = s.slot === 'am' ? ' · Turno Mañana' : s.slot === 'pm' ? ' · Turno Tarde' : '';
   let g = '';
-  if (s.cid <= 1 || s.cid === 6) g = mf('📋 Actividad', s.group, true) + mf('📝 Detalle', s.detail, true) + mf('🎓 Responsable', s.facilitator, true);
+  if (s.cid <= 1 || s.cid >= 6) g = mf('📋 Actividad', s.group, true) + mf('📝 Detalle', s.detail, true) + mf('🎓 Responsable', s.facilitator, true);
   else if (s.cid <= 3) g = mf('📋 Grupo', `${s.group} de ${NP.rondas} · ${s.area}`) + mf('⏱ Horario', s.hours) + mf('📍 Sala', s.sala) + mf('👥 Participantes', `${MAXT === 1 ? '1' : 'Hasta ' + MAXT} por farmacia (${s.tiendas.length * MAXT})`) + mf('🎓 Facilitador(es)', s.facilitator, true) + mf(`🏪 Farmacias convocadas (${s.tiendas.length})`, s.tiendas.map(nesc).join(' · '), true);
   else if (s.cid === 4) g = mf('📋 Ciclo', `${s.group}: ${CONFIG.conductas[s.ciclo-1]} + ${CONFIG.pilares[s.ciclo-1]}`, true) + mf('🎯 Actividad de la conducta', `${ACTS[s.ciclo-1].nombre} (${ACTS[s.ciclo-1].dur}). ${ACTS[s.ciclo-1].modo}. <a href="#" onclick="nxOpenAct(${s.ciclo});return false;" style="font-weight:800;color:#e67e22">Ver dinámica →</a>`, true) + mf('🗺 Área', s.area) + mf('⏱ Duración', '60 min por farmacia · conducta y pilar en la misma visita') + mf('🎓 Facilitador(es)', `${s.facilitator}${s.rol ? '<br><span style="font-size:12px;color:var(--muted)">' + nesc(s.rol) + '</span>' : ''}`, true) + mf(`🏪 Farmacias a visitar (${s.tiendas.length})`, s.tiendas.map(nesc).join(' · '), true);
   else g = mf('📋 Actividad', s.group, true) + mf('🎓 Con quién', s.facilitator, true);
