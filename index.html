@@ -488,7 +488,7 @@ thead th.week-even .date-box { background:#eef2fb; }
     </div>
     <div class="cap-grid" id="nxCards" style="position:relative;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:30px;row-gap:34px"></div>
     <p style="font-size:12px;font-weight:700;color:var(--text-soft);margin:-30px 0 46px">Las flechas indican el orden. <b>+</b> = en paralelo. El diagnóstico es transversal: ocurre durante los talleres y el refuerzo, de octubre a diciembre.</p>
-    <div class="section-label">Actividades de refuerzo de las Conductas en tienda</div>
+    <div class="section-label">Ciclos de refuerzo en tienda · cada ciclo: 1 conducta y 1 pilar</div>
     <div class="cap-grid" id="nxActs"></div>
     <div class="footer-note"><div class="footer-note-icon">💡</div><div class="footer-note-text"><strong>Supuestos del plan.</strong> 16 colaboradores por farmacia en promedio; 1 persona por farmacia en cada grupo de los talleres de Conductas y Pilares; Área 1 sola, siempre en la mañana en Sala Las Heras (10 participantes), y Áreas 2 y 3 juntas, siempre en la tarde en Sala Los Olivos (21 participantes); cada grupo hace Conductas un día y Pilares el día hábil siguiente; feriados de Argentina y pausa navideña del 21 de diciembre al 1 de enero. En los talleres de Conductas y Pilares, Mariana facilita Conductas y Oswaldo facilita Pilares con su guía; desde el 18 de diciembre, Oswaldo continúa solo con el refuerzo en tienda.</div></div>
   </div>
@@ -1232,7 +1232,7 @@ const CONFIG = {
   ultimoDiaMariana: '2026-12-17',   // jueves; último día de Mariana en Argentina
   salidaMariana: '2026-12-17',
   pausa: { desde: '2026-12-21', hasta: '2027-01-01', motivo: 'Temporada alta navideña: sin visitas de campo' },
-  capacidad: { 1: 2, 2: 3, 3: 2 },  // tiendas por medio turno (AM 8–12 / PM 13–17)
+  capacidad: { 1: 1, 2: 1, 3: 1 },  // 1 tienda por mañana (8–12) o por tarde (13–17)
   conductas: ['Conducta 1: Soy cercano con el cliente','Conducta 2: Actúo con agilidad para el cliente','Conducta 3: Brindo soluciones al cliente','Conducta 4: Personalizo el trato con el cliente','Conducta 5: Deleito al cliente más allá del Gracias'],
   pilares:   ['Pilar 1','Pilar 2','Pilar 3','Pilar 4','Pilar 5'],
   kickoff: {
@@ -1518,10 +1518,10 @@ const NC = [
     content:`Los 5 pilares de la operación · Cada grupo va a Pilares el día hábil siguiente a su taller de Conductas, en el mismo horario y sala · ${CONFIG.kickoff.turnos.AM.length === 1 ? 'Área ' + CONFIG.kickoff.turnos.AM[0] : 'Áreas ' + CONFIG.kickoff.turnos.AM.join(' y ')}: mañanas en ${salaTxt(CONFIG.kickoff.turnos.AM[0])} · ${CONFIG.kickoff.turnos.PM.length === 1 ? 'Área ' + CONFIG.kickoff.turnos.PM[0] : 'Áreas ' + CONFIG.kickoff.turnos.PM.join(' y ')}: tardes en ${salaTxt(CONFIG.kickoff.turnos.PM[0])}`,
     facilitators: `Oswaldo Saldivia, con Mariana Meza acompañando y guiando${R.kick[1] > ULT ? ' hasta el 17 dic' : ''}<br>${salaBadges(NX_COLORS[3])}`,
     status:'Por iniciar', start:R.kick[0] },
-  { id:4, short:'Refuerzo en tienda', name:'Refuerzo en tienda: 1 conducta + 1 pilar', population:`Equipos de las ${NTI} farmacias`, duration:'60 min por visita',
+  { id:4, short:'Refuerzo en tienda', name:'Refuerzo en tienda: 1 conducta + 1 pilar', population:`Equipos de las ${NTI} farmacias`, duration:'1 mañana o 1 tarde por visita',
     dates:rangoMes(refVis.map(v=>v.fecha).sort()[0], NP.fin), range:`${nf(refVis.map(v=>v.fecha).sort()[0])} – ${nf(NP.fin)}`, prog:{ total:refVis.length, unit:'visitas', live:true }, groups:'5 ciclos · 1 visita por farmacia', people:`🏪 ${refVis.length} visitas`,
-    invest:'2 a 3 farmacias por medio turno',
-    content:'Una visita por farmacia en cada ciclo: la conducta y el pilar se refuerzan en el mismo momento · Ideal en el cambio de turno, para llegar a ambos equipos · Actividades: Bingo, Rally contra el tiempo, Ruleta de las soluciones, STOP del cliente y Chapa del Deleite · Los colaboradores no se trasladan',
+    invest:'1 farmacia por mañana (8 a 12) o por tarde (13 a 17)',
+    content:'Una visita por farmacia en cada ciclo, de una mañana (8 a 12) o una tarde (13 a 17): la conducta y el pilar se refuerzan en el mismo momento · Conductas: Bingo, Rally contra el tiempo, Ruleta de las soluciones, STOP del cliente y Chapa del Deleite · Pilares: "Tú haces, yo observo", con feedback de Oswaldo · Los colaboradores no se trasladan',
     facilitators: (refConM ? `${areaBadge('HASTA 17 DIC', NX_COLORS[4])} Mariana Meza y Oswaldo Saldivia (${refConM} visitas)</span><br>${areaBadge('DESDE 18 DIC', NX_COLORS[4])} Oswaldo Saldivia</span><br>` : 'Oswaldo Saldivia<br>') + `<span style="font-size:11px;color:var(--muted)">Reporte semanal a Adriana D'Angelo y José Ignacio Thorne</span>`,
     status:'Por iniciar', start:refVis.map(v=>v.fecha).sort()[0] },
   { id:5, short:'Diagnóstico', name:'Diagnóstico de necesidades de capacitación', population:'Gerencia de Capacitación', duration:'Entregable',
@@ -1573,50 +1573,59 @@ let nConCont = false;
 
 // ---- Actividades de refuerzo de las Conductas (instructivos) ----
 const ACTS = [
-  { n:1, conducta:'Soy cercano con el cliente', nombre:'Reto "Soy cercano con el cliente" (bingo)', dur:'1 semana', modo:'Se lanza en la visita; el supervisor la sostiene durante la semana',
+  { n:1, conducta:'Soy cercano con el cliente', nombre:'Reto "Soy cercano con el cliente" (bingo)', dur:'Una mañana o una tarde', modo:'Oswaldo realiza la actividad con el equipo a lo largo de la visita',
     objetivo:'Reforzar la conducta con una dinámica práctica basada en la observación de comportamientos reales.',
     materiales:'Cartones de bingo, 1 por colaborador',
-    dinamica:['Cada casilla del cartón es un comportamiento de la conducta; cada día se realizan cuatro, hasta llenar el cartón al final de la semana.','Para marcar una casilla, un compañero debe haber observado el comportamiento y escribe su nombre en "Reconocido por".','El supervisor motiva durante la semana: "¿A quién reconociste hoy?"'],
-    cierre:'Reflexión de pocos minutos: cómo se sintieron, cómo reaccionaron los clientes y qué mantener como hábito. Reconocimiento a quienes completaron el cartón con el kit.' },
-  { n:2, conducta:'Actúo con agilidad para el cliente', nombre:'Rally contra el tiempo', dur:'8 minutos', modo:'Se realiza completa en la visita',
+    dinamica:['Cada casilla del cartón es un comportamiento de la conducta; el equipo los va realizando durante la mañana o la tarde de la visita.','Para marcar una casilla, un compañero debe haber observado el comportamiento y escribe su nombre en "Reconocido por".','Oswaldo acompaña al equipo durante la visita y lo motiva: "¿A quién reconociste hoy?"'],
+    cierre:'Reflexión al final de la visita: cómo se sintieron, cómo reaccionaron los clientes y qué mantener como hábito. Reconocimiento a quienes completaron el cartón.' },
+  { n:2, conducta:'Actúo con agilidad para el cliente', nombre:'Rally contra el tiempo', dur:'Una mañana o una tarde', modo:'Oswaldo realiza la actividad con el equipo durante la visita; cada ronda del rally dura 8 minutos',
     objetivo:'Practicar cómo detener las actividades del día a día para atender al cliente de forma rápida y eficiente.',
     materiales:'Kit de tienda: 42 vasos plásticos, 12 corazones, 2 dibujos de clientes y 2 cestas de farmacia',
     dinamica:['Grupos de 4 colaboradores en 2 parejas, con los roles "colaborador ágil" y "cliente".','El colaborador ágil arma una torre de 21 vasos; cada vez que el cliente dice "AYUDA" (6 veces) se detiene y pone un corazón en la cesta del cliente.','El cliente toma el tiempo; luego se intercambian los roles.'],
     cierre:'Pregunta: "¿Cómo se vio reflejada la Conducta 2 en esta actividad?" Mensaje: cuando un cliente necesita ayuda, nos detenemos y lo atendemos de inmediato. Reconocimiento al equipo ganador.' },
-  { n:3, conducta:'Brindo soluciones al cliente', nombre:'Ruleta de las soluciones', dur:'1 minuto por pareja', modo:'Se realiza completa en la visita',
+  { n:3, conducta:'Brindo soluciones al cliente', nombre:'Ruleta de las soluciones', dur:'Una mañana o una tarde', modo:'Oswaldo realiza la actividad con el equipo durante la visita; cada pareja tiene 1 minuto para proponer soluciones',
     objetivo:'Practicar la escucha activa, la personalización, la propuesta de alternativas, el acompañamiento y el cierre satisfactorio.',
     materiales:'Dos ruletas digitales: necesidad del cliente y contexto de la tienda', link:'https://claudiagarcia-create.github.io/index.html/',
     dinamica:['En parejas, uno es cliente y otro colaborador.','El cliente gira las dos ruletas y lee la situación en voz alta.','El colaborador tiene un minuto para proponer soluciones; luego se intercambian los roles.'],
     cierre:'El grupo analiza: ¿escuchó activamente?, ¿ofreció una solución factible?, ¿acompañó al cliente hasta el final? Se refuerzan los mensajes clave de la conducta.' },
-  { n:4, conducta:'Personalizo el trato con el cliente', nombre:'STOP del cliente', dur:'Por rondas', modo:'Se realiza completa en la visita',
+  { n:4, conducta:'Personalizo el trato con el cliente', nombre:'STOP del cliente', dur:'Una mañana o una tarde', modo:'Oswaldo realiza la actividad con el equipo durante la visita, en rondas',
     objetivo:'Hacer mejores preguntas para conocer al cliente e identificar acciones concretas para personalizar la atención.',
     materiales:'Hojas, lápices o bolígrafos y la plantilla (Letra, Nombre, Perfil, Pregunta, Acción)',
     dinamica:['El supervisor dice una letra del abecedario.','Cada participante completa: nombre de cliente, perfil, una pregunta para conocerlo y una acción para personalizar su atención.','Quien termina primero dice "¡STOP!" y todos dejan de escribir.'],
     cierre:'Cada uno comparte: "Para personalizar el trato con [nombre], voy a preguntarle [pregunta] y a [acción]". El líder valida si las acciones son concretas y aplicables hoy en tienda.' },
-  { n:5, conducta:'Deleito al cliente más allá del Gracias', nombre:'Chapa del Deleite', dur:'1 mes', modo:'Se lanza en la visita; el supervisor la sostiene durante el mes',
+  { n:5, conducta:'Deleito al cliente más allá del Gracias', nombre:'Chapa del Deleite', dur:'Una mañana o una tarde', modo:'Se lanza en la visita; la chapa queda en la tienda y el supervisor la sostiene durante el mes',
     objetivo:'Instalar el hábito de identificar oportunidades cotidianas para generar experiencias memorables.',
     materiales:'Chapas o pines de reconocimiento, ruleta de situaciones e instructivo', link:'https://claudiagarcia-create.github.io/Ruleta-Conductas/',
     dinamica:['Lanzamiento: se presenta la dinámica y se refuerza qué es "deleitar" con la ruleta de situaciones.','Una chapa circula por la tienda: la recibe quien logra una acción de deleite validada por el supervisor.','Preguntas de chequeo: ¿esto lo tenía que hacer de todos modos? ¿El cliente lo recordará mañana?'],
     cierre:'Al final del mes, el equipo comparte acciones de deleite que lo inspiraron. Seguimiento diario: "¿Qué hiciste hoy que tu cliente recordará?"' },
 ];
+// Actividad de cada pilar, igual en los 5 ciclos
+const ACT_PILAR = { nombre: 'Tú haces, yo observo', desc: 'Los colaboradores de la tienda aplican el pilar y Oswaldo Saldivia los observa y les da feedback.' };
 const actRango = n => { const f = refVis.filter(v => v.ciclo === n).map(v => v.fecha).sort(); return f.length ? `${nf(f[0])} – ${nf(f[f.length-1])}` : ''; };
 function nxRenderActs() {
-  const c = NX_COLORS[2];
+  const c = NX_COLORS[4], co = NX_COLORS[2], pi = NX_COLORS[3];
   document.getElementById('nxActs').innerHTML = ACTS.map(a => `
     <div class="cap-card" style="border-top-color:${c.color}" onclick="nxOpenAct(${a.n})">
-      <div class="cap-population" style="color:${c.color}">Conducta ${a.n} · ${a.conducta}</div>
-      <div class="cap-name">${a.nombre}</div>
-      <div class="cap-tags"><span class="cap-tag">${a.dur}</span><span class="cap-tag">Ciclo ${a.n}</span><span class="cap-tag" style="background:${c.lt};color:${c.color};border-color:${c.bd}">👥 Todo el equipo de tienda</span></div>
-      <div class="cap-tags" style="margin-top:-6px"><span class="cap-tag" style="background:#f0f9ff;color:#0369a1;border-color:#bae6fd">📍 ${a.modo}</span></div>
-      <div class="cap-capacidades"><strong>Objetivo</strong>${a.objetivo}</div>
-      <div class="cap-capacidades" style="margin-top:8px"><strong>Materiales</strong>${a.materiales}</div>
-      <div class="cap-facilitators"><span class="cap-facilitators-icon">🗓</span><span><span class="cap-facilitators-label">Visitas del ciclo ${a.n}: </span>${actRango(a.n)}</span></div>
-      <div class="cap-content-link" style="color:${c.color}">📋 Ver dinámica →</div>
+      <div class="cap-population" style="color:${c.color}">Ciclo ${a.n} · Visitas: ${actRango(a.n)}</div>
+      <div class="cap-name">Ciclo ${a.n}: Conducta ${a.n} y Pilar ${a.n}</div>
+      <div class="cap-tags"><span class="cap-tag">1 visita por farmacia</span><span class="cap-tag">1 mañana o 1 tarde</span><span class="cap-tag" style="background:${c.lt};color:${c.color};border-color:${c.bd}">🏪 31 farmacias</span></div>
+      <div style="margin:4px 0 10px;background:${co.lt};border:1px solid ${co.bd};border-radius:8px;padding:10px 12px">
+        <div style="font-size:10px;font-weight:800;color:${co.color};text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px">Conducta ${a.n}</div>
+        <div style="font-size:13px;font-weight:800;color:var(--navy);margin-bottom:4px">${a.conducta}</div>
+        <div style="font-size:12px;color:var(--text-mid);line-height:1.5">Actividad: <b>${a.nombre}</b><br>${a.modo}</div>
+      </div>
+      <div style="margin:0 0 10px;background:${pi.lt};border:1px solid ${pi.bd};border-radius:8px;padding:10px 12px">
+        <div style="font-size:10px;font-weight:800;color:${pi.color};text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px">Pilar ${a.n}</div>
+        <div style="font-size:13px;font-weight:800;color:var(--navy);margin-bottom:4px">${CONFIG.pilares[a.n-1]}</div>
+        <div style="font-size:12px;color:var(--text-mid);line-height:1.5">Actividad: <b>"${ACT_PILAR.nombre}"</b><br>${ACT_PILAR.desc}</div>
+      </div>
+      <div class="cap-capacidades"><strong>Objetivo de la conducta</strong>${a.objetivo}</div>
+      <div class="cap-content-link" style="color:${c.color}">📋 Ver detalle del ciclo →</div>
     </div>`).join('');
 }
 window.nxOpenAct = n => { const a = ACTS[n-1], c = NX_COLORS[2];
-  nxModal(c, `🎯 Actividad de refuerzo · Conducta ${n}`, a.nombre, a.conducta,
-    mf('⏱ Duración', a.dur) + mf('📍 En la visita', a.modo) + mf('🎯 Objetivo', a.objetivo, true) + mf('🧰 Materiales', a.materiales + (a.link ? `<br><a href="${a.link}" target="_blank" rel="noopener" style="color:${c.color};font-weight:800">Abrir ruleta →</a>` : ''), true)
+  nxModal(c, `🔁 Ciclo ${n} de refuerzo en tienda`, `Ciclo ${n}: Conducta ${n} y Pilar ${n}`, `Conducta ${n}: ${a.conducta} · ${CONFIG.pilares[n-1]}`,
+    mf('🎯 Actividad de la conducta', `${a.nombre} · ${a.dur}`) + mf('📍 En la visita', a.modo) + mf(`🏛 Actividad del Pilar ${n}`, `<b>"${ACT_PILAR.nombre}"</b><br>${ACT_PILAR.desc}`, true) + mf('🎯 Objetivo', a.objetivo, true) + mf('🧰 Materiales', a.materiales + (a.link ? `<br><a href="${a.link}" target="_blank" rel="noopener" style="color:${c.color};font-weight:800">Abrir ruleta →</a>` : ''), true)
     + mf('🔁 Dinámica', a.dinamica.map((x, i) => `${i+1}. ${nesc(x)}`).join('<br>'), true) + mf('💬 Cierre', a.cierre, true) + mf('🗓 Visitas del ciclo', actRango(n), true)); };
 
 // ---- Progreso (mismo formato que Mónica) ----
@@ -1801,7 +1810,7 @@ window.nxOpenSession = i => { const s = NS[i], c = NCI(s.cid);
   let g = '';
   if (s.cid <= 1 || s.cid >= 6) g = mf('📋 Actividad', s.group, true) + mf('📝 Detalle', s.detail, true) + mf('🎓 Responsable', s.facilitator, true);
   else if (s.cid <= 3 || s.cid === 8) g = mf('📋 Grupo', `${s.group} de ${NP.rondas} · ${s.area}`) + mf('⏱ Horario', s.hours) + mf('📍 Sala', s.sala) + mf('👥 Participantes', `${MAXT === 1 ? '1' : 'Hasta ' + MAXT} por farmacia (${s.tiendas.length * MAXT})`) + mf('🎓 Facilitador(es)', s.facilitator, true) + mf(`🏪 Farmacias convocadas (${s.tiendas.length})`, s.tiendas.map(nesc).join(' · '), true);
-  else if (s.cid === 4) g = mf('📋 Ciclo', `${s.group}: ${CONFIG.conductas[s.ciclo-1]} + ${CONFIG.pilares[s.ciclo-1]}`, true) + mf('🎯 Actividad de la conducta', `${ACTS[s.ciclo-1].nombre} (${ACTS[s.ciclo-1].dur}). ${ACTS[s.ciclo-1].modo}. <a href="#" onclick="nxOpenAct(${s.ciclo});return false;" style="font-weight:800;color:#e67e22">Ver dinámica →</a>`, true) + mf('🗺 Área', s.area) + mf('⏱ Duración', '60 min por farmacia · conducta y pilar en la misma visita') + mf('🎓 Facilitador(es)', `${s.facilitator}${s.rol ? '<br><span style="font-size:12px;color:var(--muted)">' + nesc(s.rol) + '</span>' : ''}`, true) + mf(`🏪 Farmacias a visitar (${s.tiendas.length})`, s.tiendas.map(nesc).join(' · '), true);
+  else if (s.cid === 4) g = mf('📋 Ciclo', `${s.group}: Conducta ${s.ciclo} y Pilar ${s.ciclo}<br><span style="font-size:12px;color:var(--muted)">${CONFIG.conductas[s.ciclo-1]} · ${CONFIG.pilares[s.ciclo-1]}</span>`, true) + mf('🎯 Actividad de la conducta', `${ACTS[s.ciclo-1].nombre} (${ACTS[s.ciclo-1].dur}). ${ACTS[s.ciclo-1].modo}. <a href="#" onclick="nxOpenAct(${s.ciclo});return false;" style="font-weight:800;color:#e67e22">Ver detalle del ciclo →</a>`, true) + mf('🏛 Actividad del pilar', `<b>"${ACT_PILAR.nombre}"</b>: ${ACT_PILAR.desc}`, true) + mf('🗺 Área', s.area) + mf('⏱ Duración', `${s.slot === 'am' ? 'Mañana completa, 8:00 a 12:00' : 'Tarde completa, 13:00 a 17:00'} · conducta y pilar en la misma visita`) + mf('🎓 Facilitador(es)', `${s.facilitator}${s.rol ? '<br><span style="font-size:12px;color:var(--muted)">' + nesc(s.rol) + '</span>' : ''}`, true) + mf(`🏪 Farmacias a visitar (${s.tiendas.length})`, s.tiendas.map(nesc).join(' · '), true);
   else g = mf('📋 Actividad', s.group, true) + mf('🎓 Con quién', s.facilitator, true);
   nxModal(c, '📚 Detalle de la actividad', c.name, '📅 ' + nfl(s.date) + turno, g); };
 window.nxOverlayClick = e => { if (e.target === document.getElementById('nxOverlay')) nxClose(); };
