@@ -487,7 +487,7 @@ thead th.week-even .date-box { background:#eef2fb; }
       <a href="#" onclick="goToStatus();return false;" style="display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:800;color:#e74c3c;background:#fdecea;border:1px solid #f5c2bd;border-radius:100px;padding:7px 16px;text-decoration:none;white-space:nowrap">Ver estatus de participación →</a></div>
     </div>
     <div class="cap-grid" id="nxCards" style="position:relative;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:30px;row-gap:34px"></div>
-    <p style="font-size:12px;font-weight:700;color:var(--text-soft);margin:-30px 0 46px">Las flechas indican el orden. <b>+</b> = en paralelo. El diagnóstico es transversal: ocurre durante los talleres y el refuerzo, de octubre a diciembre.</p>
+    <p style="font-size:12px;font-weight:700;color:var(--text-soft);margin:-30px 0 46px">Las flechas indican el orden. Los talleres de Conductas y Pilares (pasos 3 y 4) ocurren en paralelo. El diagnóstico es transversal: ocurre durante los talleres y el refuerzo, de octubre a diciembre.</p>
     <div class="section-label">Ciclos de refuerzo en tienda · cada ciclo: 1 conducta y 1 pilar</div>
     <p style="font-size:12px;font-weight:700;color:var(--text-soft);margin:-8px 0 18px">Todos los colaboradores de cada tienda viven las actividades: si una dinámica es para pocos participantes, se repite las veces necesarias hasta que todos pasen.</p>
     <div class="cap-grid" id="nxActs"></div>
@@ -1601,7 +1601,7 @@ const ACTS = [
     cierre:'Al final del mes, el equipo comparte acciones de deleite que lo inspiraron. Seguimiento diario: "¿Qué hiciste hoy que tu cliente recordará?"' },
 ];
 // Actividad de cada pilar, igual en los 5 ciclos
-const ACT_PILAR = { nombre: 'Tú haces, yo observo', desc: 'Los colaboradores de la tienda aplican el pilar y Oswaldo Saldivia los observa y les da feedback. Se repite hasta que todos los colaboradores hayan pasado.' };
+const ACT_PILAR = { nombre: 'Tú haces, yo observo', desc: n => `Los colaboradores de la tienda aplican el Pilar ${n} y Oswaldo Saldivia los observa y les da feedback. Se repite hasta que todos los colaboradores hayan pasado.` };
 const actRango = n => { const f = refVis.filter(v => v.ciclo === n).map(v => v.fecha).sort(); return f.length ? `${nf(f[0])} – ${nf(f[f.length-1])}` : ''; };
 function nxRenderActs() {
   const c = NX_COLORS[4], co = NX_COLORS[2], pi = NX_COLORS[3];
@@ -1618,7 +1618,7 @@ function nxRenderActs() {
       <div style="margin:0 0 10px;background:${pi.lt};border:1px solid ${pi.bd};border-radius:8px;padding:10px 12px">
         <div style="font-size:10px;font-weight:800;color:${pi.color};text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px">Pilar ${a.n}</div>
         <div style="font-size:13px;font-weight:800;color:var(--navy);margin-bottom:4px">${CONFIG.pilares[a.n-1]}</div>
-        <div style="font-size:12px;color:var(--text-mid);line-height:1.5">Actividad: <b>"${ACT_PILAR.nombre}"</b><br>${ACT_PILAR.desc}</div>
+        <div style="font-size:12px;color:var(--text-mid);line-height:1.5">Actividad: <b>"${ACT_PILAR.nombre}"</b><br>${ACT_PILAR.desc(a.n)}</div>
       </div>
       <div class="cap-capacidades"><strong>Objetivo de la conducta</strong>${a.objetivo}</div>
       <div class="cap-content-link" style="color:${c.color}">📋 Ver detalle del ciclo →</div>
@@ -1626,7 +1626,7 @@ function nxRenderActs() {
 }
 window.nxOpenAct = n => { const a = ACTS[n-1], c = NX_COLORS[2];
   nxModal(c, `🔁 Ciclo ${n} de refuerzo en tienda`, `Ciclo ${n}: Conducta ${n} y Pilar ${n}`, `Conducta ${n}: ${a.conducta} · ${CONFIG.pilares[n-1]}`,
-    mf('👥 Participación', 'Todos los colaboradores de la tienda viven las actividades. Si la dinámica es para pocos participantes, se repite las veces necesarias hasta que todos pasen.', true) + mf('🎯 Actividad de la conducta', `${a.nombre} · ${a.dur}`) + mf('📍 En la visita', a.modo) + mf(`🏛 Actividad del Pilar ${n}`, `<b>"${ACT_PILAR.nombre}"</b><br>${ACT_PILAR.desc}`, true) + mf('🎯 Objetivo', a.objetivo, true) + mf('🧰 Materiales', a.materiales + (a.link ? `<br><a href="${a.link}" target="_blank" rel="noopener" style="color:${c.color};font-weight:800">Abrir ruleta →</a>` : ''), true)
+    mf('👥 Participación', 'Todos los colaboradores de la tienda viven las actividades. Si la dinámica es para pocos participantes, se repite las veces necesarias hasta que todos pasen.', true) + mf('🎯 Actividad de la conducta', `${a.nombre} · ${a.dur}`) + mf('📍 En la visita', a.modo) + mf(`🏛 Actividad del Pilar ${n}`, `<b>"${ACT_PILAR.nombre}"</b><br>${ACT_PILAR.desc(n)}`, true) + mf('🎯 Objetivo', a.objetivo, true) + mf('🧰 Materiales', a.materiales + (a.link ? `<br><a href="${a.link}" target="_blank" rel="noopener" style="color:${c.color};font-weight:800">Abrir ruleta →</a>` : ''), true)
     + mf('🔁 Dinámica', a.dinamica.map((x, i) => `${i+1}. ${nesc(x)}`).join('<br>'), true) + mf('💬 Cierre', a.cierre, true) + mf('🗓 Visitas del ciclo', actRango(n), true)); };
 
 // ---- Progreso (mismo formato que Mónica) ----
@@ -1692,16 +1692,23 @@ function nxFlechas() {
     const r1 = cards[i].getBoundingClientRect(), r2 = cards[i+1].getBoundingClientRect();
     const misma = Math.abs(r1.top - r2.top) < 8;
     const el = document.createElement('div'); el.className = 'nx-flecha';
-    // Centro vertical entre los dos cuadros de la misma fila; en el salto de fila, centro del espacio entre filas
-    const x = misma ? (r1.right + r2.left) / 2 - g.left : r1.left + r1.width / 2 - g.left;
-    const y = misma ? (Math.max(r1.top, r2.top) + Math.min(r1.bottom, r2.bottom)) / 2 - g.top : (r1.bottom + r2.top) / 2 - g.top;
     const NAVY = '#0f1e4a';
-    const svg = paralelo
-      ? `<svg width="26" height="26" viewBox="0 0 26 26"><path d="M13 4v18M4 13h18" stroke="${NAVY}" stroke-width="4" stroke-linecap="round"/></svg>`
-      : `<svg width="30" height="30" viewBox="0 0 30 30" style="transform:rotate(${misma ? 0 : 90}deg)"><path d="M4 15h20M16 7l8 8-8 8" fill="none" stroke="${NAVY}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
-    el.innerHTML = svg;
-    el.title = paralelo ? 'En paralelo' : 'Sigue';
-    el.style.cssText = `position:absolute;left:${x}px;top:${y}px;transform:translate(-50%,-50%);display:flex;align-items:center;justify-content:center;z-index:3;pointer-events:none;line-height:0`;
+    if (misma) {
+      // Flecha horizontal, centrada verticalmente entre los dos cuadros
+      const x = (r1.right + r2.left) / 2 - g.left;
+      const y = (Math.max(r1.top, r2.top) + Math.min(r1.bottom, r2.bottom)) / 2 - g.top;
+      el.innerHTML = `<svg width="30" height="30" viewBox="0 0 30 30"><path d="M4 15h20M16 7l8 8-8 8" fill="none" stroke="${NAVY}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+      el.style.cssText = `position:absolute;left:${x}px;top:${y}px;transform:translate(-50%,-50%);z-index:3;pointer-events:none;line-height:0`;
+    } else {
+      // Salto de fila: flecha en codo desde el cuadro de arriba hasta el primer cuadro de la fila siguiente
+      const x1 = r1.left + r1.width / 2 - g.left, x2 = r2.left + r2.width / 2 - g.left;
+      const top = r1.bottom - g.top - 6, h = r2.top - r1.bottom + 10;
+      const left = Math.min(x1, x2) - 12, w = Math.abs(x1 - x2) + 24;
+      const ax = x1 - left, bx = x2 - left, my = h / 2;
+      el.innerHTML = `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" style="overflow:visible"><path d="M${ax} 2 V${my} H${bx} V${h - 4}" fill="none" stroke="${NAVY}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M${bx - 7} ${h - 11} L${bx} ${h - 3} L${bx + 7} ${h - 11}" fill="none" stroke="${NAVY}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+      el.style.cssText = `position:absolute;left:${left}px;top:${top}px;z-index:3;pointer-events:none;line-height:0`;
+    }
+    el.title = 'Sigue';
     grid.appendChild(el);
   }
 }
@@ -1811,7 +1818,7 @@ window.nxOpenSession = i => { const s = NS[i], c = NCI(s.cid);
   let g = '';
   if (s.cid <= 1 || s.cid >= 6) g = mf('📋 Actividad', s.group, true) + mf('📝 Detalle', s.detail, true) + mf('🎓 Responsable', s.facilitator, true);
   else if (s.cid <= 3 || s.cid === 8) g = mf('📋 Grupo', `${s.group} de ${NP.rondas} · ${s.area}`) + mf('⏱ Horario', s.hours) + mf('📍 Sala', s.sala) + mf('👥 Participantes', `${MAXT === 1 ? '1' : 'Hasta ' + MAXT} por farmacia (${s.tiendas.length * MAXT})`) + mf('🎓 Facilitador(es)', s.facilitator, true) + mf(`🏪 Farmacias convocadas (${s.tiendas.length})`, s.tiendas.map(nesc).join(' · '), true);
-  else if (s.cid === 4) g = mf('📋 Ciclo', `${s.group}: Conducta ${s.ciclo} y Pilar ${s.ciclo}<br><span style="font-size:12px;color:var(--muted)">${CONFIG.conductas[s.ciclo-1]} · ${CONFIG.pilares[s.ciclo-1]}</span>`, true) + mf('🎯 Actividad de la conducta', `${ACTS[s.ciclo-1].nombre} (${ACTS[s.ciclo-1].dur}). ${ACTS[s.ciclo-1].modo}. <a href="#" onclick="nxOpenAct(${s.ciclo});return false;" style="font-weight:800;color:#e67e22">Ver detalle del ciclo →</a>`, true) + mf('🏛 Actividad del pilar', `<b>"${ACT_PILAR.nombre}"</b>: ${ACT_PILAR.desc}`, true) + mf('🗺 Área', s.area) + mf('⏱ Duración', `${s.slot === 'am' ? 'Mañana completa, 8:00 a 12:00' : 'Tarde completa, 13:00 a 17:00'} · conducta y pilar en la misma visita`) + mf('🎓 Facilitador(es)', `${s.facilitator}${s.rol ? '<br><span style="font-size:12px;color:var(--muted)">' + nesc(s.rol) + '</span>' : ''}`, true) + mf(`🏪 Farmacias a visitar (${s.tiendas.length})`, s.tiendas.map(nesc).join(' · '), true);
+  else if (s.cid === 4) g = mf('📋 Ciclo', `${s.group}: Conducta ${s.ciclo} y Pilar ${s.ciclo}<br><span style="font-size:12px;color:var(--muted)">${CONFIG.conductas[s.ciclo-1]} · ${CONFIG.pilares[s.ciclo-1]}</span>`, true) + mf('🎯 Actividad de la conducta', `${ACTS[s.ciclo-1].nombre} (${ACTS[s.ciclo-1].dur}). ${ACTS[s.ciclo-1].modo}. <a href="#" onclick="nxOpenAct(${s.ciclo});return false;" style="font-weight:800;color:#e67e22">Ver detalle del ciclo →</a>`, true) + mf(`🏛 Actividad del Pilar ${s.ciclo}`, `<b>"${ACT_PILAR.nombre}"</b>: ${ACT_PILAR.desc(s.ciclo)}`, true) + mf('🗺 Área', s.area) + mf('⏱ Duración', `${s.slot === 'am' ? 'Mañana completa, 8:00 a 12:00' : 'Tarde completa, 13:00 a 17:00'} · conducta y pilar en la misma visita`) + mf('🎓 Facilitador(es)', `${s.facilitator}${s.rol ? '<br><span style="font-size:12px;color:var(--muted)">' + nesc(s.rol) + '</span>' : ''}`, true) + mf(`🏪 Farmacias a visitar (${s.tiendas.length})`, s.tiendas.map(nesc).join(' · '), true);
   else g = mf('📋 Actividad', s.group, true) + mf('🎓 Con quién', s.facilitator, true);
   nxModal(c, '📚 Detalle de la actividad', c.name, '📅 ' + nfl(s.date) + turno, g); };
 window.nxOverlayClick = e => { if (e.target === document.getElementById('nxOverlay')) nxClose(); };
