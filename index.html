@@ -489,6 +489,7 @@ thead th.week-even .date-box { background:#eef2fb; }
     <div class="cap-grid" id="nxCards" style="position:relative;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:30px;row-gap:34px"></div>
     <p style="font-size:12px;font-weight:700;color:var(--text-soft);margin:-30px 0 46px">Las flechas indican el orden. <b>+</b> = en paralelo. El diagnóstico es transversal: ocurre durante los talleres y el refuerzo, de octubre a diciembre.</p>
     <div class="section-label">Ciclos de refuerzo en tienda · cada ciclo: 1 conducta y 1 pilar</div>
+    <p style="font-size:12px;font-weight:700;color:var(--text-soft);margin:-8px 0 18px">Todos los colaboradores de cada tienda viven las actividades: si una dinámica es para pocos participantes, se repite las veces necesarias hasta que todos pasen.</p>
     <div class="cap-grid" id="nxActs"></div>
     <div class="footer-note"><div class="footer-note-icon">💡</div><div class="footer-note-text"><strong>Supuestos del plan.</strong> 16 colaboradores por farmacia en promedio; 1 persona por farmacia en cada grupo de los talleres de Conductas y Pilares; Área 1 sola, siempre en la mañana en Sala Las Heras (10 participantes), y Áreas 2 y 3 juntas, siempre en la tarde en Sala Los Olivos (21 participantes); cada grupo hace Conductas un día y Pilares el día hábil siguiente; feriados de Argentina y pausa navideña del 21 de diciembre al 1 de enero. En los talleres de Conductas y Pilares, Mariana facilita Conductas y Oswaldo facilita Pilares con su guía; desde el 18 de diciembre, Oswaldo continúa solo con el refuerzo en tienda.</div></div>
   </div>
@@ -1573,34 +1574,34 @@ let nConCont = false;
 
 // ---- Actividades de refuerzo de las Conductas (instructivos) ----
 const ACTS = [
-  { n:1, conducta:'Soy cercano con el cliente', nombre:'Reto "Soy cercano con el cliente" (bingo)', dur:'Una mañana o una tarde', modo:'Oswaldo realiza la actividad con el equipo a lo largo de la visita',
+  { n:1, conducta:'Soy cercano con el cliente', nombre:'Reto "Soy cercano con el cliente" (bingo)', dur:'Una mañana o una tarde', modo:'Oswaldo realiza la actividad a lo largo de la visita, hasta que todos los colaboradores de la tienda hayan participado',
     objetivo:'Reforzar la conducta con una dinámica práctica basada en la observación de comportamientos reales.',
     materiales:'Cartones de bingo, 1 por colaborador',
     dinamica:['Cada casilla del cartón es un comportamiento de la conducta; el equipo los va realizando durante la mañana o la tarde de la visita.','Para marcar una casilla, un compañero debe haber observado el comportamiento y escribe su nombre en "Reconocido por".','Oswaldo acompaña al equipo durante la visita y lo motiva: "¿A quién reconociste hoy?"'],
     cierre:'Reflexión al final de la visita: cómo se sintieron, cómo reaccionaron los clientes y qué mantener como hábito. Reconocimiento a quienes completaron el cartón.' },
-  { n:2, conducta:'Actúo con agilidad para el cliente', nombre:'Rally contra el tiempo', dur:'Una mañana o una tarde', modo:'Oswaldo realiza la actividad con el equipo durante la visita; cada ronda del rally dura 8 minutos',
+  { n:2, conducta:'Actúo con agilidad para el cliente', nombre:'Rally contra el tiempo', dur:'Una mañana o una tarde', modo:'Oswaldo repite el rally durante la visita, con grupos de 4, hasta que todos los colaboradores hayan participado; cada ronda dura 8 minutos',
     objetivo:'Practicar cómo detener las actividades del día a día para atender al cliente de forma rápida y eficiente.',
     materiales:'Kit de tienda: 42 vasos plásticos, 12 corazones, 2 dibujos de clientes y 2 cestas de farmacia',
     dinamica:['Grupos de 4 colaboradores en 2 parejas, con los roles "colaborador ágil" y "cliente".','El colaborador ágil arma una torre de 21 vasos; cada vez que el cliente dice "AYUDA" (6 veces) se detiene y pone un corazón en la cesta del cliente.','El cliente toma el tiempo; luego se intercambian los roles.'],
     cierre:'Pregunta: "¿Cómo se vio reflejada la Conducta 2 en esta actividad?" Mensaje: cuando un cliente necesita ayuda, nos detenemos y lo atendemos de inmediato. Reconocimiento al equipo ganador.' },
-  { n:3, conducta:'Brindo soluciones al cliente', nombre:'Ruleta de las soluciones', dur:'Una mañana o una tarde', modo:'Oswaldo realiza la actividad con el equipo durante la visita; cada pareja tiene 1 minuto para proponer soluciones',
+  { n:3, conducta:'Brindo soluciones al cliente', nombre:'Ruleta de las soluciones', dur:'Una mañana o una tarde', modo:'Oswaldo repite la dinámica en parejas durante la visita hasta que todos los colaboradores hayan participado; cada pareja tiene 1 minuto para proponer soluciones',
     objetivo:'Practicar la escucha activa, la personalización, la propuesta de alternativas, el acompañamiento y el cierre satisfactorio.',
     materiales:'Dos ruletas digitales: necesidad del cliente y contexto de la tienda', link:'https://claudiagarcia-create.github.io/index.html/',
     dinamica:['En parejas, uno es cliente y otro colaborador.','El cliente gira las dos ruletas y lee la situación en voz alta.','El colaborador tiene un minuto para proponer soluciones; luego se intercambian los roles.'],
     cierre:'El grupo analiza: ¿escuchó activamente?, ¿ofreció una solución factible?, ¿acompañó al cliente hasta el final? Se refuerzan los mensajes clave de la conducta.' },
-  { n:4, conducta:'Personalizo el trato con el cliente', nombre:'STOP del cliente', dur:'Una mañana o una tarde', modo:'Oswaldo realiza la actividad con el equipo durante la visita, en rondas',
+  { n:4, conducta:'Personalizo el trato con el cliente', nombre:'STOP del cliente', dur:'Una mañana o una tarde', modo:'Oswaldo repite las rondas durante la visita hasta que todos los colaboradores hayan participado',
     objetivo:'Hacer mejores preguntas para conocer al cliente e identificar acciones concretas para personalizar la atención.',
     materiales:'Hojas, lápices o bolígrafos y la plantilla (Letra, Nombre, Perfil, Pregunta, Acción)',
     dinamica:['El supervisor dice una letra del abecedario.','Cada participante completa: nombre de cliente, perfil, una pregunta para conocerlo y una acción para personalizar su atención.','Quien termina primero dice "¡STOP!" y todos dejan de escribir.'],
     cierre:'Cada uno comparte: "Para personalizar el trato con [nombre], voy a preguntarle [pregunta] y a [acción]". El líder valida si las acciones son concretas y aplicables hoy en tienda.' },
-  { n:5, conducta:'Deleito al cliente más allá del Gracias', nombre:'Chapa del Deleite', dur:'Una mañana o una tarde', modo:'Se lanza en la visita; la chapa queda en la tienda y el supervisor la sostiene durante el mes',
+  { n:5, conducta:'Deleito al cliente más allá del Gracias', nombre:'Chapa del Deleite', dur:'Una mañana o una tarde', modo:'Se lanza en la visita con todos los colaboradores, repitiendo la ruleta de situaciones hasta que todos hayan participado; la chapa queda en la tienda y el supervisor la sostiene durante el mes',
     objetivo:'Instalar el hábito de identificar oportunidades cotidianas para generar experiencias memorables.',
     materiales:'Chapas o pines de reconocimiento, ruleta de situaciones e instructivo', link:'https://claudiagarcia-create.github.io/Ruleta-Conductas/',
     dinamica:['Lanzamiento: se presenta la dinámica y se refuerza qué es "deleitar" con la ruleta de situaciones.','Una chapa circula por la tienda: la recibe quien logra una acción de deleite validada por el supervisor.','Preguntas de chequeo: ¿esto lo tenía que hacer de todos modos? ¿El cliente lo recordará mañana?'],
     cierre:'Al final del mes, el equipo comparte acciones de deleite que lo inspiraron. Seguimiento diario: "¿Qué hiciste hoy que tu cliente recordará?"' },
 ];
 // Actividad de cada pilar, igual en los 5 ciclos
-const ACT_PILAR = { nombre: 'Tú haces, yo observo', desc: 'Los colaboradores de la tienda aplican el pilar y Oswaldo Saldivia los observa y les da feedback.' };
+const ACT_PILAR = { nombre: 'Tú haces, yo observo', desc: 'Los colaboradores de la tienda aplican el pilar y Oswaldo Saldivia los observa y les da feedback. Se repite hasta que todos los colaboradores hayan pasado.' };
 const actRango = n => { const f = refVis.filter(v => v.ciclo === n).map(v => v.fecha).sort(); return f.length ? `${nf(f[0])} – ${nf(f[f.length-1])}` : ''; };
 function nxRenderActs() {
   const c = NX_COLORS[4], co = NX_COLORS[2], pi = NX_COLORS[3];
@@ -1625,7 +1626,7 @@ function nxRenderActs() {
 }
 window.nxOpenAct = n => { const a = ACTS[n-1], c = NX_COLORS[2];
   nxModal(c, `🔁 Ciclo ${n} de refuerzo en tienda`, `Ciclo ${n}: Conducta ${n} y Pilar ${n}`, `Conducta ${n}: ${a.conducta} · ${CONFIG.pilares[n-1]}`,
-    mf('🎯 Actividad de la conducta', `${a.nombre} · ${a.dur}`) + mf('📍 En la visita', a.modo) + mf(`🏛 Actividad del Pilar ${n}`, `<b>"${ACT_PILAR.nombre}"</b><br>${ACT_PILAR.desc}`, true) + mf('🎯 Objetivo', a.objetivo, true) + mf('🧰 Materiales', a.materiales + (a.link ? `<br><a href="${a.link}" target="_blank" rel="noopener" style="color:${c.color};font-weight:800">Abrir ruleta →</a>` : ''), true)
+    mf('👥 Participación', 'Todos los colaboradores de la tienda viven las actividades. Si la dinámica es para pocos participantes, se repite las veces necesarias hasta que todos pasen.', true) + mf('🎯 Actividad de la conducta', `${a.nombre} · ${a.dur}`) + mf('📍 En la visita', a.modo) + mf(`🏛 Actividad del Pilar ${n}`, `<b>"${ACT_PILAR.nombre}"</b><br>${ACT_PILAR.desc}`, true) + mf('🎯 Objetivo', a.objetivo, true) + mf('🧰 Materiales', a.materiales + (a.link ? `<br><a href="${a.link}" target="_blank" rel="noopener" style="color:${c.color};font-weight:800">Abrir ruleta →</a>` : ''), true)
     + mf('🔁 Dinámica', a.dinamica.map((x, i) => `${i+1}. ${nesc(x)}`).join('<br>'), true) + mf('💬 Cierre', a.cierre, true) + mf('🗓 Visitas del ciclo', actRango(n), true)); };
 
 // ---- Progreso (mismo formato que Mónica) ----
