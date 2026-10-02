@@ -469,7 +469,7 @@ thead th.week-even .date-box { background:#eef2fb; }
   </div>
 </div>
 
-<style>@media(max-width:860px){#nxCards{grid-template-columns:repeat(2,minmax(0,1fr))!important}}@media(max-width:640px){#nxCards{grid-template-columns:minmax(0,1fr)!important}}</style>
+<style>#nxOverlay .modal{max-height:calc(100vh - 48px);display:flex;flex-direction:column}#nxOverlay .modal-top{flex-shrink:0}#nxOverlay .modal-body{overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}@media(max-width:860px){#nxCards{grid-template-columns:repeat(2,minmax(0,1fr))!important}}@media(max-width:640px){#nxCards{grid-template-columns:minmax(0,1fr)!important}}</style>
 <!-- ══ VISTA 3: LO QUE VIENE · RESUMEN ══ -->
 <div id="nexec" style="display:none;background:var(--offwhite)">
   <div class="hero-ex">
@@ -1697,7 +1697,7 @@ function nxFlechas() {
       // Flecha horizontal, centrada verticalmente entre los dos cuadros
       const x = (r1.right + r2.left) / 2 - g.left;
       const y = (Math.max(r1.top, r2.top) + Math.min(r1.bottom, r2.bottom)) / 2 - g.top;
-      el.innerHTML = `<svg width="30" height="30" viewBox="0 0 30 30"><path d="M4 15h20M16 7l8 8-8 8" fill="none" stroke="${NAVY}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+      el.innerHTML = `<svg width="30" height="30" viewBox="0 0 30 30"><path d="M4 15h20M16 7l8 8-8 8" fill="none" stroke="${NAVY}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
       el.style.cssText = `position:absolute;left:${x}px;top:${y}px;transform:translate(-50%,-50%);z-index:3;pointer-events:none;line-height:0`;
     } else {
       // Salto de fila: flecha en codo desde el cuadro de arriba hasta el primer cuadro de la fila siguiente
@@ -1705,7 +1705,7 @@ function nxFlechas() {
       const top = r1.bottom - g.top - 6, h = r2.top - r1.bottom + 10;
       const left = Math.min(x1, x2) - 12, w = Math.abs(x1 - x2) + 24;
       const ax = x1 - left, bx = x2 - left, my = h / 2;
-      el.innerHTML = `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" style="overflow:visible"><path d="M${ax} 2 V${my} H${bx} V${h - 4}" fill="none" stroke="${NAVY}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M${bx - 7} ${h - 11} L${bx} ${h - 3} L${bx + 7} ${h - 11}" fill="none" stroke="${NAVY}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+      el.innerHTML = `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" style="overflow:visible"><path d="M${ax} 2 V${my} H${bx} V${h - 4}" fill="none" stroke="${NAVY}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M${bx - 7} ${h - 11} L${bx} ${h - 3} L${bx + 7} ${h - 11}" fill="none" stroke="${NAVY}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
       el.style.cssText = `position:absolute;left:${left}px;top:${top}px;z-index:3;pointer-events:none;line-height:0`;
     }
     el.title = 'Sigue';
