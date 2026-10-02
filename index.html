@@ -1472,12 +1472,16 @@ const salaBadges = col => CONFIG.kickoff.grupos.map(p => `${areaBadge(poolEtq(p)
 
 // ---- Taller de Formación de Facilitadores (abril 2027) ----
 // ▼ Cuando estén confirmadas, escribe aquí las 3 fechas, por ejemplo ['2027-04-12','2027-04-13','2027-04-14']
-const FF_FECHAS = [];
+// Los talleres Cultura de Servicio Base empiezan el lunes 3 de mayo de 2027.
+const CB_INICIO = '2027-05-03';
+// La Formación de Facilitadores se hace 2 semanas antes: 3 días hábiles desde el lunes 19 de abril.
+const FF_FECHAS = (() => { const out = []; let f = addDays(CB_INICIO, -14);
+  while (out.length < 3) { const w = dow(f); if (w !== 0 && w !== 6 && !FERIADOS[f]) out.push(f); f = addDays(f, 1); }
+  return out; })();
 const FF_MES = '2027-04-01';
 
 // ---- Talleres Cultura de Servicio Base en sala (desde mayo 2027) ----
 // Mismas salas y grupos que el kickoff: 1 persona por tienda por grupo; ambas salas en paralelo, día completo.
-const CB_INICIO = '2027-05-03';
 const CB_HORARIO = '8:00 a 17:00';
 const CB = (() => {
   const out = []; let f = CB_INICIO, r = 1;
@@ -1527,8 +1531,8 @@ const NC = [
     invest: NP.dncModo === 'tardes' ? 'Tardes libres del refuerzo' : '2 jornadas reservadas (15 y 16 dic)',
     content:'Brechas por conducta y pilar en cada farmacia · Hallazgos de Auditoría con causa en formación · Prioridades de formación 2027',
     facilitators:'Mariana Meza, con Delitze (Auditoría Argentina)', status:'Por iniciar', start:NP.dnc[0].fecha },
-  { id:6, short:'Facilitadores', name:'Taller de Formación de Facilitadores para Cultura de Servicio Base', population:'Coordinadores y supervisores de tienda', duration:'3 días',
-    dates:'Abr 2027', range: FF_FECHAS.length ? `${nf(FF_FECHAS[0])} – ${nf(FF_FECHAS[FF_FECHAS.length-1])}` : 'Abril 2027 · fechas por confirmar', prog:{ total:15, unit:'formados' },
+  { id:6, short:'Formación de Facilitadores', name:'Taller de Formación de Facilitadores para Cultura de Servicio Base', population:'Coordinadores y supervisores de tienda', duration:'3 días',
+    dates: FF_FECHAS.length ? `${nf(FF_FECHAS[0]).replace(' 2027','')} – ${nf(FF_FECHAS[2])}` : 'Abr 2027', range: FF_FECHAS.length ? `${nf(FF_FECHAS[0])} – ${nf(FF_FECHAS[FF_FECHAS.length-1])}` : 'Abril 2027 · fechas por confirmar', prog:{ total:15, unit:'formados' },
     groups:'1 grupo · 15 c/u', people:'15 participantes', invest:'3 días completos',
     content:'Formación de facilitadores internos para el taller Cultura de Servicio Base',
     facilitators:'Cuestiónica', status:'Por iniciar', start: FF_FECHAS[0] || FF_MES, startTxt: FF_FECHAS.length ? null : 'abr 2027 · fechas por confirmar' },
