@@ -1227,6 +1227,7 @@ setInterval(fetchProgress, 300000);
 const CONFIG = {
   llegada: '2026-10-14',
   inicio: '2026-10-15',   // primer día de trabajo en Argentina
+  unaVisitaPorCiclo: true,          // una visita por farmacia en cada ciclo (conducta + pilar juntos)
   ultimoDiaMariana: '2026-12-17',   // jueves; último día de Mariana en Argentina
   salidaMariana: '2026-12-17',
   pausa: { desde: '2026-12-21', hasta: '2027-01-01', motivo: 'Temporada alta navideña: sin visitas de campo' },
@@ -1372,7 +1373,8 @@ function planificar(opts = {}) {
   }
   // Fase 3/4: refuerzo por ciclos (1 conducta + 1 pilar), AM y PM desfasados una semana
   const mkQueue = () => { const q = []; for (let c = 1; c <= 5; c++) for (const a of [1,2,3]) q.push({ ciclo: c, area: a, pend: AREAS[a].tiendas.slice() }); return q; };
-  const qAM = mkQueue(), qPM = mkQueue();
+  const una = CONFIG.unaVisitaPorCiclo;
+  const qAM = mkQueue(), qPM = una ? qAM : mkQueue();
   const iniRefuerzo = (() => { let s = f; while (!esHabil(s)) s = addDays(s,1); return s; })();
   const iniPM = addDays(iniRefuerzo, 7);
   iniR = iniRefuerzo;
@@ -1381,7 +1383,7 @@ function planificar(opts = {}) {
     while (q.length && q[0].pend.length === 0) q.shift();
     if (!q.length) return null;
     const b = q[0];
-    if (turno === 'PM' && !amIniciado.has(b.ciclo+'-'+b.area)) return null;
+    if (turno === 'PM' && !una && !amIniciado.has(b.ciclo+'-'+b.area)) return null;
     const lote = b.pend.splice(0, CONFIG.capacidad[b.area]);
     if (turno === 'AM') amIniciado.add(b.ciclo+'-'+b.area);
     lote.forEach(t => visitas.push({ tienda: t, area: b.area, ciclo: b.ciclo, turno, fecha: s, resp: resp(s) }));
@@ -1396,7 +1398,8 @@ function planificar(opts = {}) {
       next(); continue;
     }
     const am = tomar(qAM, f, 'AM');
-    const pm = f >= iniPM ? tomar(qPM, f, 'PM') : null;
+    const reservaDnc = f <= CONFIG.ultimoDiaMariana && (f === r1 || f === r2);
+    const pm = reservaDnc ? null : (una || f >= iniPM) ? tomar(qPM, f, 'PM') : null;
     const fase = f <= CONFIG.ultimoDiaMariana ? 'refuerzo' : 'continuidad';
     const d = { fase, am, pm, rol: rol(f) };
     if (!pm && f < iniPM) d.pmNota = 'Repesca de kickoff (colaboradores ausentes) y registro de evidencias';
@@ -1487,9 +1490,9 @@ const NC = [
     facilitators: `Oswaldo Saldivia, con Mariana Meza acompañando y guiando${R.kick[1] > ULT ? ' hasta el 17 dic' : ''}<br>${salaBadges(NX_COLORS[3])}`,
     status:'Por iniciar', start:R.kick[0] },
   { id:4, short:'Refuerzo en tienda', name:'Refuerzo en tienda: 1 conducta + 1 pilar', population:`Equipos de las ${NTI} farmacias`, duration:'60 min por visita',
-    dates:rangoMes(refVis.map(v=>v.fecha).sort()[0], NP.fin), range:`${nf(refVis.map(v=>v.fecha).sort()[0])} – ${nf(NP.fin)}`, prog:{ total:refVis.length, unit:'visitas', live:true }, groups:'5 ciclos', people:`🏪 ${refVis.length} visitas`,
+    dates:rangoMes(refVis.map(v=>v.fecha).sort()[0], NP.fin), range:`${nf(refVis.map(v=>v.fecha).sort()[0])} – ${nf(NP.fin)}`, prog:{ total:refVis.length, unit:'visitas', live:true }, groups:'5 ciclos · 1 visita por farmacia', people:`🏪 ${refVis.length} visitas`,
     invest:'2 a 3 farmacias por medio turno',
-    content:'Un ciclo por conducta, con su actividad: Bingo, Rally contra el tiempo, Ruleta de las soluciones, STOP del cliente y Chapa del Deleite · Turno mañana y tarde · Los colaboradores no se trasladan',
+    content:'Una visita por farmacia en cada ciclo: la conducta y el pilar se refuerzan en el mismo momento · Ideal en el cambio de turno, para llegar a ambos equipos · Actividades: Bingo, Rally contra el tiempo, Ruleta de las soluciones, STOP del cliente y Chapa del Deleite · Los colaboradores no se trasladan',
     facilitators: (refConM ? `${areaBadge('HASTA 17 DIC', NX_COLORS[4])} Mariana Meza y Oswaldo Saldivia (${refConM} visitas)</span><br>${areaBadge('DESDE 18 DIC', NX_COLORS[4])} Oswaldo Saldivia</span><br>` : 'Oswaldo Saldivia<br>') + `<span style="font-size:11px;color:var(--muted)">Reporte semanal a Adriana D'Angelo y José Ignacio Thorne</span>`,
     status:'Por iniciar', start:refVis.map(v=>v.fecha).sort()[0] },
   { id:5, short:'Diagnóstico', name:'Diagnóstico de necesidades de capacitación', population:'Gerencia de Capacitación', duration:'Entregable',
@@ -1717,7 +1720,7 @@ window.nxOpenSession = i => { const s = NS[i], c = NC[s.cid];
   let g = '';
   if (s.cid <= 1) g = mf('📋 Actividad', s.group, true) + mf('📝 Detalle', s.detail, true) + mf('🎓 Responsable', s.facilitator, true);
   else if (s.cid <= 3) g = mf('📋 Grupo', `${s.group} de ${NP.rondas} · ${s.area}`) + mf('⏱ Horario', s.hours) + mf('📍 Sala', s.sala) + mf('👥 Participantes', `${MAXT === 1 ? '1' : 'Hasta ' + MAXT} por farmacia (${s.tiendas.length * MAXT})`) + mf('🎓 Facilitador(es)', s.facilitator, true) + mf(`🏪 Farmacias convocadas (${s.tiendas.length})`, s.tiendas.map(nesc).join(' · '), true);
-  else if (s.cid === 4) g = mf('📋 Ciclo', `${s.group}: ${CONFIG.conductas[s.ciclo-1]} + ${CONFIG.pilares[s.ciclo-1]}`, true) + mf('🎯 Actividad de la conducta', `${ACTS[s.ciclo-1].nombre} (${ACTS[s.ciclo-1].dur}). ${ACTS[s.ciclo-1].modo}. <a href="#" onclick="nxOpenAct(${s.ciclo});return false;" style="font-weight:800;color:#e67e22">Ver dinámica →</a>`, true) + mf('🗺 Área', s.area) + mf('⏱ Duración', '60 min por farmacia') + mf('🎓 Facilitador(es)', `${s.facilitator}${s.rol ? '<br><span style="font-size:12px;color:var(--muted)">' + nesc(s.rol) + '</span>' : ''}`, true) + mf(`🏪 Farmacias a visitar (${s.tiendas.length})`, s.tiendas.map(nesc).join(' · '), true);
+  else if (s.cid === 4) g = mf('📋 Ciclo', `${s.group}: ${CONFIG.conductas[s.ciclo-1]} + ${CONFIG.pilares[s.ciclo-1]}`, true) + mf('🎯 Actividad de la conducta', `${ACTS[s.ciclo-1].nombre} (${ACTS[s.ciclo-1].dur}). ${ACTS[s.ciclo-1].modo}. <a href="#" onclick="nxOpenAct(${s.ciclo});return false;" style="font-weight:800;color:#e67e22">Ver dinámica →</a>`, true) + mf('🗺 Área', s.area) + mf('⏱ Duración', '60 min por farmacia · conducta y pilar en la misma visita') + mf('🎓 Facilitador(es)', `${s.facilitator}${s.rol ? '<br><span style="font-size:12px;color:var(--muted)">' + nesc(s.rol) + '</span>' : ''}`, true) + mf(`🏪 Farmacias a visitar (${s.tiendas.length})`, s.tiendas.map(nesc).join(' · '), true);
   else g = mf('📋 Actividad', s.group, true) + mf('🎓 Con quién', s.facilitator, true);
   nxModal(c, '📚 Detalle de la actividad', c.name, '📅 ' + nfl(s.date) + turno, g); };
 window.nxOverlayClick = e => { if (e.target === document.getElementById('nxOverlay')) nxClose(); };
@@ -1741,7 +1744,7 @@ function nsFila(t, a) {
   const pfD = (NXDATA && NXDATA.porFarmacia) || {}, keys = Object.keys(pfD);
   const k = nsKey(t, keys), x = k ? pfD[k] : {};
   const flot = /^FLOTANTES/.test(normaT(t));
-  return { t, a, flot, nomina: x.nomina || 0, conductas: x.conductas || 0, pilares: x.pilares || 0, visitas: x.visitas || 0, visitasPlan: flot ? 0 : (x.visitasPlan || 10) };
+  return { t, a, flot, nomina: x.nomina || 0, conductas: x.conductas || 0, pilares: x.pilares || 0, visitas: x.visitas || 0, visitasPlan: flot ? 0 : (x.visitasPlan || 5) };
 }
 const nsBar = (lbl, n, tot, col, unit) => { const pct = tot ? Math.min(100, Math.round(n / tot * 100)) : 0;
   return `<div style="margin:8px 0"><div style="display:flex;justify-content:space-between;font-size:11px;font-weight:800;color:${col};margin-bottom:4px"><span style="text-transform:uppercase;letter-spacing:.05em">${lbl}</span><span>${n} / ${tot} ${unit} · ${pct}%</span></div><div style="background:#fff;border-radius:6px;height:10px;overflow:hidden;border:1px solid var(--border)"><div style="height:100%;width:${pct}%;background:${col};border-radius:6px;transition:width .8s ease"></div></div></div>`; };
