@@ -1609,6 +1609,8 @@ window.nxFetchProgress = async () => {
     nxSetBar(2, j.conductas || 0, tot);
     nxSetBar(3, j.pilares || 0, tot);
     nxSetBar(4, j.visitas || 0, j.visitasPlan || refVis.length);
+    if (j.preparacion && j.preparacion.plan) nxSetBar(0, j.preparacion.hechas, j.preparacion.plan);
+    if (j.entrenamiento && j.entrenamiento.plan) nxSetBar(1, j.entrenamiento.hechas, j.entrenamiento.plan);
   } catch (e) {
     [2,3,4].forEach(id => { const q = document.getElementById('nxp-pct-' + id); if (q) q.textContent = 'No se pudo cargar el progreso'; });
     NXDATA = { error: String(e) }; nsRender();
