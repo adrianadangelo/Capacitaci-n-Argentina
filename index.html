@@ -469,7 +469,7 @@ thead th.week-even .date-box { background:#eef2fb; }
   </div>
 </div>
 
-
+<style>@media(max-width:860px){#nxCards{grid-template-columns:repeat(2,minmax(0,1fr))!important}}@media(max-width:640px){#nxCards{grid-template-columns:minmax(0,1fr)!important}}</style>
 <!-- ══ VISTA 3: LO QUE VIENE · RESUMEN ══ -->
 <div id="nexec" style="display:none;background:var(--offwhite)">
   <div class="hero-ex">
@@ -486,7 +486,8 @@ thead th.week-even .date-box { background:#eef2fb; }
 <div style="display:flex;gap:10px;flex-wrap:wrap">      <a href="#" onclick="goToPlanning();return false;" style="display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:800;color:var(--blue2);background:var(--blue-lt);border:1px solid #c5d0f8;border-radius:100px;padding:7px 16px;text-decoration:none;white-space:nowrap">← Ver lo realizado (jun – ago 2026)</a>
       <a href="#" onclick="goToStatus();return false;" style="display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:800;color:#e74c3c;background:#fdecea;border:1px solid #f5c2bd;border-radius:100px;padding:7px 16px;text-decoration:none;white-space:nowrap">Ver estatus de participación →</a></div>
     </div>
-    <div class="cap-grid" id="nxCards"></div>
+    <div class="cap-grid" id="nxCards" style="position:relative;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:30px;row-gap:34px"></div>
+    <p style="font-size:12px;font-weight:700;color:var(--text-soft);margin:-30px 0 46px">Las flechas indican el orden. <b>+</b> = en paralelo. El diagnóstico es transversal: ocurre durante los talleres y el refuerzo, de octubre a diciembre.</p>
     <div class="section-label">Actividades de refuerzo de las Conductas en tienda</div>
     <div class="cap-grid" id="nxActs"></div>
     <div class="footer-note"><div class="footer-note-icon">💡</div><div class="footer-note-text"><strong>Supuestos del plan.</strong> 16 colaboradores por farmacia en promedio; 1 persona por farmacia en cada grupo de los talleres de Conductas y Pilares; Área 1 sola, siempre en la mañana en Sala Las Heras (10 participantes), y Áreas 2 y 3 juntas, siempre en la tarde en Sala Los Olivos (21 participantes); cada grupo hace Conductas un día y Pilares el día hábil siguiente; feriados de Argentina y pausa navideña del 21 de diciembre al 1 de enero. En los talleres de Conductas y Pilares, Mariana facilita Conductas y Oswaldo facilita Pilares con su guía; desde el 18 de diciembre, Oswaldo continúa solo con el refuerzo en tienda.</div></div>
@@ -1663,12 +1664,39 @@ window.nxFetchProgress = async () => {
   }
 };
 
+// ---- Orden y flechas entre tarjetas ----
+// Orden cronológico; 5 Conductas y 5 Pilares van en paralelo; el diagnóstico es transversal (oct – dic).
+const NX_ORDEN = [0, 1, 2, 3, 4, 6, 8, 5];
+const NX_PASO = { 0: 1, 1: 2, 2: 3, 3: 3, 4: 4, 6: 5, 8: 6, 5: '∥' };
+function nxFlechas() {
+  const grid = document.getElementById('nxCards'); if (!grid || !grid.offsetParent) return;
+  grid.querySelectorAll('.nx-flecha').forEach(e => e.remove());
+  const cards = [...grid.querySelectorAll('.cap-card')], g = grid.getBoundingClientRect();
+  for (let i = 0; i < cards.length - 1; i++) {
+    const a = +cards[i].dataset.id, b = +cards[i+1].dataset.id;
+    if (NX_PASO[b] === '∥') continue;
+    const paralelo = NX_PASO[a] === NX_PASO[b];
+    const r1 = cards[i].getBoundingClientRect(), r2 = cards[i+1].getBoundingClientRect();
+    const misma = Math.abs(r1.top - r2.top) < 8;
+    const el = document.createElement('div'); el.className = 'nx-flecha';
+    const x = misma ? (r1.right + r2.left) / 2 - g.left : r1.left + r1.width / 2 - g.left;
+    const y = misma ? r1.top + 70 - g.top : (r1.bottom + r2.top) / 2 - g.top;
+    el.textContent = paralelo ? '+' : misma ? '→' : '↓';
+    el.title = paralelo ? 'En paralelo' : 'Sigue';
+    el.style.cssText = `position:absolute;left:${x}px;top:${y}px;transform:translate(-50%,-50%);width:30px;height:30px;border-radius:50%;background:var(--navy);color:#fff;font-size:${paralelo ? 18 : 16}px;font-weight:900;display:flex;align-items:center;justify-content:center;z-index:3;box-shadow:0 2px 8px rgba(15,30,74,.25);pointer-events:none`;
+    grid.appendChild(el);
+  }
+}
+window.addEventListener('resize', () => { clearTimeout(window.__nxF); window.__nxF = setTimeout(nxFlechas, 150); });
+
 // ---- Tarjetas ----
 function nxRenderCards() {
-  document.getElementById('nxCards').innerHTML = NC.map(c => `
-    <div class="cap-card" style="border-top-color:${c.color}" onclick="nxOpenCourse(${c.id})">
-      <div class="cap-population" style="color:${c.color}">${c.population}</div>
-      <div class="cap-name">${c.name}</div>
+  const grid = document.getElementById('nxCards');
+  grid.innerHTML = NX_ORDEN.map(id => NCI(id)).map(c => `
+    <div class="cap-card" data-id="${c.id}" style="border-top-color:${c.color};position:relative" onclick="nxOpenCourse(${c.id})">
+      <div title="${NX_PASO[c.id] === '∥' ? 'Transversal: ocurre en paralelo' : 'Paso ' + NX_PASO[c.id]}" style="position:absolute;top:14px;right:14px;min-width:30px;height:30px;padding:0 8px;border-radius:999px;background:${c.color};color:#fff;font-size:13px;font-weight:900;display:flex;align-items:center;justify-content:center">${NX_PASO[c.id] === '∥' ? 'Transversal' : NX_PASO[c.id]}</div>
+      <div class="cap-population" style="color:${c.color};padding-right:${NX_PASO[c.id] === '∥' ? 96 : 44}px">${c.population}</div>
+      <div class="cap-name" style="padding-right:${NX_PASO[c.id] === '∥' ? 0 : 30}px">${c.name}</div>
       <div class="cap-tags"><span class="cap-tag">${c.duration}</span><span class="cap-tag">${c.dates}</span>${c.groups === 'N/A' ? '' : `<span class="cap-tag">${c.groups}</span>`}<span class="cap-tag" style="background:${c.lt};color:${c.color};border-color:${c.bd}">${/^[🏪📄]/u.test(c.people) ? c.people : '👥 ' + c.people}</span></div>
       <div class="cap-tags" style="margin-top:-6px"><span class="cap-tag" style="background:#f0f9ff;color:#0369a1;border-color:#bae6fd">⏱ Inversión de tiempo facilitador: ${c.invest}</span></div>
       <div class="cap-capacidades"><strong>Contenido</strong>${c.content}</div>
@@ -1676,6 +1704,7 @@ function nxRenderCards() {
       <div class="cap-facilitators"><span class="cap-facilitators-icon">🎓</span><span><span class="cap-facilitators-label">Facilitadores: </span><br>${c.facilitators}</span></div>
       <div class="cap-content-link" style="color:${c.color}">📋 Ver detalle →</div>
     </div>`).join('');
+  nxFlechas();
 }
 
 // ---- KPIs ----
@@ -1772,7 +1801,7 @@ window.nxClose = () => document.getElementById('nxOverlay').classList.remove('op
 document.addEventListener('keydown', e => { if (e.key === 'Escape') nxClose(); });
 
 let nxInit = false;
-window.nxInitOnce = () => { if (nxInit) return; nxInit = true; nxRenderCards(); nxRenderActs(); nxFetchProgress(); nxRenderKPIs(); nxRenderFilters(); nxRenderCalendar(); };
+window.nxInitOnce = () => { setTimeout(nxFlechas, 60); if (nxInit) return; nxInit = true; nxRenderCards(); nxRenderActs(); nxFetchProgress(); nxRenderKPIs(); nxRenderFilters(); nxRenderCalendar(); };
 
 // ===== Vista: Estatus de participación de lo que viene =====
 const normaT = v => String(v || '').toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/^FARMACIA\s+/, '').replace(/,/g, '.').replace(/\s+/g, ' ').trim();
