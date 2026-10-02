@@ -1656,7 +1656,7 @@ window.nxFetchProgress = async () => {
     const tot = j.nomina > 0 ? j.nomina : participantes;
     nxSetBar(2, j.conductas || 0, tot);
     nxSetBar(3, j.pilares || 0, tot);
-    nxSetBar(4, j.visitas || 0, j.visitasPlan || refVis.length);
+    nxSetBar(4, j.visitas || 0, refVis.length);
     nxSetBar(8, j.culturaBase || 0, tot);
     if (j.preparacion && j.preparacion.plan) { const f = j.formacion || { hechas: 0, plan: 0 }; nxSetBar(0, j.preparacion.hechas + f.hechas, j.preparacion.plan + f.plan); }
     if (j.entrenamiento && j.entrenamiento.plan) nxSetBar(1, j.entrenamiento.hechas, j.entrenamiento.plan);
@@ -1825,7 +1825,7 @@ function nsFila(t, a) {
   const pfD = (NXDATA && NXDATA.porFarmacia) || {}, keys = Object.keys(pfD);
   const k = nsKey(t, keys), x = k ? pfD[k] : {};
   const flot = /^FLOTANTES/.test(normaT(t));
-  return { t, a, flot, nomina: x.nomina || 0, conductas: x.conductas || 0, pilares: x.pilares || 0, visitas: x.visitas || 0, visitasPlan: flot ? 0 : (x.visitasPlan || 5) };
+  return { t, a, flot, nomina: x.nomina || 0, conductas: x.conductas || 0, pilares: x.pilares || 0, visitas: x.visitas || 0, visitasPlan: flot ? 0 : refVis.filter(v => v.tienda === t).length };
 }
 const nsBar = (lbl, n, tot, col, unit) => { const pct = tot ? Math.min(100, Math.round(n / tot * 100)) : 0;
   return `<div style="margin:8px 0"><div style="display:flex;justify-content:space-between;font-size:11px;font-weight:800;color:${col};margin-bottom:4px"><span style="text-transform:uppercase;letter-spacing:.05em">${lbl}</span><span>${n} / ${tot} ${unit} · ${pct}%</span></div><div style="background:#fff;border-radius:6px;height:10px;overflow:hidden;border:1px solid var(--border)"><div style="height:100%;width:${pct}%;background:${col};border-radius:6px;transition:width .8s ease"></div></div></div>`; };
@@ -1843,7 +1843,7 @@ function nsRender() {
   const kpis = [
     { v:`${NXDATA.conductas || 0}`, l:`formados en Conductas de ${totG}`, c:C },
     { v:`${NXDATA.pilares || 0}`, l:`formados en Pilares de ${totG}`, c:Pl },
-    { v:`${NXDATA.visitas || 0}`, l:`visitas de refuerzo de ${NXDATA.visitasPlan || refVis.length}`, c:V },
+    { v:`${NXDATA.visitas || 0}`, l:`visitas de refuerzo de ${refVis.length}`, c:V },
     { v:`${totG}`, l: NXDATA.nomina > 0 ? 'colaboradores en nómina' : 'participantes (supuesto)', c:'var(--blue2)' },
   ];
   let h = `<div class="kpi-row" style="margin-bottom:34px">${kpis.map(k => `<div class="kpi"><div class="kpi-val" style="color:${k.c}">${k.v}</div><div class="kpi-lbl">${k.l}</div><div class="kpi-bar" style="background:${k.c}"></div></div>`).join('')}</div>`;
