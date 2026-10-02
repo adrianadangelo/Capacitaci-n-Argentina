@@ -1273,8 +1273,6 @@ const AREAS = {
 // Preparación de Mariana antes de viajar (fechas propuestas, editables)
 const PREPARACION = [
   { fecha: '2026-09-29', t: 'Presentación del cronograma', resp: 'Adriana', d: 'Recorrido por el plan completo en Argentina: fases, áreas, farmacias, responsables y entregables.' },
-  { fecha: '2026-09-30', t: 'Taller Cultura de Servicio, personal base', resp: 'Adriana', d: 'Mariana vive el taller como participante y toma nota de la secuencia, dinámicas y mensajes clave para replicarlo.' },
-  { fecha: '2026-10-01', t: 'Taller Cultura de Servicio, supervisores', resp: 'Adriana', d: 'Versión para líderes de tienda: cómo sostener las conductas en el día a día y dar feedback al equipo.' },
   { fecha: '2026-10-02', t: 'Inducción 5 pilares de la operación', resp: 'Álvaro Bermúdez', d: 'Contenido de los 5 pilares y cómo se ven en tienda.' },
   { fecha: '2026-10-05', t: 'Entrenamiento en Pilares de la operación, tienda Graciela (día 1)', resp: 'Álvaro Bermúdez', d: 'Mariana acompaña la operación real de la tienda y ve cómo se aplica cada pilar en el día a día.' },
   { fecha: '2026-10-06', t: 'Entrenamiento en Pilares de la operación, tienda Graciela (día 2)', resp: 'Álvaro Bermúdez', d: 'Mariana aplica el checklist de los pilares en tienda con la guía de Álvaro, para luego acompañar y guiar a Oswaldo.' },
@@ -1499,9 +1497,9 @@ const poolTiendas = p => p.flatMap(a => AREAS[a].tiendas.concat(FLOTANTES[a]));
 const NC = [
   { id:0, short:'Preparación', name:'Preparación de Mariana antes del viaje', population:'Mariana Meza', duration:`${R.prep[2]} días`,
     dates:'Sep – Oct', range:`${nf(R.prep[0])} – ${nf(R.prep[1])}`, prog:{ total:PREPARACION.length, unit:'jornadas', byDate:true }, groups:'N/A', people:'1 participante',
-    invest:'8 días hábiles antes de viajar',
+    invest:`${R.prep[2]} días hábiles antes de viajar`,
     content: PREPARACION.map(p => p.t.replace(/ \(día \d\)/, '')).filter((t, i, a) => a.indexOf(t) === i).join(' · '),
-    facilitators: `${areaBadge('CULTURA DE SERVICIO', NX_COLORS[0])} Adriana D'Angelo</span><br>${areaBadge('PILARES', NX_COLORS[0])} Álvaro Bermúdez</span><br>${areaBadge('TALLERES C Y P', NX_COLORS[0])} Monica Urdaneta</span>`,
+    facilitators: `${areaBadge('CRONOGRAMA', NX_COLORS[0])} Adriana D'Angelo</span><br>${areaBadge('PILARES', NX_COLORS[0])} Álvaro Bermúdez</span><br>${areaBadge('TALLERES C Y P', NX_COLORS[0])} Monica Urdaneta</span>`,
     status:'Por iniciar', start:R.prep[0] },
   { id:1, short:'Entrenamiento', name:'Entrenamiento de Oswaldo como facilitador', population:'Oswaldo Saldivia', duration:`${R.ent[2]} días`,
     dates:'Oct', range:`${nf(R.ent[0])} – ${nf(R.ent[1])}`, prog:{ total:R.ent[2], unit:'días', byDate:true }, groups:'N/A', people:'1 participante',
