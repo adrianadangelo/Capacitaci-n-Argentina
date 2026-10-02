@@ -1671,7 +1671,8 @@ window.nxFetchProgress = async () => {
 // ---- Orden y flechas entre tarjetas ----
 // Orden cronológico; 5 Conductas y 5 Pilares van en paralelo; el diagnóstico es transversal (oct – dic).
 const NX_ORDEN = [0, 1, 2, 3, 4, 6, 8, 5];
-const NX_PASO = { 0: 1, 1: 2, 2: 3, 3: 3, 4: 4, 6: 5, 8: 6, 5: '∥' };
+const NX_PASO = { 0: 1, 1: 2, 2: 3, 3: 4, 4: 5, 6: 6, 8: 7, 5: '∥' };
+const NX_PARALELO = ['2-3'];   // 5 Conductas y 5 Pilares ocurren en paralelo
 function nxFlechas() {
   const grid = document.getElementById('nxCards'); if (!grid || !grid.offsetParent) return;
   grid.querySelectorAll('.nx-flecha').forEach(e => e.remove());
@@ -1679,15 +1680,20 @@ function nxFlechas() {
   for (let i = 0; i < cards.length - 1; i++) {
     const a = +cards[i].dataset.id, b = +cards[i+1].dataset.id;
     if (NX_PASO[b] === '∥') continue;
-    const paralelo = NX_PASO[a] === NX_PASO[b];
+    const paralelo = NX_PARALELO.includes(a + '-' + b);
     const r1 = cards[i].getBoundingClientRect(), r2 = cards[i+1].getBoundingClientRect();
     const misma = Math.abs(r1.top - r2.top) < 8;
     const el = document.createElement('div'); el.className = 'nx-flecha';
+    // Centro vertical entre los dos cuadros de la misma fila; en el salto de fila, centro del espacio entre filas
     const x = misma ? (r1.right + r2.left) / 2 - g.left : r1.left + r1.width / 2 - g.left;
-    const y = misma ? r1.top + 70 - g.top : (r1.bottom + r2.top) / 2 - g.top;
-    el.textContent = paralelo ? '+' : misma ? '→' : '↓';
+    const y = misma ? (Math.max(r1.top, r2.top) + Math.min(r1.bottom, r2.bottom)) / 2 - g.top : (r1.bottom + r2.top) / 2 - g.top;
+    const NAVY = '#0f1e4a';
+    const svg = paralelo
+      ? `<svg width="26" height="26" viewBox="0 0 26 26"><path d="M13 4v18M4 13h18" stroke="${NAVY}" stroke-width="4" stroke-linecap="round"/></svg>`
+      : `<svg width="30" height="30" viewBox="0 0 30 30" style="transform:rotate(${misma ? 0 : 90}deg)"><path d="M4 15h20M16 7l8 8-8 8" fill="none" stroke="${NAVY}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+    el.innerHTML = svg;
     el.title = paralelo ? 'En paralelo' : 'Sigue';
-    el.style.cssText = `position:absolute;left:${x}px;top:${y}px;transform:translate(-50%,-50%);width:30px;height:30px;border-radius:50%;background:var(--navy);color:#fff;font-size:${paralelo ? 18 : 16}px;font-weight:900;display:flex;align-items:center;justify-content:center;z-index:3;box-shadow:0 2px 8px rgba(15,30,74,.25);pointer-events:none`;
+    el.style.cssText = `position:absolute;left:${x}px;top:${y}px;transform:translate(-50%,-50%);display:flex;align-items:center;justify-content:center;z-index:3;pointer-events:none;line-height:0`;
     grid.appendChild(el);
   }
 }
