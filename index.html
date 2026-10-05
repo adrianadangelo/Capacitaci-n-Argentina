@@ -1399,8 +1399,8 @@ function planificar(opts = {}) {
   while ((qAM.some(b => b.pend.length) || qPM.some(b => b.pend.length)) && guard++ < 400) {
     if (!esHabil(f) || enPausa(f)) { registraInhabil(f); next(); continue; }
     if (f === CONFIG.ultimoDiaMariana) {
-      const pmU = tomar(qPM, f, 'PM');
-      push(f, { fase: 'cierre', titulo: 'Cierre y traspaso a Oswaldo', rol: rol(f), detalle: 'Mañana (8:00 a 12:00): informe de avance por tienda, reunión con Gerentes de Área y Coordinadores de RRHH, entrega del plan de continuidad y rutas de Oswaldo.', am: null, amNota: 'Cierre y traspaso', pm: pmU, pmNota: pmU ? null : 'Seguimiento, registro de evidencias y reporte' });
+      const pmU = null; // la tarde del último día es para el informe de cierre
+      push(f, { fase: 'cierre', titulo: 'Cierre y traspaso a Oswaldo', rol: rol(f), detalle: 'Mañana (8:00 a 12:00): informe de avance por tienda, reunión con Gerentes de Área y Coordinadores de RRHH, entrega del plan de continuidad y rutas de Oswaldo.', am: null, amNota: 'Cierre y traspaso', pm: pmU, pmNota: 'Diagnóstico de necesidades: elaboración del informe de cierre, con apoyo de Mariana' });
       next(); continue;
     }
     const am = tomar(qAM, f, 'AM');
@@ -1419,18 +1419,15 @@ function planificar(opts = {}) {
   const ent0 = dias.find(d => d.fase === 'entrenamiento');
   if (ent0) { ent0.dnc = 'Reunión de arranque con Delitze, de Auditoría Argentina: hallazgos recientes por área y farmacia, y criterios del diagnóstico.'; dnc.push({ fecha: ent0.fecha, t: 'Reunión de arranque con Auditoría', con: 'Delitze, Auditoría Argentina' }); }
   dnc.push({ fecha: null, t: 'Levantamiento en campo durante los talleres de Conductas y Pilares y las visitas: brechas por conducta y pilar en cada farmacia', con: 'Mariana y Oswaldo' });
-  const libres = dias.filter(d => d.fase === 'refuerzo' && !d.pm && d.fecha <= CONFIG.ultimoDiaMariana);
-  const tareas = [
-    ['Reunión de contraste con Delitze, de Auditoría Argentina: lo observado en campo frente a sus hallazgos', 'Reunión de contraste con Auditoría', 'Delitze, Auditoría Argentina'],
-    ['Redacción del borrador del diagnóstico', 'Borrador del diagnóstico', 'Mariana'],
-    ['Redacción del borrador del diagnóstico y prioridades de formación', 'Borrador del diagnóstico (continuación)', 'Mariana'],
-  ];
-  tareas.forEach((t, k) => { const d = libres[k]; if (!d) return; d.pmNota = 'Diagnóstico de necesidades: ' + t[0]; d.dnc = true; dnc.push({ fecha: d.fecha, t: t[1], con: t[2] }); });
-  let dncModo = libres.length ? 'tardes' : 'reservadas';
-  dias.filter(d => d.fase === 'diagnostico').forEach((d, k) => { d.dnc = d.titulo; dnc.push({ fecha: d.fecha, t: k === 0 ? 'Reunión de contraste con Auditoría y borrador' : 'Redacción final del diagnóstico', con: k === 0 ? 'Delitze, Auditoría Argentina' : 'Mariana' }); });
-  dnc.sort((a, b) => (a.fecha || '2026-10-15z') < (b.fecha || '2026-10-15z') ? -1 : 1);
+  // Cierre del diagnóstico: 2 días
   const cie = dias.find(d => d.fase === 'cierre');
-  if (cie) { cie.dnc = 'Entrega del diagnóstico de necesidades de capacitación y validación con Delitze (Auditoría Argentina) y los Gerentes de Área.'; dnc.push({ fecha: cie.fecha, t: 'Entrega y validación del diagnóstico', con: 'Delitze (Auditoría Argentina) y Gerentes de Área' }); }
+  const libres = dias.filter(d => d.fase === 'refuerzo' && !d.pm && d.fecha <= CONFIG.ultimoDiaMariana);
+  const antesCierre = libres.length ? libres[libres.length - 1] : null;
+  if (antesCierre) { antesCierre.pmNota = 'Diagnóstico de necesidades: Reunión de cierre con Delitze, de Auditoría Argentina'; antesCierre.dnc = true; dnc.push({ fecha: antesCierre.fecha, t: 'Reunión de cierre con Auditoría', con: 'Delitze, Auditoría Argentina' }); }
+  if (cie) { cie.dnc = 'Elaboración del informe de cierre, con apoyo de Mariana.'; dnc.push({ fecha: cie.fecha, t: 'Elaboración de informe de cierre (apoyo Mariana)', con: 'Mariana Meza' }); }
+  const dncModo = 'cierre';
+  dias.filter(d => d.fase === 'diagnostico').forEach(d => { d.dnc = d.titulo; });
+  dnc.sort((a, b) => (a.fecha || '2026-10-15z') < (b.fecha || '2026-10-15z') ? -1 : 1);
   return { dncModo, dnc, dias, visitas, iniRefuerzo, iniPM, fin: dias[dias.length-1].fecha, rondas, colab, talleres: nGruposK * 2, nGrupos: nGruposK };
 }
 
@@ -1537,9 +1534,9 @@ const NC = [
     facilitators: (refConM ? `${areaBadge('HASTA 17 DIC', NX_COLORS[4])} Mariana Meza y Oswaldo Saldivia (${refConM} visitas)</span><br>${areaBadge('DESDE 18 DIC', NX_COLORS[4])} Oswaldo Saldivia</span><br>` : 'Oswaldo Saldivia<br>') + `<span style="font-size:11px;color:var(--muted)">Reporte semanal a Adriana D'Angelo y José Ignacio Thorne</span>`,
     status:'Por iniciar', start:refVis.map(v=>v.fecha).sort()[0] },
   { id:5, short:'Diagnóstico', name:'Diagnóstico de necesidades de capacitación', population:'Gerencia de Capacitación', duration:'Entregable',
-    dates:'Oct – Dic', range:`${nf(NP.dnc[0].fecha)} – ${nf(ULT)}`, prog:{ total:1, unit:'entregado' }, groups:'3 reuniones con Auditoría', people:'📄 Entrega 17 dic',
-    invest: NP.dncModo === 'tardes' ? 'Tardes libres del refuerzo' : '2 jornadas reservadas (15 y 16 dic)',
-    content:'Brechas por conducta y pilar en cada farmacia · Hallazgos de Auditoría con causa en formación · Prioridades de formación 2027',
+    dates:'Oct – Dic', range:`${nf(NP.dnc[0].fecha)} – ${nf(ULT)}`, prog:{ total:1, unit:'informe de cierre' }, groups:'2 reuniones con Auditoría', people:`📄 Informe de cierre ${nf(ULT)}`,
+    invest:'Cierre en 2 días: reunión con Auditoría e informe de cierre',
+    content:'Brechas por conducta y pilar en cada farmacia · Hallazgos de Auditoría con causa en formación · Prioridades de formación 2027 · Cierre: reunión con Auditoría e informe de cierre con apoyo de Mariana',
     facilitators:'Mariana Meza, con Delitze (Auditoría Argentina)', status:'Por iniciar', start:NP.dnc[0].fecha },
   { id:6, short:'Formación de Facilitadores', name:'Taller de Formación de Facilitadores para Cultura de Servicio Base', population:'Coordinadores y supervisores de tienda', duration:'3 días',
     dates: FF_FECHAS.length ? `${nf(FF_FECHAS[0]).replace(' 2027','')} – ${nf(FF_FECHAS[2])}` : 'Abr 2027', range: FF_FECHAS.length ? `${nf(FF_FECHAS[0])} – ${nf(FF_FECHAS[FF_FECHAS.length-1])}` : 'Abril 2027 · fechas por confirmar', prog:{ total:15, unit:'formados' },
@@ -1563,6 +1560,8 @@ const NC = [
 ];
 NC.forEach(c => Object.assign(c, NX_COLORS[c.id]));
 const NCI = id => NC.find(c => c.id === id);
+const NX_ORDEN_CAL = [0, 1, 2, 3, 4, 5, 9, 10, 6, 8];
+const NC_CAL = () => NX_ORDEN_CAL.map(NCI).filter(Boolean);
 
 // ---- Sesiones (equivalente a SESSIONS) ----
 const NS = [];
@@ -1767,7 +1766,7 @@ function nxRenderKPIs() {
 // ---- Filtros ----
 function nxRenderFilters() {
   const bar = document.getElementById('nxFilterBar'); bar.innerHTML = '<span class="filter-label">Filtrar:</span>';
-  NC.forEach(c => { const b = document.createElement('button'); b.className = 'filter-btn ' + (nActive.has(c.id) ? 'active' : 'inactive');
+  NC_CAL().forEach(c => { const b = document.createElement('button'); b.className = 'filter-btn ' + (nActive.has(c.id) ? 'active' : 'inactive');
     b.innerHTML = `<span class="filter-dot" style="background:${c.color}"></span>${c.short}`;
     b.onclick = () => { nActive.has(c.id) ? nActive.delete(c.id) : nActive.add(c.id); nxRenderFilters(); nxRenderCalendar(); }; bar.appendChild(b); });
   const t = document.createElement('button'); t.className = 'filter-btn ' + (nConCont ? 'active' : 'inactive'); t.style.marginLeft = '10px';
@@ -1778,7 +1777,7 @@ function nxRenderFilters() {
 // ---- Calendario ----
 function nxRenderCalendar() {
   const cont = document.getElementById('nxCalContent'); cont.innerHTML = '';
-  const vis = NC.filter(c => nActive.has(c.id));
+  const vis = NC_CAL().filter(c => nActive.has(c.id));
   const finTodo = [NP.fin, CB[CB.length-1].date].concat(FF_FECHAS).sort().pop();
   const desde = '2026-09-28', hasta = nConCont ? finTodo : addDays(lunes2(ULT), 4);
   const days = []; for (let s = desde; s <= hasta; s = addDays(s, 1)) { const w = dow(s); if (w !== 0 && w !== 6) days.push(s); }
