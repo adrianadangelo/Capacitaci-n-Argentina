@@ -1543,14 +1543,14 @@ const NC = [
     groups:'1 grupo · 15 c/u', people:'15 participantes', invest:'3 días completos',
     content:'Formación de facilitadores internos para el taller Cultura de Servicio Base',
     facilitators:'Cuestiónica', status:'Por iniciar', start: FF_FECHAS[0] || FF_MES, startTxt: FF_FECHAS.length ? null : 'abr 2027 · fechas por confirmar' },
-  { id:9, short:'Módulo 4 · Líderes', name:'Módulo 4 de Cultura de Servicio para Líderes', population:'Líderes de tienda', duration:'2 días',
-    dates:`${nf(MOD4_FECHAS[0]).replace(' 2027','')} – ${nf(MOD4_FECHAS[1])}`, range:`${nf(MOD4_FECHAS[0])} – ${nf(MOD4_FECHAS[1])}`, prog:{ total:2, unit:'jornadas', byDate:true },
-    groups:'N/A', people:'Líderes', invest:'2 días', content:'Módulo 4 del programa Cultura de Servicio para Líderes, antes de la Formación de Facilitadores',
-    facilitators:'Por definir', status:'Por iniciar', start:MOD4_FECHAS[0] },
+  { id:9, short:'Módulo 4 · Líderes', name:'Módulo 4 de Cultura de Servicio para Líderes', population:'Líderes formados en abril 2027', duration:'2 días · 1 grupo por día',
+    dates:`${nf(MOD4_FECHAS[0]).replace(' 2027','')} – ${nf(MOD4_FECHAS[1])}`, range:`${nf(MOD4_FECHAS[0])} – ${nf(MOD4_FECHAS[1])}`, prog:{ total:50, unit:'formados' },
+    groups:'2 grupos · ~25 c/u', people:'~50 participantes', invest:'2 días completos', content:'Módulo 4 del programa Cultura de Servicio para Líderes, antes de la Formación de Facilitadores',
+    facilitators:'Reinaldo Contreras', status:'Por iniciar', start:MOD4_FECHAS[0] },
   { id:10, short:'Rezagados · Líderes', name:'Formación de Rezagados en Cultura de Servicio para Líderes', population:'Líderes rezagados', duration:'2 días',
-    dates:`${nf(REZ_FECHAS[0]).replace(' 2027','')} – ${nf(REZ_FECHAS[1])}`, range:`${nf(REZ_FECHAS[0])} – ${nf(REZ_FECHAS[1])}`, prog:{ total:2, unit:'jornadas', byDate:true },
-    groups:'N/A', people:'Líderes rezagados', invest:'2 días', content:'Formación en Cultura de Servicio para Líderes de quienes no la completaron, antes de la Formación de Facilitadores',
-    facilitators:'Por definir', status:'Por iniciar', start:REZ_FECHAS[0] },
+    dates:`${nf(REZ_FECHAS[0]).replace(' 2027','')} – ${nf(REZ_FECHAS[1])}`, range:`${nf(REZ_FECHAS[0])} – ${nf(REZ_FECHAS[1])}`, prog:{ total:13, unit:'formados' },
+    groups:'1 grupo · ~13 c/u', people:'~13 participantes', invest:'2 días completos', content:'Formación en Cultura de Servicio para Líderes de quienes no la completaron, antes de la Formación de Facilitadores',
+    facilitators:'Reinaldo Contreras', status:'Por iniciar', start:REZ_FECHAS[0] },
   { id:8, short:'Cultura de Servicio Base', name:'Taller Cultura de Servicio Base', population:`Personal base de las ${NTI} farmacias`, duration:'1 día completo',
     dates:rangoMes(CB[0].date, CB[CB.length-1].date), range:`${nf(CB[0].date)} – ${nf(CB[CB.length-1].date)}`, prog:{ total:participantes, unit:'formados', live:true },
     groups:`${CB.length} grupos · ${tam} c/u`, people:`${participantes} participantes`, invest:`${CB.length} jornadas de ${CB_HORARIO}`,
@@ -1581,8 +1581,8 @@ NP.dias.forEach(d => {
 });
 NP.dnc.filter(x => x.fecha).forEach(x => NS.push({ date:x.fecha, cid:5, group:x.t, facilitator:x.con === 'Mariana' ? 'Mariana Meza' : 'Mariana Meza con ' + x.con }));
 CB.forEach(x => NS.push({ date:x.date, cid:8, slot:'dia', group:`G${x.ronda}`, area:poolLbl(x.areas), sala:salaTxt(x.areas[0]), tiendas:poolTiendas(x.areas), hours:CB_HORARIO, facilitator:'Facilitadores formados en abril' }));
-MOD4_FECHAS.forEach((f, i) => NS.push({ date:f, cid:9, group:`Día ${i+1} de 2`, facilitator:'Por definir', detail:'Módulo 4 de Cultura de Servicio para Líderes' }));
-REZ_FECHAS.forEach((f, i) => NS.push({ date:f, cid:10, group:`Día ${i+1} de 2`, facilitator:'Por definir', detail:'Formación de Rezagados en Cultura de Servicio para Líderes' }));
+MOD4_FECHAS.forEach((f, i) => NS.push({ date:f, cid:9, group:`Grupo ${i+1} de 2 (~25 líderes)`, facilitator:'Reinaldo Contreras', detail:'Módulo 4 de Cultura de Servicio para Líderes' }));
+REZ_FECHAS.forEach((f, i) => NS.push({ date:f, cid:10, group:`Día ${i+1} de 2`, facilitator:'Reinaldo Contreras', detail:'Formación de Rezagados en Cultura de Servicio para Líderes' }));
 FF_FECHAS.forEach((f, i) => NS.push({ date:f, cid:6, group:`Día ${i+1} de ${FF_FECHAS.length}`, facilitator:'Cuestiónica', detail:'Taller de Formación de Facilitadores para Cultura de Servicio Base · 15 coordinadores y supervisores de tienda' }));
 const NBY = {}; NS.forEach(s => { ((NBY[s.date] = NBY[s.date] || {})[s.cid] = NBY[s.date][s.cid] || []).push(s); });
 const NHOL = {};
@@ -1806,7 +1806,7 @@ function nxRenderCalendar() {
         const slot = se.slot === 'am' ? 'AM' : se.slot === 'pm' ? 'PM' : se.slot === 'dia' ? 'DÍA' : '';
         const area = se.area ? `<span style="background:${c.color};color:#fff;border-radius:3px;padding:0 4px;font-size:7px;font-weight:800;margin-left:2px">${se.area.replace('Áreas ', 'A').replace('Área ', 'A').replace(' y ', '+')}</span>` : '';
         const solo = se.cid >= 2 && se.cid <= 4 && s > ULT;
-        const sub = se.cid <= 1 || se.cid === 5 || se.cid >= 9 ? '' : se.cid === 6 ? 'Cuestiónica' : se.cid === 8 ? se.sala.replace('Sala ', '') : (se.cid === 4 ? (solo ? 'Oswaldo' : 'Mariana y Oswaldo') : (solo ? 'Oswaldo' : se.facilitator.split(',')[0].split(' ')[0]));
+        const sub = se.cid <= 1 || se.cid === 5 ? '' : se.cid >= 9 ? 'Reinaldo Contreras' : se.cid === 6 ? 'Cuestiónica' : se.cid === 8 ? se.sala.replace('Sala ', '') : (se.cid === 4 ? (solo ? 'Oswaldo' : 'Mariana y Oswaldo') : (solo ? 'Oswaldo' : se.facilitator.split(',')[0].split(' ')[0]));
         h += `<div onclick="nxOpenSession(${idx})" style="background:${solo ? 'repeating-linear-gradient(135deg,' + c.lt + ' 0 6px,#fff 6px 12px)' : c.lt};border-left:3px solid ${c.color};border-radius:7px;padding:5px 7px;cursor:pointer;display:flex;flex-direction:column;justify-content:center;min-height:${arr.length === 1 ? '56px' : '24px'};">
           <div style="display:flex;align-items:center;gap:3px;flex-wrap:wrap">${slot ? `<span style="color:${c.color};font-size:7px;font-weight:700;opacity:.7">${slot}</span>` : ''}<span style="font-size:8px;font-weight:800;color:var(--navy);line-height:1.2">${nesc(se.group)}</span>${area}</div>
           ${sub ? `<div style="font-size:7.5px;color:${c.color};font-weight:600;margin-top:1px;line-height:1.2;opacity:.9">${sub}</div>` : ''}</div>`;
