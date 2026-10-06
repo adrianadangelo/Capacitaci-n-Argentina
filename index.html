@@ -258,7 +258,7 @@ thead th.week-even .date-box { background:#eef2fb; }
         <div style="margin-bottom:16px;line-height:1"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="5" cy="18" r="2.2" stroke="#27ae60" stroke-width="1.6"/><circle cx="19" cy="6" r="2.2" stroke="#27ae60" stroke-width="1.6"/><path d="M7.2 18H15a3 3 0 0 0 0-6H9a3 3 0 0 1 0-6h7.8" stroke="#27ae60" stroke-width="1.6" stroke-linecap="round" fill="none"/></svg></div>
         <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:#27ae60;margin-bottom:6px">Lo que viene · Oct 2026 – Oct 2027</div>
         <div style="font-size:19px;font-weight:800;color:var(--navy);margin-bottom:8px;line-height:1.25">Planificación de lo que viene</div>
-        <div style="font-size:13px;font-weight:500;color:var(--muted);line-height:1.55;flex:1;margin-bottom:20px">Resumen y cronograma de las 10 actividades para llevar las 5 conductas y los 5 pilares a las 31 farmacias: preparación, entrenamiento, talleres en sala, Práctica Aplicada, diagnóstico, Cultura de Servicio para Líderes, formación de facilitadores y talleres de Cultura de Servicio Base.</div>
+        <div style="font-size:13px;font-weight:500;color:var(--muted);line-height:1.55;flex:1;margin-bottom:20px">Resumen y cronograma de las 8 actividades para llevar las 5 conductas y los 5 pilares a las 31 farmacias: preparación, entrenamiento, talleres en sala, Práctica Aplicada, diagnóstico y Cultura de Servicio para Líderes.</div>
         <span style="font-size:13px;font-weight:800;color:#27ae60">Ver planificación →</span>
       </a><a href="#" onclick="goToStatus();return false;" style="background:#fff;border-radius:18px;padding:32px 28px;text-align:left;text-decoration:none;display:flex;flex-direction:column;border-top:4px solid #e74c3c;transition:transform .2s,box-shadow .2s">
         <div style="margin-bottom:16px;line-height:1"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="4" y1="20" x2="20" y2="20" stroke="#e74c3c" stroke-width="1.6" stroke-linecap="round"/><rect x="6" y="12" width="3.2" height="8" rx="0.6" fill="#e74c3c"/><rect x="11" y="8" width="3.2" height="12" rx="0.6" fill="#e74c3c"/><rect x="16" y="4.5" width="3.2" height="15.5" rx="0.6" fill="#e74c3c"/></svg></div>
@@ -1553,11 +1553,11 @@ const NC = [
     facilitators:'Cuestiónica', status:'Por iniciar', start: FF_FECHAS[0] || FF_MES, startTxt: FF_FECHAS.length ? null : 'abr 2027 · fechas por confirmar' },
   { id:9, short:'Módulo 4 · Líderes', name:'Módulo 4 de Cultura de Servicio para Líderes', population:'Líderes formados en abril 2026', duration:'2 días · 1 grupo por día',
     dates:`${nf(MOD4_FECHAS[0]).replace(' 2027','')} – ${nf(MOD4_FECHAS[1])}`, range:`${nf(MOD4_FECHAS[0])} – ${nf(MOD4_FECHAS[1])}`, prog:{ total:50, unit:'formados' },
-    groups:'2 grupos · ~25 c/u', people:'~50 participantes', invest:'2 días completos', content:'Módulo 4 del programa Cultura de Servicio para Líderes, antes de la Formación de Facilitadores',
+    groups:'2 grupos · ~25 c/u', people:'~50 participantes', invest:'2 días completos', content:'Módulo 4 del programa Cultura de Servicio para Líderes',
     facilitators:'Reinaldo Contreras', status:'Por iniciar', start:MOD4_FECHAS[0] },
   { id:10, short:'Rezagados · Líderes', name:'Formación de Rezagados en Cultura de Servicio para Líderes', population:'Líderes rezagados', duration:'2 días',
     dates:`${nf(REZ_FECHAS[0]).replace(' 2027','')} – ${nf(REZ_FECHAS[1])}`, range:`${nf(REZ_FECHAS[0])} – ${nf(REZ_FECHAS[1])}`, prog:{ total:13, unit:'formados' },
-    groups:'1 grupo · ~13 c/u', people:'~13 participantes', invest:'2 días completos', content:'Formación en Cultura de Servicio para Líderes de quienes no la completaron, antes de la Formación de Facilitadores',
+    groups:'1 grupo · ~13 c/u', people:'~13 participantes', invest:'2 días completos', content:'Formación en Cultura de Servicio para Líderes de quienes no la completaron',
     facilitators:'Reinaldo Contreras', status:'Por iniciar', start:REZ_FECHAS[0] },
   { id:8, short:'Cultura de Servicio Base', name:'Taller Cultura de Servicio Base', population:`Personal base de las ${NTI} farmacias`, duration:'1 día completo',
     dates:rangoMes(CB[0].date, CB[CB.length-1].date), range:`${nf(CB[0].date)} – ${nf(CB[CB.length-1].date)}`, prog:{ total:participantes, unit:'formados', live:true },
@@ -1568,7 +1568,7 @@ const NC = [
 ];
 NC.forEach(c => Object.assign(c, NX_COLORS[c.id]));
 const NCI = id => NC.find(c => c.id === id);
-const NX_ORDEN_CAL = [0, 1, 2, 3, 4, 5, 9, 10, 6, 8];
+const NX_ORDEN_CAL = [0, 1, 2, 3, 4, 5, 9, 10];
 const NC_CAL = () => NX_ORDEN_CAL.map(NCI).filter(Boolean);
 
 // ---- Sesiones (equivalente a SESSIONS) ----
@@ -1592,6 +1592,8 @@ CB.forEach(x => NS.push({ date:x.date, cid:8, slot:'dia', group:`G${x.ronda}`, a
 MOD4_FECHAS.forEach((f, i) => NS.push({ date:f, cid:9, group:`Grupo ${i+1} de 2 (~25 líderes)`, facilitator:'Reinaldo Contreras', detail:'Módulo 4 de Cultura de Servicio para Líderes' }));
 REZ_FECHAS.forEach((f, i) => NS.push({ date:f, cid:10, group:`Día ${i+1} de 2`, facilitator:'Reinaldo Contreras', detail:'Formación de Rezagados en Cultura de Servicio para Líderes' }));
 FF_FECHAS.forEach((f, i) => NS.push({ date:f, cid:6, group:`Día ${i+1} de ${FF_FECHAS.length}`, facilitator:'Cuestiónica', detail:'Taller de Formación de Facilitadores para Cultura de Servicio Base · 15 coordinadores y supervisores de tienda' }));
+const NX_OCULTAS = [6, 8];   // Formación de Facilitadores y Taller Cultura de Servicio Base: ocultas en el dashboard
+for (let i = NS.length - 1; i >= 0; i--) if (NX_OCULTAS.includes(NS[i].cid)) NS.splice(i, 1);
 const NBY = {}; NS.forEach(s => { ((NBY[s.date] = NBY[s.date] || {})[s.cid] = NBY[s.date][s.cid] || []).push(s); });
 const NHOL = {};
 NP.dias.filter(d => d.fase === 'inhabil').forEach(d => { NHOL[d.fecha] = d.titulo.startsWith('Feriado') ? 'Feriado' : d.titulo.startsWith('Llegada') ? 'Llegada' : d.titulo.startsWith('Día no laborable') ? 'No laborable' : 'Pausa'; });
@@ -1705,8 +1707,8 @@ window.nxFetchProgress = async () => {
 
 // ---- Orden y flechas entre tarjetas ----
 // Orden cronológico; 5 Conductas y 5 Pilares van en paralelo; el diagnóstico es transversal (oct – dic).
-const NX_ORDEN = [0, 1, 2, 3, 4, 9, 10, 6, 8, 5];
-const NX_PASO = { 0: 1, 1: 2, 2: 3, 3: 4, 4: 5, 9: 6, 10: 7, 6: 8, 8: 9, 5: '∥' };
+const NX_ORDEN = [0, 1, 2, 3, 4, 9, 10, 5];
+const NX_PASO = { 0: 1, 1: 2, 2: 3, 3: 4, 4: 5, 9: 6, 10: 7, 5: '∥' };
 const NX_PARALELO = ['2-3'];   // 5 Conductas y 5 Pilares ocurren en paralelo
 function nxFlechas() {
   const grid = document.getElementById('nxCards'); if (!grid || !grid.offsetParent) return;
@@ -1762,9 +1764,9 @@ function nxRenderCards() {
 // ---- KPIs ----
 function nxRenderKPIs() {
   const k = [
-    { val:String(NC.length), lbl:'Actividades planificadas', color:'var(--blue2)' },
+    { val:String(NX_ORDEN.length), lbl:'Actividades planificadas', color:'var(--blue2)' },
     { val:String(NTI), lbl:'Tiendas incluidas', color:'var(--purple)' },
-    { val:String(nGrupos * 2 + CB.length), lbl:'Talleres en sala', color:'var(--orange)' },
+    { val:String(nGrupos * 2), lbl:'Talleres introductorios', color:'var(--orange)' },
     { val:String(refVis.length), lbl:'Talleres de Práctica Aplicada', color:'var(--green)' },
   ];
   document.getElementById('nxKpiRow').innerHTML = k.map(x => `<div class="kpi"><div class="kpi-val" style="color:${x.color}">${x.val}</div><div class="kpi-lbl">${x.lbl}</div><div class="kpi-bar" style="background:${x.color}"></div></div>`).join('');
@@ -1777,7 +1779,7 @@ function nxRenderFilters() {
     b.innerHTML = `<span class="filter-dot" style="background:${c.color}"></span>${c.short}`;
     b.onclick = () => { nActive.has(c.id) ? nActive.delete(c.id) : nActive.add(c.id); nxRenderFilters(); nxRenderCalendar(); }; bar.appendChild(b); });
   const t = document.createElement('button'); t.className = 'filter-btn ' + (nConCont ? 'active' : 'inactive'); t.style.marginLeft = '10px';
-  t.innerHTML = `<span class="filter-dot" style="background:#9aa6b8"></span>${nConCont ? 'Ocultar' : 'Ver'} continuidad (dic – ${NMES[D([NP.fin, CB[CB.length-1].date].concat(FF_FECHAS).sort().pop()).getUTCMonth()]})`;
+  t.innerHTML = `<span class="filter-dot" style="background:#9aa6b8"></span>${nConCont ? 'Ocultar' : 'Ver'} continuidad (dic – ${NMES[D([NP.fin].concat(MOD4_FECHAS, REZ_FECHAS).sort().pop()).getUTCMonth()]})`;
   t.onclick = () => { nConCont = !nConCont; nxRenderFilters(); nxRenderCalendar(); }; bar.appendChild(t);
 }
 
@@ -1785,7 +1787,7 @@ function nxRenderFilters() {
 function nxRenderCalendar() {
   const cont = document.getElementById('nxCalContent'); cont.innerHTML = '';
   const vis = NC_CAL().filter(c => nActive.has(c.id));
-  const finTodo = [NP.fin, CB[CB.length-1].date].concat(FF_FECHAS).sort().pop();
+  const finTodo = [NP.fin].concat(MOD4_FECHAS, REZ_FECHAS).sort().pop();
   const desde = '2026-09-28', hasta = nConCont ? finTodo : addDays(lunes2(ULT), 4);
   const days = []; for (let s = desde; s <= hasta; s = addDays(s, 1)) { const w = dow(s); if (w !== 0 && w !== 6) days.push(s); }
   const wk = {}; let wi = -1, prevMon = null; days.forEach(s => { const m = lunes2(s); if (m !== prevMon) { wi++; prevMon = m; } wk[s] = wi; });
