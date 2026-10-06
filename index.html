@@ -481,6 +481,7 @@ thead th.week-even .date-box { background:#eef2fb; }
     <p class="hero-sub-ex">Mariana Meza se prepara antes de viajar, entrena a Oswaldo Saldivia en Argentina del 14 de octubre al 17 de diciembre, y juntos llevan las 5 conductas de servicio y los 5 pilares de la operación a las 31 farmacias.</p>
   </div>
   <div class="content-ex">
+    <div id="nxResumen"></div>
     <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px">
       <div class="section-label" style="margin-bottom:0">Actividades</div>
 <div style="display:flex;gap:10px;flex-wrap:wrap">      <a href="#" onclick="goToPlanning();return false;" style="display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:800;color:var(--blue2);background:var(--blue-lt);border:1px solid #c5d0f8;border-radius:100px;padding:7px 16px;text-decoration:none;white-space:nowrap">← Ver lo realizado (jun – ago 2026)</a>
@@ -1464,6 +1465,7 @@ const refVis = NP.visitas.filter(v => v.ciclo > 0);
 const refConM = 0;
 const refIni = refVis.map(v => v.fecha).sort()[0];
 const MESES_CICLO = Array.from({ length: 10 }, (_, k) => { const [y, m] = CONFIG.refuerzo.inicio.split('-').map(Number); const d = new Date(Date.UTC(y, m - 1 + k, 1)); return NMONTHS[d.getUTCMonth()] + (d.getUTCFullYear() !== 2026 ? ' ' + d.getUTCFullYear() : ''); });
+const MESES_ISO = Array.from({ length: 10 }, (_, k) => { const [y, m] = CONFIG.refuerzo.inicio.split('-').map(Number); return S(new Date(Date.UTC(y, m - 1 + k, 1))); });
 const gVals = Object.values(NP.gruposMes || {}); const gMin = Math.min(...gVals), gMax = Math.max(...gVals);
 const finC1 = refVis.filter(v => v.ciclo === 1).map(v => v.fecha).sort().pop();
 const nGrupos = NP.nGrupos;
@@ -1851,7 +1853,7 @@ window.nxClose = () => document.getElementById('nxOverlay').classList.remove('op
 document.addEventListener('keydown', e => { if (e.key === 'Escape') nxClose(); });
 
 let nxInit = false;
-window.nxInitOnce = () => { setTimeout(nxFlechas, 60); if (nxInit) return; nxInit = true; nxRenderCards(); nxRenderActs(); nxFetchProgress(); nxRenderKPIs(); nxRenderFilters(); nxRenderCalendar(); };
+window.nxInitOnce = () => { setTimeout(nxFlechas, 60); if (nxInit) return; nxInit = true; nxRenderResumen(); nxRenderCards(); nxRenderActs(); nxFetchProgress(); nxRenderKPIs(); nxRenderFilters(); nxRenderCalendar(); };
 
 // ===== Vista: Estatus de participación de lo que viene =====
 const normaT = v => String(v || '').toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/^FARMACIA\s+/, '').replace(/,/g, '.').replace(/\s+/g, ' ').trim();
@@ -1915,6 +1917,53 @@ function nsRender() {
 window.nsSetArea = i => { nsArea = i; nsRender(); };
 window.nsRefresh = () => { NXDATA = null; nsRender(); nxFetchProgress(); };
 window.nsInitOnce = () => { if (!nsInit) { nsInit = true; nxFetchProgress(); } nsRender(); };
+
+// ===== Resumen al inicio: cuadro y línea de tiempo por mes =====
+function nxRenderResumen() {
+  const box = document.getElementById('nxResumen'); if (!box) return;
+  const C = NX_COLORS;
+  const rangoV = v => { const f = refVis.filter(x => x.vuelta === v).map(x => x.fecha).sort(); return [f[0], f[f.length - 1]]; };
+  const v1 = rangoV(1), v2 = rangoV(2);
+  const filas = [
+    { col: C[2].color, nombre: 'Taller 5 Conductas de Servicio', tipo: 'Kickoff', ini: R.kick[0], fin: R.kick[1], pob: `Personal de las ${NTI} farmacias (1 por tienda por grupo)`, resp: 'Mariana Meza, con Oswaldo Saldivia' },
+    { col: C[3].color, nombre: 'Taller 5 Pilares de la Operación', tipo: 'Kickoff', ini: R.kick[0], fin: R.kick[1], pob: `Personal de las ${NTI} farmacias (1 por tienda por grupo)`, resp: 'Oswaldo Saldivia, con Mariana Meza' },
+    { col: C[4].color, nombre: 'Refuerzo · Ciclo 1 (Conductas y Pilares 1 a 5)', tipo: 'Ciclo 1', ini: v1[0], fin: v1[1], pob: `Personal de las ${NTI} farmacias (1 por tienda por grupo)`, resp: 'Oswaldo Saldivia' },
+    { col: C[4].color, nombre: 'Refuerzo · Ciclo 2 (Conductas y Pilares 1 a 5)', tipo: 'Ciclo 2', ini: v2[0], fin: v2[1], pob: `Personal de las ${NTI} farmacias (1 por tienda por grupo)`, resp: 'Oswaldo Saldivia' },
+  ];
+  const th = t => `<th style="text-align:left;padding:12px 14px;font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border);white-space:nowrap">${t}</th>`;
+  let h = `<div class="section-label">Resumen: talleres de Conductas y Pilares y ciclos de refuerzo</div>
+  <div class="cal-wrap" style="margin-bottom:26px"><div class="cal-scroll"><table style="width:100%;border-collapse:collapse;font-size:13px;min-width:760px">
+    <thead><tr style="background:#f8f9fd">${['Formación','Inicio','Fin','Población objetivo','Responsable'].map(th).join('')}</tr></thead><tbody>
+    ${filas.map(r => `<tr style="border-bottom:1px solid #eef0f6">
+      <td style="padding:12px 14px"><div style="display:flex;align-items:center;gap:10px"><span style="width:4px;align-self:stretch;min-height:30px;border-radius:3px;background:${r.col}"></span><div><div style="font-size:10px;font-weight:800;color:${r.col};text-transform:uppercase;letter-spacing:.06em">${r.tipo}</div><div style="font-weight:800;color:var(--navy)">${r.nombre}</div></div></div></td>
+      <td style="padding:12px 14px;font-weight:700;white-space:nowrap">${nfl(r.ini)}</td>
+      <td style="padding:12px 14px;font-weight:700;white-space:nowrap">${nfl(r.fin)}</td>
+      <td style="padding:12px 14px;color:var(--text-mid)">${r.pob}</td>
+      <td style="padding:12px 14px;font-weight:700;color:var(--navy)">${r.resp}</td></tr>`).join('')}
+    </tbody></table></div></div>`;
+
+  // Línea de tiempo por mes
+  const ini = '2026-10-01', finM = (() => { const d = D(NP.fin); return S(new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth() + 1, 0))); })();
+  const tot = (D(finM) - D(ini)) / 864e5 + 1;
+  const pos = s => ((D(s) - D(ini)) / 864e5) / tot * 100;
+  const meses = []; for (let d = D(ini); S(d) <= finM; d = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth() + 1, 1))) meses.push(S(d));
+  const finMes = s => { const d = D(s); return S(new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth() + 1, 0))); };
+  const bar = (a, b, col, txt, sub, alto) => `<div title="${nesc(txt)}: ${nf(a)} – ${nf(b)}" style="position:absolute;top:${alto ? 6 : 8}px;bottom:${alto ? 6 : 8}px;left:${pos(a)}%;width:${pos(addDays(b, 1)) - pos(a)}%;background:${col};border-radius:8px;color:#fff;padding:4px 8px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;box-sizing:border-box;font-size:11px;font-weight:800;line-height:1.25;border:2px solid #fff">${txt}${sub ? `<div style="font-weight:600;font-size:10px;opacity:.9">${sub}</div>` : ''}</div>`;
+  const fila = (lbl, sub, cont) => `<div style="display:grid;grid-template-columns:170px 1fr;border-top:1px solid #eef0f6"><div style="padding:12px 14px;background:#f8f9fd;border-right:1px solid var(--border)"><div style="font-weight:800;color:var(--navy);font-size:13px">${lbl}</div><div style="font-size:10px;color:var(--muted);font-weight:700">${sub}</div></div><div style="position:relative;height:60px">${meses.map(m => `<div style="position:absolute;top:0;bottom:0;left:${pos(m)}%;border-left:1px dashed #e3e8f2"></div>`).join('')}${cont}</div></div>`;
+  const ciclo = v => [1,2,3,4,5].map(n => { const m = MESES_ISO[(v - 1) * 5 + n - 1]; return bar(m, finMes(m), n % 2 ? C[4].color : '#1e8e4e', `C${n} + P${n}`, NMONTHS[D(m).getUTCMonth()]); }).join('');
+  const pausa = `<div title="Pausa navideña" style="position:absolute;top:0;bottom:0;left:${pos(CONFIG.pausa.desde)}%;width:${pos(addDays(CONFIG.pausa.hasta, 1)) - pos(CONFIG.pausa.desde)}%;background:repeating-linear-gradient(135deg,#eef0f4 0 5px,#f8f9fb 5px 10px)"></div>`;
+  h += `<div class="section-label">Línea de tiempo por mes</div>
+  <div class="cal-wrap" style="margin-bottom:40px"><div class="cal-scroll"><div style="min-width:900px">
+    <div style="display:grid;grid-template-columns:170px 1fr"><div style="background:#f8f9fd;border-right:1px solid var(--border)"></div>
+      <div style="position:relative;height:38px">${meses.map((m, i) => { const w = pos(addDays(finMes(m), 1)) - pos(m); const d = D(m); return `<div style="position:absolute;top:0;bottom:0;left:${pos(m)}%;width:${w}%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:${i % 2 ? '#3b5fe2' : '#1a2e6b'};color:#fff;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;line-height:1.1">${NMONTHS[d.getUTCMonth()].slice(0, 3)}<span style="font-size:9px;opacity:.75">${d.getUTCFullYear()}</span></div>`; }).join('')}</div></div>
+    ${fila('Kickoff', 'Conductas y Pilares en sala', pausa + bar(R.kick[0], R.kick[1], C[2].color, 'Conductas + Pilares', `${nf(R.kick[0])} – ${nf(R.kick[1])}`))}
+    ${fila('Refuerzo · Ciclo 1', `${MESES_CICLO[0]} – ${MESES_CICLO[4]}`, pausa + ciclo(1))}
+    ${fila('Refuerzo · Ciclo 2', `${MESES_CICLO[5]} – ${MESES_CICLO[9]}`, ciclo(2))}
+    <div style="position:relative;height:0"><div style="position:absolute;left:calc(170px + (100% - 170px) * ${pos(CONFIG.salidaMariana) / 100});top:-${3 * 61 + 38}px;height:${3 * 61 + 38}px;border-left:2px solid #e74c3c" title="Último día de Mariana: ${nf(CONFIG.salidaMariana)}"></div></div>
+  </div></div></div>
+  <div style="display:flex;gap:18px;flex-wrap:wrap;font-size:11px;font-weight:700;color:var(--text-soft);margin:-28px 0 40px"><span><span style="display:inline-block;width:3px;height:12px;background:#e74c3c;vertical-align:-2px;margin-right:6px"></span>Último día de Mariana (${nf(CONFIG.salidaMariana)})</span><span><span style="display:inline-block;width:14px;height:12px;background:repeating-linear-gradient(135deg,#eef0f4 0 3px,#f8f9fb 3px 6px);border:1px solid #dde3f0;vertical-align:-2px;margin-right:6px"></span>Pausa navideña</span><span>C = Conducta · P = Pilar</span></div>`;
+  box.innerHTML = h;
+}
 
 })();
 </script>
