@@ -1604,11 +1604,11 @@ let nConCont = false;
 
 // ---- Actividades de refuerzo de las Conductas (instructivos) ----
 const ACTS = [
-  { n:1, conducta:'Soy cercano con el cliente', nombre:'Reto "Soy cercano con el cliente" (bingo)', dur:'Taller de 2.5 horas', modo:'Oswaldo realiza la actividad a lo largo del taller en sala, hasta que todos los participantes hayan pasado',
-    objetivo:'Reforzar la conducta con una dinámica práctica basada en la observación de comportamientos reales.',
-    materiales:'Cartones de bingo, 1 por colaborador',
-    dinamica:['Cada casilla del cartón es un comportamiento de la conducta; los participantes los van realizando durante el taller.','Para marcar una casilla, un compañero debe haber observado el comportamiento y escribe su nombre en "Reconocido por".','Oswaldo acompaña al grupo durante el taller y lo motiva: "¿A quién reconociste hoy?"'],
-    cierre:'Reflexión al final del taller: cómo se sintieron, cómo reaccionaron los clientes y qué mantener como hábito. Reconocimiento a quienes completaron el cartón.' },
+  { n:1, conducta:'Soy cercano con el cliente', nombre:'Cine Foro', dur:'Taller de 2.5 horas', modo:'Oswaldo proyecta las escenas y modera la discusión con todo el grupo',
+    objetivo:'Reconocer la conducta en escenas de películas y asociarla a comportamientos concretos.',
+    materiales:'4 escenas de películas y equipo para proyectarlas',
+    dinamica:['El facilitador proyecta 4 escenas de películas.','Después de cada escena, el grupo discute qué conductas observó.','Para cada conducta, el grupo identifica qué comportamientos se asocian a ella.'],
+    cierre:'Conclusiones del grupo sobre los comportamientos observados en las 4 escenas.' },
   { n:2, conducta:'Actúo con agilidad para el cliente', nombre:'Rally contra el tiempo', dur:'Taller de 2.5 horas', modo:'Oswaldo repite el rally durante el taller, con grupos de 4, hasta que todos los participantes hayan pasado; cada ronda dura 8 minutos',
     objetivo:'Practicar cómo detener las actividades del día a día para atender al cliente de forma rápida y eficiente.',
     materiales:'Kit de tienda: 42 vasos plásticos, 12 corazones, 2 dibujos de clientes y 2 cestas de farmacia',
@@ -1619,11 +1619,11 @@ const ACTS = [
     materiales:'Dos ruletas digitales: necesidad del cliente y contexto de la tienda', link:'https://claudiagarcia-create.github.io/index.html/',
     dinamica:['En parejas, uno es cliente y otro colaborador.','El cliente gira las dos ruletas y lee la situación en voz alta.','El colaborador tiene un minuto para proponer soluciones; luego se intercambian los roles.'],
     cierre:'El grupo analiza: ¿escuchó activamente?, ¿ofreció una solución factible?, ¿acompañó al cliente hasta el final? Se refuerzan los mensajes clave de la conducta.' },
-  { n:4, conducta:'Personalizo el trato con el cliente', nombre:'STOP del cliente', dur:'Taller de 2.5 horas', modo:'Oswaldo repite las rondas durante el taller hasta que todos los participantes hayan pasado',
-    objetivo:'Hacer mejores preguntas para conocer al cliente e identificar acciones concretas para personalizar la atención.',
-    materiales:'Hojas, lápices o bolígrafos y la plantilla (Letra, Nombre, Perfil, Pregunta, Acción)',
-    dinamica:['El supervisor dice una letra del abecedario.','Cada participante completa: nombre de cliente, perfil, una pregunta para conocerlo y una acción para personalizar su atención.','Quien termina primero dice "¡STOP!" y todos dejan de escribir.'],
-    cierre:'Cada uno comparte: "Para personalizar el trato con [nombre], voy a preguntarle [pregunta] y a [acción]". El líder valida si las acciones son concretas y aplicables hoy en tienda.' },
+  { n:4, conducta:'Personalizo el trato con el cliente', nombre:'Role playing', dur:'Taller de 2.5 horas', modo:'Oswaldo coordina los 4 role playing y rota a los participantes hasta que todos hayan pasado',
+    objetivo:'Practicar la conducta Personalizo el trato con el cliente en situaciones simuladas.',
+    materiales:'4 situaciones de role playing relacionadas con la conducta',
+    dinamica:['Se realizan 4 role playing relacionados con la conducta.','En cada uno, los participantes representan una situación de atención al cliente.','Después de cada role playing, el grupo comenta cómo se aplicó la conducta.'],
+    cierre:'Conclusiones del grupo sobre cómo personalizar el trato con el cliente en tienda.' },
   { n:5, conducta:'Deleito al cliente más allá del Gracias', nombre:'Chapa del Deleite', dur:'Taller de 2.5 horas', modo:'Se lanza en el taller con todos los participantes, repitiendo la ruleta de situaciones hasta que todos hayan pasado; cada participante lleva la dinámica de la chapa a su tienda durante el mes',
     objetivo:'Instalar el hábito de identificar oportunidades cotidianas para generar experiencias memorables.',
     materiales:'Chapas o pines de reconocimiento, ruleta de situaciones e instructivo', link:'https://claudiagarcia-create.github.io/Ruleta-Conductas/',
@@ -1656,7 +1656,7 @@ function nxRenderActs() {
 }
 window.nxOpenAct = n => { const a = ACTS[n-1], c = NX_COLORS[2];
   nxModal(c, `🔁 Práctica Aplicada · ${actRango(n)}`, `Conducta ${n} y Pilar ${n}`, `Conducta ${n}: ${a.conducta} · ${CONFIG.pilares[n-1]}`,
-    mf('👥 Participación', 'Todos los participantes del taller viven las actividades. Si la dinámica es para pocos participantes, se repite las veces necesarias hasta que todos pasen.', true) + mf('🎯 Actividad de la conducta', `${a.nombre} · ${a.dur}`) + mf('📍 En la visita', a.modo) + mf(`🏛 Actividad del Pilar ${n}`, `<b>"${ACT_PILAR.nombre}"</b><br>${ACT_PILAR.desc(n)}`, true) + mf('🎯 Objetivo', a.objetivo, true) + mf('🧰 Materiales', a.materiales + (a.link ? `<br><a href="${a.link}" target="_blank" rel="noopener" style="color:${c.color};font-weight:800">Abrir ruleta →</a>` : ''), true)
+    mf('👥 Participación', 'Todos los participantes del taller viven las actividades. Si la dinámica es para pocos participantes, se repite las veces necesarias hasta que todos pasen.', true) + mf('🎯 Actividad de la conducta', `${a.nombre} · ${a.dur}`) + mf('📍 En el taller', a.modo) + mf(`🏛 Actividad del Pilar ${n}`, `<b>"${ACT_PILAR.nombre}"</b><br>${ACT_PILAR.desc(n)}`, true) + mf('🎯 Objetivo', a.objetivo, true) + mf('🧰 Materiales', a.materiales + (a.link ? `<br><a href="${a.link}" target="_blank" rel="noopener" style="color:${c.color};font-weight:800">Abrir ruleta →</a>` : ''), true)
     + mf('🔁 Dinámica', a.dinamica.map((x, i) => `${i+1}. ${nesc(x)}`).join('<br>'), true) + mf('💬 Cierre', a.cierre, true) + mf('🗓 Meses', actRango(n), true)); };
 
 // ---- Progreso (mismo formato que Mónica) ----
