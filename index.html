@@ -492,7 +492,7 @@ thead th.week-even .date-box { background:#eef2fb; }
     <div class="section-label">Práctica Aplicada en sala · un mes por conducta y pilar, en 2 ciclos</div>
     <p style="font-size:12px;font-weight:700;color:var(--text-soft);margin:-8px 0 18px">Todos los participantes de cada taller viven las actividades: si una dinámica es para pocos participantes, se repite las veces necesarias hasta que todos pasen.</p>
     <div class="cap-grid" id="nxActs"></div>
-    <div class="footer-note"><div class="footer-note-icon">💡</div><div class="footer-note-text"><strong>Supuestos del plan.</strong> 16 colaboradores por farmacia en promedio; 1 persona por farmacia en cada grupo de los talleres de Conductas y Pilares; Área 1 sola, siempre en la mañana en Sala Las Heras (10 participantes), y Áreas 2 y 3 juntas, siempre en la tarde en Sala Olivos (21 participantes); cada grupo hace Conductas un día y Pilares el día hábil siguiente; feriados de Argentina y pausa navideña del 21 de diciembre al 1 de enero. En los talleres de Conductas y Pilares, Mariana facilita Conductas y Oswaldo facilita Pilares con su guía; desde enero, Oswaldo facilita solo la Práctica Aplicada en sala: un mes por conducta y pilar, en 2 ciclos, con talleres de lunes a miércoles y jueves y viernes administrativos.</div></div>
+    <div class="footer-note"><div class="footer-note-icon">💡</div><div class="footer-note-text"><strong>Supuestos del plan.</strong> Introductorio según la propuesta de grupos seleccionada (Opción 1: lunes, miércoles y viernes; Opción 2: lunes a viernes), con Base Farmacia y Supervisorio por separado, cupos para nuevos ingresos y rezagados, y cada grupo haciendo Conductas y luego Pilares en el mismo medio día (8:00 a 12:00 o 14:00 a 17:30), alternando Tienda Las Heras y Tienda Scalabrini. Práctica Aplicada: talleres en sala de lunes a miércoles, un mes por conducta y pilar, en 2 ciclos. Feriados de Argentina y pausa navideña del 21 de diciembre al 1 de enero.</div></div>
   </div>
 </div>
 
@@ -1247,9 +1247,29 @@ const CONFIG = {
     // Cada taller dura 2,5 horas: Conductas en la mañana, Pilares en la tarde
     horario: { AM: '9:00 a 11:30', PM: '14:00 a 16:30' },
   },
+  // Introductorio: cada grupo hace Conductas y luego Pilares en el mismo medio día.
+  introductorio: {
+    grupoMax: 25,
+    sedes: ['Tienda Las Heras', 'Tienda Scalabrini'],     // un día completo en cada una, alternando
+    horas: { AM: { Conductas: '8:00 a 10:00', Pilares: '10:00 a 12:00' }, PM: { Conductas: '14:00 a 15:45', Pilares: '15:45 a 17:30' } },
+    segmentos: [ { k: 'sup', nombre: 'Supervisorio' }, { k: 'base', nombre: 'Base Farmacia' } ],
+    tiendaGrande: 12,   // tiendas con 12 o más colaboradores pueden enviar 2 personas por grupo; el resto, 1
+  },
 };
+// Propuestas de distribución de grupos del Introductorio (solo grupos, fechas y cantidades; sin datos personales).
+const PROPUESTAS = {"op1": {"nombre": "Opción 1 · Lunes, miércoles y viernes", "corto": "Opción 1 · L-M-V", "url": "https://docs.google.com/spreadsheets/d/16ZySuHhEZyXS73w5QMtdYZXGf1YBvsb92JbGA_AlmWo/edit", "desc": "Talleres solo lunes, miércoles y viernes, con las tres áreas mezcladas en todos los grupos. Grupos de 6 las dos primeras semanas y de 11 a 18 desde el 9 de noviembre.", "grupos": [{"id": "G01", "f": "2026-10-26", "s": "AM", "t": "Base Farmacia", "n": 6, "cupos": false, "ger": 0, "a": "Áreas 1, 2 y 3"}, {"id": "G02", "f": "2026-10-26", "s": "PM", "t": "Base Farmacia", "n": 6, "cupos": false, "ger": 0, "a": "Áreas 1, 2 y 3"}, {"id": "G03", "f": "2026-10-28", "s": "AM", "t": "Base Farmacia", "n": 6, "cupos": false, "ger": 0, "a": "Áreas 1, 2 y 3"}, {"id": "G04", "f": "2026-10-28", "s": "PM", "t": "Base Farmacia", "n": 6, "cupos": false, "ger": 0, "a": "Áreas 1, 2 y 3"}, {"id": "G05", "f": "2026-10-30", "s": "AM", "t": "Base Farmacia", "n": 6, "cupos": false, "ger": 0, "a": "Áreas 1, 2 y 3"}, {"id": "G06", "f": "2026-10-30", "s": "PM", "t": "Base Farmacia", "n": 6, "cupos": false, "ger": 0, "a": "Áreas 1, 2 y 3"}, {"id": "G07", "f": "2026-11-02", "s": "AM", "t": "Supervisorio", "n": 6, "cupos": false, "ger": 6, "a": "Áreas 1, 2 y 3"}, {"id": "G08", "f": "2026-11-02", "s": "PM", "t": "Supervisorio", "n": 6, "cupos": false, "ger": 6, "a": "Áreas 1, 2 y 3"}, {"id": "G09", "f": "2026-11-04", "s": "AM", "t": "Supervisorio", "n": 6, "cupos": false, "ger": 3, "a": "Áreas 1, 2 y 3"}, {"id": "G10", "f": "2026-11-04", "s": "PM", "t": "Base Farmacia", "n": 6, "cupos": false, "ger": 0, "a": "Áreas 1, 2 y 3"}, {"id": "G11", "f": "2026-11-06", "s": "AM", "t": "Base Farmacia", "n": 6, "cupos": false, "ger": 0, "a": "Áreas 1, 2 y 3"}, {"id": "G12", "f": "2026-11-06", "s": "PM", "t": "Base Farmacia", "n": 6, "cupos": false, "ger": 0, "a": "Áreas 1, 2 y 3"}, {"id": "G13", "f": "2026-11-11", "s": "AM", "t": "Supervisorio", "n": 18, "cupos": false, "ger": 1, "a": "Áreas 1, 2 y 3"}, {"id": "G14", "f": "2026-11-13", "s": "AM", "t": "Supervisorio", "n": 18, "cupos": false, "ger": 1, "a": "Áreas 1, 2 y 3"}, {"id": "G15", "f": "2026-11-13", "s": "PM", "t": "Supervisorio", "n": 18, "cupos": false, "ger": 0, "a": "Áreas 1, 2 y 3"}, {"id": "G16", "f": "2026-11-16", "s": "AM", "t": "Supervisorio", "n": 18, "cupos": false, "ger": 0, "a": "Áreas 1, 2 y 3"}, {"id": "G17", "f": "2026-11-16", "s": "PM", "t": "Base Farmacia", "n": 12, "cupos": false, "ger": 0, "a": "Áreas 1, 2 y 3"}, {"id": "G18", "f": "2026-11-18", "s": "AM", "t": "Supervisorio", "n": 18, "cupos": false, "ger": 0, "a": "Áreas 1, 2 y 3"}, {"id": "G19", "f": "2026-11-18", "s": "PM", "t": "Base Farmacia", "n": 13, "cupos": false, "ger": 0, "a": "Áreas 1, 2 y 3"}, {"id": "G20", "f": "2026-11-20", "s": "AM", "t": "Base Farmacia", "n": 18, "cupos": false, "ger": 0, "a": "Áreas 1, 2 y 3"}, {"id": "G21", "f": "2026-11-20", "s": "PM", "t": "Nuevos ingresos (mixto)", "n": 10, "cupos": true, "ger": 0, "a": "Áreas 1, 2 y 3"}, {"id": "G22", "f": "2026-11-25", "s": "AM", "t": "Base Farmacia", "n": 16, "cupos": false, "ger": 0, "a": "Áreas 1, 2 y 3"}, {"id": "G23", "f": "2026-11-25", "s": "PM", "t": "Base Farmacia", "n": 17, "cupos": false, "ger": 0, "a": "Áreas 1, 2 y 3"}, {"id": "G24", "f": "2026-11-27", "s": "AM", "t": "Base Farmacia", "n": 18, "cupos": false, "ger": 0, "a": "Áreas 1, 2 y 3"}, {"id": "G25", "f": "2026-11-27", "s": "PM", "t": "Nuevos ingresos (mixto)", "n": 10, "cupos": true, "ger": 0, "a": "Áreas 1, 2 y 3"}, {"id": "G26", "f": "2026-11-30", "s": "AM", "t": "Supervisorio", "n": 18, "cupos": false, "ger": 0, "a": "Áreas 1, 2 y 3"}, {"id": "G27", "f": "2026-11-30", "s": "PM", "t": "Base Farmacia", "n": 11, "cupos": false, "ger": 0, "a": "Áreas 1, 2 y 3"}, {"id": "G28", "f": "2026-12-02", "s": "AM", "t": "Base Farmacia", "n": 15, "cupos": false, "ger": 0, "a": "Áreas 1, 2 y 3"}, {"id": "G29", "f": "2026-12-02", "s": "PM", "t": "Base Farmacia", "n": 16, "cupos": false, "ger": 0, "a": "Áreas 1, 2 y 3"}, {"id": "G30", "f": "2026-12-04", "s": "AM", "t": "Base Farmacia", "n": 18, "cupos": false, "ger": 0, "a": "Áreas 1, 2 y 3"}, {"id": "G31", "f": "2026-12-04", "s": "PM", "t": "Nuevos ingresos (mixto)", "n": 10, "cupos": true, "ger": 0, "a": "Áreas 1, 2 y 3"}, {"id": "G32", "f": "2026-12-09", "s": "AM", "t": "Base Farmacia", "n": 18, "cupos": false, "ger": 0, "a": "Áreas 1, 2 y 3"}, {"id": "G33", "f": "2026-12-09", "s": "PM", "t": "Rezagados · Supervisorio", "n": 15, "cupos": true, "ger": 0, "a": "Áreas 1, 2 y 3"}, {"id": "G34", "f": "2026-12-11", "s": "AM", "t": "Rezagados · Base Farmacia", "n": 15, "cupos": true, "ger": 0, "a": "Áreas 1, 2 y 3"}, {"id": "G35", "f": "2026-12-11", "s": "PM", "t": "Rezagados · Base Farmacia", "n": 15, "cupos": true, "ger": 0, "a": "Áreas 1, 2 y 3"}]}, "op2": {"nombre": "Opción 2 · Lunes a viernes", "corto": "Opción 2 · L a V", "url": "https://docs.google.com/spreadsheets/d/1gx0uencX_G0LZWgZJdlvSzsPcQx_ski5j_07zFkKI7Y/edit", "desc": "Talleres de lunes a viernes: lunes, miércoles y viernes con las tres áreas; martes solo Área 1 y jueves solo Áreas 2 y 3. Grupos de 4 a 10 personas, un colaborador por tienda por día.", "grupos": [{"id": "G01", "f": "2026-10-26", "s": "AM", "t": "Base Farmacia", "n": 6, "cupos": false, "ger": 0, "a": "Áreas 1, 2 y 3"}, {"id": "G03", "f": "2026-10-27", "s": "AM", "t": "Base Farmacia", "n": 5, "cupos": false, "ger": 0, "a": "Área 1"}, {"id": "G05", "f": "2026-10-28", "s": "AM", "t": "Base Farmacia", "n": 6, "cupos": false, "ger": 0, "a": "Áreas 1, 2 y 3"}, {"id": "G07", "f": "2026-10-29", "s": "AM", "t": "Base Farmacia", "n": 6, "cupos": false, "ger": 0, "a": "Áreas 2 y 3"}, {"id": "G09", "f": "2026-10-30", "s": "AM", "t": "Base Farmacia", "n": 6, "cupos": false, "ger": 0, "a": "Áreas 1, 2 y 3"}, {"id": "G02", "f": "2026-10-26", "s": "PM", "t": "Base Farmacia", "n": 6, "cupos": false, "ger": 0, "a": "Áreas 1, 2 y 3"}, {"id": "G04", "f": "2026-10-27", "s": "PM", "t": "Base Farmacia", "n": 5, "cupos": false, "ger": 0, "a": "Área 1"}, {"id": "G06", "f": "2026-10-28", "s": "PM", "t": "Base Farmacia", "n": 6, "cupos": false, "ger": 0, "a": "Áreas 1, 2 y 3"}, {"id": "G08", "f": "2026-10-29", "s": "PM", "t": "Base Farmacia", "n": 6, "cupos": false, "ger": 0, "a": "Áreas 2 y 3"}, {"id": "G10", "f": "2026-10-30", "s": "PM", "t": "Base Farmacia", "n": 6, "cupos": false, "ger": 0, "a": "Áreas 1, 2 y 3"}, {"id": "G11", "f": "2026-11-02", "s": "AM", "t": "Supervisorio", "n": 6, "cupos": false, "ger": 6, "a": "Áreas 1, 2 y 3"}, {"id": "G13", "f": "2026-11-03", "s": "AM", "t": "Supervisorio", "n": 6, "cupos": false, "ger": 3, "a": "Área 1"}, {"id": "G15", "f": "2026-11-04", "s": "AM", "t": "Supervisorio", "n": 6, "cupos": false, "ger": 1, "a": "Áreas 1, 2 y 3"}, {"id": "G17", "f": "2026-11-05", "s": "AM", "t": "Supervisorio", "n": 6, "cupos": false, "ger": 0, "a": "Áreas 2 y 3"}, {"id": "G19", "f": "2026-11-06", "s": "AM", "t": "Supervisorio", "n": 6, "cupos": false, "ger": 0, "a": "Áreas 1, 2 y 3"}, {"id": "G12", "f": "2026-11-02", "s": "PM", "t": "Supervisorio", "n": 6, "cupos": false, "ger": 6, "a": "Áreas 1, 2 y 3"}, {"id": "G14", "f": "2026-11-03", "s": "PM", "t": "Supervisorio", "n": 5, "cupos": false, "ger": 0, "a": "Área 1"}, {"id": "G16", "f": "2026-11-04", "s": "PM", "t": "Supervisorio", "n": 6, "cupos": false, "ger": 0, "a": "Áreas 1, 2 y 3"}, {"id": "G18", "f": "2026-11-05", "s": "PM", "t": "Supervisorio", "n": 6, "cupos": false, "ger": 0, "a": "Áreas 2 y 3"}, {"id": "G20", "f": "2026-11-06", "s": "PM", "t": "Supervisorio", "n": 6, "cupos": false, "ger": 0, "a": "Áreas 1, 2 y 3"}, {"id": "G21", "f": "2026-11-10", "s": "AM", "t": "Supervisorio", "n": 10, "cupos": false, "ger": 1, "a": "Área 1"}, {"id": "G22", "f": "2026-11-11", "s": "AM", "t": "Supervisorio", "n": 10, "cupos": false, "ger": 0, "a": "Áreas 1, 2 y 3"}, {"id": "G23", "f": "2026-11-12", "s": "AM", "t": "Supervisorio", "n": 10, "cupos": false, "ger": 0, "a": "Áreas 2 y 3"}, {"id": "G25", "f": "2026-11-13", "s": "AM", "t": "Supervisorio", "n": 10, "cupos": false, "ger": 0, "a": "Áreas 1, 2 y 3"}, {"id": "G24", "f": "2026-11-12", "s": "PM", "t": "Supervisorio", "n": 10, "cupos": false, "ger": 0, "a": "Áreas 2 y 3"}, {"id": "G26", "f": "2026-11-13", "s": "PM", "t": "Base Farmacia", "n": 7, "cupos": false, "ger": 0, "a": "Áreas 1, 2 y 3"}, {"id": "G27", "f": "2026-11-16", "s": "AM", "t": "Supervisorio", "n": 9, "cupos": false, "ger": 0, "a": "Áreas 1, 2 y 3"}, {"id": "G29", "f": "2026-11-17", "s": "AM", "t": "Supervisorio", "n": 4, "cupos": false, "ger": 0, "a": "Área 1"}, {"id": "G31", "f": "2026-11-18", "s": "AM", "t": "Base Farmacia", "n": 7, "cupos": false, "ger": 0, "a": "Áreas 1, 2 y 3"}, {"id": "G33", "f": "2026-11-19", "s": "AM", "t": "Base Farmacia", "n": 7, "cupos": false, "ger": 0, "a": "Áreas 2 y 3"}, {"id": "G35", "f": "2026-11-20", "s": "AM", "t": "Base Farmacia", "n": 7, "cupos": false, "ger": 0, "a": "Áreas 1, 2 y 3"}, {"id": "G28", "f": "2026-11-16", "s": "PM", "t": "Base Farmacia", "n": 7, "cupos": false, "ger": 0, "a": "Áreas 1, 2 y 3"}, {"id": "G30", "f": "2026-11-17", "s": "PM", "t": "Base Farmacia", "n": 4, "cupos": false, "ger": 0, "a": "Área 1"}, {"id": "G32", "f": "2026-11-18", "s": "PM", "t": "Base Farmacia", "n": 7, "cupos": false, "ger": 0, "a": "Áreas 1, 2 y 3"}, {"id": "G34", "f": "2026-11-19", "s": "PM", "t": "Base Farmacia", "n": 6, "cupos": false, "ger": 0, "a": "Áreas 2 y 3"}, {"id": "G36", "f": "2026-11-20", "s": "PM", "t": "Nuevos ingresos (mixto)", "n": 10, "cupos": true, "ger": 0, "a": "Áreas 1, 2 y 3"}, {"id": "G37", "f": "2026-11-24", "s": "AM", "t": "Base Farmacia", "n": 5, "cupos": false, "ger": 0, "a": "Área 1"}, {"id": "G39", "f": "2026-11-25", "s": "AM", "t": "Supervisorio", "n": 4, "cupos": false, "ger": 0, "a": "Áreas 1, 2 y 3"}, {"id": "G41", "f": "2026-11-26", "s": "AM", "t": "Base Farmacia", "n": 7, "cupos": false, "ger": 0, "a": "Áreas 2 y 3"}, {"id": "G43", "f": "2026-11-27", "s": "AM", "t": "Base Farmacia", "n": 7, "cupos": false, "ger": 0, "a": "Áreas 1, 2 y 3"}, {"id": "G38", "f": "2026-11-24", "s": "PM", "t": "Base Farmacia", "n": 5, "cupos": false, "ger": 0, "a": "Área 1"}, {"id": "G40", "f": "2026-11-25", "s": "PM", "t": "Base Farmacia", "n": 7, "cupos": false, "ger": 0, "a": "Áreas 1, 2 y 3"}, {"id": "G42", "f": "2026-11-26", "s": "PM", "t": "Base Farmacia", "n": 7, "cupos": false, "ger": 0, "a": "Áreas 2 y 3"}, {"id": "G44", "f": "2026-11-27", "s": "PM", "t": "Nuevos ingresos (mixto)", "n": 10, "cupos": true, "ger": 0, "a": "Áreas 1, 2 y 3"}, {"id": "G45", "f": "2026-11-30", "s": "AM", "t": "Base Farmacia", "n": 7, "cupos": false, "ger": 0, "a": "Áreas 1, 2 y 3"}, {"id": "G47", "f": "2026-12-01", "s": "AM", "t": "Base Farmacia", "n": 4, "cupos": false, "ger": 0, "a": "Área 1"}, {"id": "G49", "f": "2026-12-02", "s": "AM", "t": "Base Farmacia", "n": 6, "cupos": false, "ger": 0, "a": "Áreas 1, 2 y 3"}, {"id": "G51", "f": "2026-12-03", "s": "AM", "t": "Base Farmacia", "n": 7, "cupos": false, "ger": 0, "a": "Áreas 2 y 3"}, {"id": "G53", "f": "2026-12-04", "s": "AM", "t": "Base Farmacia", "n": 7, "cupos": false, "ger": 0, "a": "Áreas 1, 2 y 3"}, {"id": "G46", "f": "2026-11-30", "s": "PM", "t": "Base Farmacia", "n": 7, "cupos": false, "ger": 0, "a": "Áreas 1, 2 y 3"}, {"id": "G48", "f": "2026-12-01", "s": "PM", "t": "Base Farmacia", "n": 5, "cupos": false, "ger": 0, "a": "Área 1"}, {"id": "G50", "f": "2026-12-02", "s": "PM", "t": "Base Farmacia", "n": 7, "cupos": false, "ger": 0, "a": "Áreas 1, 2 y 3"}, {"id": "G52", "f": "2026-12-03", "s": "PM", "t": "Base Farmacia", "n": 6, "cupos": false, "ger": 0, "a": "Áreas 2 y 3"}, {"id": "G54", "f": "2026-12-04", "s": "PM", "t": "Nuevos ingresos (mixto)", "n": 10, "cupos": true, "ger": 0, "a": "Áreas 1, 2 y 3"}, {"id": "G55", "f": "2026-12-09", "s": "AM", "t": "Base Farmacia", "n": 8, "cupos": false, "ger": 0, "a": "Áreas 1, 2 y 3"}, {"id": "G57", "f": "2026-12-10", "s": "AM", "t": "Base Farmacia", "n": 7, "cupos": false, "ger": 0, "a": "Áreas 2 y 3"}, {"id": "G59", "f": "2026-12-11", "s": "AM", "t": "Base Farmacia", "n": 7, "cupos": false, "ger": 0, "a": "Áreas 1, 2 y 3"}, {"id": "G56", "f": "2026-12-09", "s": "PM", "t": "Rezagados · Supervisorio", "n": 15, "cupos": true, "ger": 0, "a": "Áreas 1, 2 y 3"}, {"id": "G58", "f": "2026-12-10", "s": "PM", "t": "Rezagados · Base Farmacia", "n": 15, "cupos": true, "ger": 0, "a": "Áreas 2 y 3"}, {"id": "G60", "f": "2026-12-11", "s": "PM", "t": "Rezagados · Base Farmacia", "n": 15, "cupos": true, "ger": 0, "a": "Áreas 1, 2 y 3"}]}};
+const OPCION = (() => { let o = null; try { o = new URLSearchParams(location.search).get('op'); } catch (e) {}
+  if (o === '1' || o === '2') { try { localStorage.setItem('nxOpcion', 'op' + o); } catch (e) {} return 'op' + o; }
+  try { const g = localStorage.getItem('nxOpcion'); if (g && PROPUESTAS[g]) return g; } catch (e) {}
+  return 'op1'; })();
+// Nómina del plan (solo cantidades por tienda; sin datos personales).
+// Supervisorio: Gerente, Subgerente, Director Técnico, APV Senior y Farmacéutico. Base: Base Farmacia y Asesoras.
+const NOMINA_TIENDAS = {"Olivos": {"base": 18, "sup": 3}, "Walker": {"base": 8, "sup": 2}, "Rivadavia": {"base": 6, "sup": 3}, "San Isidro": {"base": 12, "sup": 4}, "Devoto": {"base": 8, "sup": 3}, "Flotantes Área 2": {"base": 3, "sup": 1}, "Caballito": {"base": 17, "sup": 4}, "Scalabrini": {"base": 8, "sup": 5}, "25 de Mayo (Nobleza)": {"base": 4, "sup": 4}, "Villa del Parque II": {"base": 6, "sup": 3}, "Flotantes Área 1": {"base": 0, "sup": 2}, "Sanfar": {"base": 4, "sup": 3}, "Juncal": {"base": 14, "sup": 3}, "Colectora": {"base": 17, "sup": 3}, "Lupo": {"base": 2, "sup": 4}, "Perdriel": {"base": 11, "sup": 3}, "Gran Ferrari": {"base": 10, "sup": 3}, "Quinta 46": {"base": 6, "sup": 3}, "Nordelta": {"base": 2, "sup": 1}, "Alesel": {"base": 7, "sup": 4}, "Las Heras": {"base": 10, "sup": 4}, "Soria": {"base": 10, "sup": 4}, "Patricios": {"base": 3, "sup": 3}, "Botánico": {"base": 9, "sup": 3}, "San Martín": {"base": 5, "sup": 4}, "Olleros": {"base": 8, "sup": 3}, "Iglesia": {"base": 8, "sup": 3}, "KM 47,5": {"base": 10, "sup": 3}, "Mark": {"base": 9, "sup": 3}, "Parque Chacabuco": {"base": 1, "sup": 0}, "Flotantes Área 3": {"base": 1, "sup": 1}};
 const FERIADOS = {
   '2026-10-12': 'Feriado: Día del Respeto a la Diversidad Cultural',
+  '2026-11-09': 'Feriado nacional: visita del papa León XIV (Decreto 1103/2026)',
+  '2026-11-10': 'Feriado en CABA por la visita del papa León XIV',
+  '2026-11-11': 'Feriado en provincia de Buenos Aires por la visita del papa León XIV',
   '2026-11-23': 'Feriado: Día de la Soberanía Nacional (trasladado del 20)',
   '2026-12-08': 'Feriado: Inmaculada Concepción',
   '2026-12-25': 'Feriado: Navidad',
@@ -1341,44 +1361,44 @@ function planificar(opts = {}) {
   const colab = opts.colaboradores || K.colaboradoresPorTienda;
   // Cada día: taller de Conductas en la mañana y de Pilares en la tarde, con grupos distintos.
   // Cada grupo (2 personas por farmacia de un área) hace Conductas un día en la mañana y Pilares el día siguiente en la tarde.
-  const rondas = Math.ceil(colab / K.maxPorTienda);
-  // Cada turno tiene siempre la misma sala y el mismo grupo de áreas: AM y PM no se alternan.
+  // ---- Introductorio: áreas mezcladas, Base y Supervisorio por separado, máx. 25 por grupo ----
+  const IN = CONFIG.introductorio;
   const areaDe = {}; [1,2,3].forEach(a => AREAS[a].tiendas.concat(FLOTANTES[a]).forEach(t => areaDe[t] = a));
   const etq = p => p.length === 1 ? AREAS[p[0]].nombre : 'Áreas ' + p.slice(0,-1).join(', ') + ' y ' + p[p.length-1];
-  const colaTurno = p => { const q = []; for (let r = 1; r <= rondas; r++) for (const tl of ['Conductas','Pilares']) q.push({ areas: p, ronda: r, taller: tl }); return q; };
-  const qK = { AM: colaTurno(K.turnos.AM), PM: colaTurno(K.turnos.PM) };
-  const nGruposK = rondas * 2;
-  const sesionTxt = (g, slot) => { const tiendas = g.areas.flatMap(a => AREAS[a].tiendas.concat(FLOTANTES[a])); const sala = K.salaPorArea[g.areas[0]];
-    return { area: g.areas[0], areas: g.areas, areaLabel: etq(g.areas), sala, tiendas, ronda: g.ronda, taller: g.taller, slot,
-      nota: `Taller de ${g.taller}, ${sala}, ${K.horario[slot]}. Grupo ${g.ronda} de ${rondas}`,
-      resumen: `${tiendas.length} farmacias y equipos flotantes, ${K.maxPorTienda === 1 ? '1 persona' : 'hasta ' + K.maxPorTienda + ' personas'} por farmacia (${tiendas.length * K.maxPorTienda} participantes)` }; };
+  const totTienda = t => (NOMINA_TIENDAS[t] ? NOMINA_TIENDAS[t].base + NOMINA_TIENDAS[t].sup : 0);
+  const armarGrupos = seg => {
+    const st = Object.keys(NOMINA_TIENDAS).map(t => ({ t, n: NOMINA_TIENDAS[t][seg.k] || 0, L: totTienda(t) >= IN.tiendaGrande ? 2 : 1 })).filter(x => x.n > 0).sort((p, q) => q.n - p.n);
+    const total = st.reduce((acc, x) => acc + x.n, 0);
+    const G = Math.max(Math.ceil(total / IN.grupoMax), ...st.map(x => Math.ceil(x.n / x.L)));
+    const gs = Array.from({ length: G }, (_, i) => ({ seg: seg.k, segNombre: seg.nombre, ronda: i + 1, nSeg: G, tiendasN: {}, size: 0 }));
+    st.forEach(x => { for (let i = 0; i < x.n; i++) { const c = gs.filter(g => (g.tiendasN[x.t] || 0) < x.L && g.size < IN.grupoMax).sort((p, q) => p.size - q.size)[0]; if (!c) break; c.tiendasN[x.t] = (c.tiendasN[x.t] || 0) + 1; c.size++; } });
+    return gs;
+  };
+  const gruposIntro = PROPUESTAS[OPCION].grupos;
+  const rondas = gruposIntro.length;
+  const nGruposK = gruposIntro.length;
   const prevHabil = x => { let y = addDays(x, -1); while (!esHabil(y)) y = addDays(y, -1); return y; };
-  const r3 = CONFIG.ultimoDiaMariana, r2 = prevHabil(r3), r1 = prevHabil(r2);
-  let cerrado = false;
-  while (!cerrado) {
-    if (!esHabil(f) || enPausa(f)) { registraInhabil(f); next(); continue; }
-    if (f === r1 || f === r2) {
-      push(f, { fase: 'diagnostico', titulo: f === r1 ? 'Diagnóstico: reunión de contraste con Delitze (Auditoría Argentina) y borrador' : 'Diagnóstico: redacción final y preparación del traspaso',
-        detalle: 'Jornada reservada; no hay talleres de Conductas y Pilares este día.' });
-      next(); continue;
-    }
-    if (f === r3) {
-      push(f, { fase: 'cierre', titulo: 'Cierre y traspaso a Oswaldo', detalle: 'Informe de avance de los talleres de Conductas y Pilares por farmacia, entrega del diagnóstico, reunión con Gerentes de Área y plan de continuidad de Oswaldo.' });
-      next(); continue;
-    }
-    if (!qK.AM.length && !qK.PM.length) {
-      push(f, { fase: 'kickoff', titulo: 'Cierre de los talleres de Conductas y Pilares', detalle: 'Consolidar asistencia por farmacia, citar a quienes faltaron y planificar la Práctica Aplicada con cada Gerente de Área.', am: null, pm: null, amNota: 'Cierre de los talleres de Conductas y Pilares', pmNota: 'Cierre de los talleres de Conductas y Pilares' });
-      cerrado = true; next(); break;
-    }
-    const gAM = qK.AM.shift(), gPM = qK.PM.shift();
-    const am = gAM ? sesionTxt(gAM, 'AM') : null;
-    const pm = gPM ? sesionTxt(gPM, 'PM') : null;
-    const d = { fase: 'kickoff', am, pm, titulo: [am, pm].filter(Boolean).map(b => `${b.taller} ${b.areaLabel}`).join(' y ') };
-    if (!am) d.amNota = 'Sin taller'; if (!pm) d.pmNota = 'Sin taller';
-    push(f, d);
-    [[am,'AM'],[pm,'PM']].forEach(([b,t]) => b && b.tiendas.forEach(ti => visitas.push({ tienda: ti, area: areaDe[ti], ciclo: 0, turno: t, fecha: f, resp: resp(f), sala: b.sala, taller: b.taller })));
-    next();
+  const sesionIntro = (g, slot, sede) => ({ ...g, slot, sede, sala: sede, areaLabel: 'Áreas 1, 2 y 3', tiendas: Object.keys(g.tiendasN), taller: 'Conductas y Pilares',
+    nota: `${g.segNombre} · Grupo ${g.ronda} de ${g.nSeg}: Conductas ${IN.horas[slot].Conductas} y Pilares ${IN.horas[slot].Pilares}, ${sede}`,
+    resumen: `${g.size} participantes de ${Object.keys(g.tiendasN).length} farmacias y equipos flotantes` });
+  // Los grupos salen de la propuesta seleccionada (Opción 1 u Opción 2)
+  const GP = PROPUESTAS[OPCION].grupos;
+  const segDe = t => /Supervisorio/.test(t) && !/Rezagados/.test(t) ? 'sup' : /Nuevos/.test(t) ? 'nuevos' : /Rezagados/.test(t) ? 'rezagados' : 'base';
+  const finIntro = GP.map(g => g.f).sort().pop();
+  let dia = 0;
+  while (f <= finIntro) {
+    const hoy = GP.filter(g => g.f === f);
+    if (!hoy.length) { if (!esHabil(f) || enPausa(f)) registraInhabil(f); else push(f, { fase: 'kickoff', titulo: 'Sin talleres', amNota: 'Sin talleres', pmNota: 'Sin talleres' }); next(); continue; }
+    const sede = IN.sedes[dia % IN.sedes.length];
+    const ses = g => g ? ({ ...g, slot: g.s, sede, sala: sede, seg: segDe(g.t), segNombre: g.t, ronda: g.id, size: g.n, areaLabel: g.a, tiendas: [], tiendasN: {}, taller: 'Conductas y Pilares',
+      nota: `${g.id} · ${g.t} (${g.n} ${g.cupos ? 'cupos' : 'personas'}): Conductas ${IN.horas[g.s].Conductas} y Pilares ${IN.horas[g.s].Pilares}, ${sede}` }) : null;
+    const am = ses(hoy.find(g => g.s === 'AM')), pm = ses(hoy.find(g => g.s === 'PM'));
+    push(f, { fase: 'kickoff', am, pm, sede, titulo: `${sede}: ${[am, pm].filter(Boolean).map(b => b.ronda + ' ' + b.segNombre).join(' y ')}`, amNota: am ? null : 'Sin taller', pmNota: pm ? null : 'Sin taller', feriadoConTaller: FERIADOS[f] || null });
+    dia++; next();
   }
+  while (!esHabil(f) || enPausa(f)) { registraInhabil(f); next(); }
+  push(f, { fase: 'kickoff', titulo: 'Cierre del Introductorio', detalle: 'Consolidar asistencia, citar a quienes faltaron y planificar la Práctica Aplicada con cada Gerente de Área.', amNota: 'Cierre del Introductorio', pmNota: 'Cierre del Introductorio' });
+  next();
   // Transición: entre el fin de los talleres de Conductas y Pilares y la salida de Mariana
   const ULTM = CONFIG.ultimoDiaMariana;
   const antesUlt = prevHabil(ULTM);
@@ -1386,7 +1406,7 @@ function planificar(opts = {}) {
     if (!esHabil(f) || enPausa(f)) { registraInhabil(f); next(); continue; }
     if (f === ULTM) push(f, { fase: 'cierre', titulo: 'Cierre y traspaso a Oswaldo', detalle: 'Mañana: informe de avance de los talleres por farmacia, reunión con Gerentes de Área y Coordinadores de RRHH y plan de Práctica Aplicada de Oswaldo.', amNota: 'Cierre y traspaso', pmNota: 'Diagnóstico de necesidades: elaboración del informe de cierre, con apoyo de Mariana' });
     else if (f === antesUlt) push(f, { fase: 'transicion', titulo: 'Reunión de cierre con Auditoría', detalle: 'Diagnóstico de necesidades: reunión de cierre con Delitze, de Auditoría Argentina.', dncCierre: true });
-    else push(f, { fase: 'transicion', titulo: 'Consolidación de asistencia y preparación de la Práctica Aplicada', detalle: 'Registro final de asistencia de los talleres, citación de ausentes y preparación de materiales de la Práctica Aplicada.' });
+    else push(f, { fase: 'transicion', titulo: 'Seguimiento, recuperación de ausentes y preparación de la Práctica Aplicada', detalle: 'Registro de asistencia del Introductorio, citación de quienes faltaron y preparación de materiales de la Práctica Aplicada.' });
     next();
   }
   // Fase 3/4: refuerzo en sala, un mes por conducta y pilar, en 2 vueltas.
@@ -1431,7 +1451,7 @@ function planificar(opts = {}) {
   const dncModo = 'cierre';
   dias.filter(d => d.fase === 'diagnostico').forEach(d => { d.dnc = d.titulo; });
   dnc.sort((a, b) => (a.fecha || '2026-10-15z') < (b.fecha || '2026-10-15z') ? -1 : 1);
-  return { gruposMes, dncModo, dnc, dias, visitas, iniRefuerzo, iniPM, fin: dias[dias.length-1].fecha, rondas, colab, talleres: nGruposK * 2, nGrupos: nGruposK };
+  return { gruposMes, dncModo, dnc, dias, visitas, iniRefuerzo, iniPM, fin: dias[dias.length-1].fecha, rondas, colab, talleres: nGruposK * 2, nGrupos: nGruposK, gruposIntro };
 }
 
 
@@ -1460,7 +1480,7 @@ const areaBadge = (txt, c) => `<span style="display:inline-flex;align-items:cent
 const NP = planificar({});
 const ULT = CONFIG.ultimoDiaMariana;
 const range = f => { const x = NP.dias.filter(d => d.fase === f); return x.length ? [x[0].fecha, x[x.length-1].fecha, x.length] : null; };
-const R = { prep: range('preparacion'), ent: range('entrenamiento'), kick: range('kickoff'), ref: range('refuerzo'), cont: range('continuidad') };
+const R = { prep: range('preparacion'), ent: range('entrenamiento'), kick: (() => { const k = NP.dias.filter(d => d.fase === 'kickoff' && (d.am || d.pm)).map(d => d.fecha); return [k[0], k[k.length - 1]]; })(), ref: range('refuerzo'), cont: range('continuidad') };
 const refVis = NP.visitas.filter(v => v.ciclo > 0);
 const refConM = 0;
 const refIni = refVis.map(v => v.fecha).sort()[0];
@@ -1474,7 +1494,13 @@ const tam = (() => { const t = CONFIG.kickoff.grupos.map(p => p.reduce((n, a) =>
 const kMes = s => NMONTHS[D(s).getUTCMonth()].slice(0,3);
 const rangoMes = (a, b) => kMes(a) === kMes(b) ? kMes(a) : `${kMes(a)} – ${kMes(b)}`;
 const NTI = Object.values(AREAS).reduce((a, x) => a + x.tiendas.length, 0);
-const participantes = NTI * NP.colab;
+const PSEL = PROPUESTAS[OPCION];
+const propRes = p => { const G = p.grupos, sum = fn => G.filter(fn).reduce((a, g) => a + g.n, 0), t = G.filter(g => !g.cupos).map(g => g.n);
+  return { grupos: G.length, nomina: sum(g => !g.cupos), cupos: sum(g => g.cupos), sup: sum(g => g.t === 'Supervisorio'), base: sum(g => g.t === 'Base Farmacia'), gSup: G.filter(g => g.t === 'Supervisorio').length, gBase: G.filter(g => g.t === 'Base Farmacia').length, gCupos: G.filter(g => g.cupos).length,
+    ini: G.map(g => g.f).sort()[0], fin: G.map(g => g.f).sort().pop(), dias: new Set(G.map(g => g.f)).size, tam: `${Math.min(...t)}–${Math.max(...t)}`, enFeriado: G.filter(g => FERIADOS[g.f]) }; };
+const PR = propRes(PSEL);
+const participantes = PR.nomina;
+const tamIntro = PR.tam;
 const salaTxt = a => CONFIG.kickoff.salaPorArea[a];
 const poolEtq = p => p.length === 1 ? 'ÁREA ' + p[0] : 'ÁREAS ' + p.join(' Y ');
 const salaBadges = col => CONFIG.kickoff.grupos.map(p => `${areaBadge(poolEtq(p), col)} ${salaTxt(p[0])}</span>`).join('<br>');
@@ -1522,17 +1548,17 @@ const NC = [
     invest:`${R.ent[2]} días completos`,
     content:'Mariana llega el 14 oct · Alineación con Oswaldo, Operaciones y Auditoría · 5 conductas de servicio · 5 pilares en tienda · Metodología de facilitación · Ensayo general y certificación',
     facilitators:'Mariana Meza', status:'Por iniciar', start:R.ent[0] },
-  { id:2, short:'5 Conductas', name:'Taller 5 Conductas de Servicio', population:`Personal de las ${NTI} farmacias`, duration:'2.5 horas',
-    dates:rangoMes(R.kick[0], R.kick[1]), range:`${nf(R.kick[0])} – ${nf(R.kick[1])}`, prog:{ total:participantes, unit:'formados', live:true }, groups:`${nGrupos} grupos · ${tam} c/u`, people:`${participantes} participantes`,
-    invest:`${nGrupos} sesiones de 2.5 horas`,
-    content:`Las 5 conductas de servicio aplicadas a situaciones reales de tienda · Incluye al personal flotante de cada área · ${MAXT === 1 ? '1 persona' : 'Máximo ' + MAXT + ' personas'} por farmacia en cada grupo · ${CONFIG.kickoff.turnos.AM.length === 1 ? 'Área ' + CONFIG.kickoff.turnos.AM[0] : 'Áreas ' + CONFIG.kickoff.turnos.AM.join(' y ')}: mañanas en ${salaTxt(CONFIG.kickoff.turnos.AM[0])} · ${CONFIG.kickoff.turnos.PM.length === 1 ? 'Área ' + CONFIG.kickoff.turnos.PM[0] : 'Áreas ' + CONFIG.kickoff.turnos.PM.join(' y ')}: tardes en ${salaTxt(CONFIG.kickoff.turnos.PM[0])}`,
-    facilitators: `Mariana Meza, con Oswaldo Saldivia de apoyo${R.kick[1] > ULT ? ', hasta el 17 dic; desde el 18 dic, Oswaldo Saldivia' : ''}<br>${salaBadges(NX_COLORS[2])}`,
+  { id:2, short:'5 Conductas', name:'Taller 5 Conductas de Servicio', population:`Personal de las ${NTI} farmacias`, duration:'2 horas',
+    dates:rangoMes(R.kick[0], R.kick[1]), range:`${nf(R.kick[0])} – ${nf(R.kick[1])}`, prog:{ total:participantes, unit:'formados', live:true }, groups:`${PR.grupos} grupos · ${tamIntro} c/u`, people:`${participantes} participantes + ${PR.cupos} cupos`,
+    invest:`${PR.grupos} talleres: 8:00 a 10:00 y 14:00 a 15:45`,
+    content:`${'Las 5 conductas de servicio aplicadas a situaciones reales de tienda · Primer taller de cada medio día'} · ${PSEL.nombre}: ${PR.gBase} grupos de Base Farmacia (${PR.base} personas), ${PR.gSup} de Supervisorio (${PR.sup} personas) y ${PR.gCupos} con cupos para nuevos ingresos y rezagados (${PR.cupos}) · Mañana 8:00 a 12:00 y tarde 14:00 a 17:30, primero Conductas y luego Pilares · Sedes alternadas: ${CONFIG.introductorio.sedes.join(' y ')}`,
+    facilitators: `Mariana Meza, con Oswaldo Saldivia de apoyo${R.kick[1] > ULT ? ', hasta el 17 dic; desde el 18 dic, Oswaldo Saldivia' : ''}<br>${CONFIG.introductorio.sedes.map(x => `${areaBadge('SEDE', NX_COLORS[2])} ${x}</span>`).join('<br>')}`,
     status:'Por iniciar', start:R.kick[0] },
-  { id:3, short:'5 Pilares', name:'Taller 5 Pilares de la Operación', population:`Personal de las ${NTI} farmacias`, duration:'2.5 horas',
-    dates:rangoMes(R.kick[0], R.kick[1]), range:`${nf(R.kick[0])} – ${nf(R.kick[1])}`, prog:{ total:participantes, unit:'formados', live:true }, groups:`${nGrupos} grupos · ${tam} c/u`, people:`${participantes} participantes`,
-    invest:`${nGrupos} sesiones de 2.5 horas`,
-    content:`Los 5 pilares de la operación · Cada grupo va a Pilares el día hábil siguiente a su taller de Conductas, en el mismo horario y sala · ${CONFIG.kickoff.turnos.AM.length === 1 ? 'Área ' + CONFIG.kickoff.turnos.AM[0] : 'Áreas ' + CONFIG.kickoff.turnos.AM.join(' y ')}: mañanas en ${salaTxt(CONFIG.kickoff.turnos.AM[0])} · ${CONFIG.kickoff.turnos.PM.length === 1 ? 'Área ' + CONFIG.kickoff.turnos.PM[0] : 'Áreas ' + CONFIG.kickoff.turnos.PM.join(' y ')}: tardes en ${salaTxt(CONFIG.kickoff.turnos.PM[0])}`,
-    facilitators: `Oswaldo Saldivia, con Mariana Meza acompañando y guiando${R.kick[1] > ULT ? ' hasta el 17 dic' : ''}<br>${salaBadges(NX_COLORS[3])}`,
+  { id:3, short:'5 Pilares', name:'Taller 5 Pilares de la Operación', population:`Personal de las ${NTI} farmacias`, duration:'2 horas',
+    dates:rangoMes(R.kick[0], R.kick[1]), range:`${nf(R.kick[0])} – ${nf(R.kick[1])}`, prog:{ total:participantes, unit:'formados', live:true }, groups:`${PR.grupos} grupos · ${tamIntro} c/u`, people:`${participantes} participantes + ${PR.cupos} cupos`,
+    invest:`${PR.grupos} talleres: 10:00 a 12:00 y 15:45 a 17:30`,
+    content:`${'Los 5 pilares de la operación · Se dicta a continuación del taller de Conductas, al mismo grupo'} · ${PSEL.nombre}: ${PR.gBase} grupos de Base Farmacia (${PR.base} personas), ${PR.gSup} de Supervisorio (${PR.sup} personas) y ${PR.gCupos} con cupos para nuevos ingresos y rezagados (${PR.cupos}) · Mañana 8:00 a 12:00 y tarde 14:00 a 17:30, primero Conductas y luego Pilares · Sedes alternadas: ${CONFIG.introductorio.sedes.join(' y ')}`,
+    facilitators: `Oswaldo Saldivia, con Mariana Meza acompañando y guiando${R.kick[1] > ULT ? ' hasta el 17 dic' : ''}<br>${CONFIG.introductorio.sedes.map(x => `${areaBadge('SEDE', NX_COLORS[3])} ${x}</span>`).join('<br>')}`,
     status:'Por iniciar', start:R.kick[0] },
   { id:4, short:'Práctica Aplicada', name:'Práctica Aplicada: 1 conducta y 1 pilar por mes', population:`Personal de las ${NTI} farmacias`, duration:'2.5 horas por taller',
     dates:rangoMes(refIni, NP.fin), range:`${nf(refIni)} – ${nf(NP.fin)}`, prog:{ total:refVis.length, unit:'talleres', byDate:true },
@@ -1578,9 +1604,10 @@ NP.dias.forEach(d => {
   if (d.fase === 'preparacion') NS.push({ date:f, cid:0, group:d.titulo, facilitator:d.responsable === 'Adriana' ? "Adriana D'Angelo" : d.responsable, detail:d.detalle });
   if (d.fase === 'entrenamiento') NS.push({ date:f, cid:1, group:d.titulo, facilitator:'Mariana Meza', detail:d.detalle });
   if (d.fase === 'kickoff') {
-    [['am', d.am], ['pm', d.pm]].forEach(([sl, b]) => { if (!b) return; const cond = b.taller === 'Conductas';
-      NS.push({ date:f, cid: cond ? 2 : 3, slot:sl, group:`G${b.ronda}`, area:b.areaLabel, sala:b.sala, tiendas:b.tiendas, hours:CONFIG.kickoff.horario[sl.toUpperCase()],
-        facilitator: f <= ULT ? (cond ? 'Mariana Meza, con Oswaldo Saldivia' : 'Oswaldo Saldivia, con Mariana Meza') : 'Oswaldo Saldivia' }); });
+    [['am', d.am], ['pm', d.pm]].forEach(([sl, b]) => { if (!b) return;
+      ['Conductas', 'Pilares'].forEach(tl => NS.push({ date:f, cid: tl === 'Conductas' ? 2 : 3, slot:sl, intro:true, group:`${b.ronda} · ${{ sup:'Superv.', base:'Base', nuevos:'Nuevos', rezagados:'Rezag.' }[b.seg]}`, area: { sup:'SUP', base:'BASE', nuevos:'NUEVOS', rezagados:'REZAG.' }[b.seg], sala:b.sede, tiendas:b.tiendas, tiendasN:b.tiendasN, size:b.size, segNombre:b.segNombre, ronda:b.ronda, cupos:b.cupos, ger:b.ger, areaLabel:b.areaLabel, feriado:d.feriadoConTaller,
+        hours: CONFIG.introductorio.horas[sl.toUpperCase()][tl],
+        facilitator: f <= ULT ? (tl === 'Conductas' ? 'Mariana Meza, con Oswaldo Saldivia' : 'Oswaldo Saldivia, con Mariana Meza') : 'Oswaldo Saldivia' })); });
   }
   if (['refuerzo','continuidad','cierre'].includes(d.fase)) {
     [['am', d.am], ['pm', d.pm]].forEach(([sl, b]) => { if (b) NS.push({ date:f, cid:4, slot:sl, group:`Ciclo ${b.vuelta} · Conducta ${b.ciclo} + Pilar ${b.ciclo}`, area:b.areaLabel, sala:b.sala, tiendas:b.tiendas, ciclo:b.ciclo, vuelta:b.vuelta, ronda:b.ronda,
@@ -1693,7 +1720,7 @@ window.nxFetchProgress = async () => {
     const r = await fetch(PROGRESO_API, { cache: 'no-store' });
     const j = await r.json();
     NXDATA = j; nsRender();
-    const tot = j.nomina > 0 ? j.nomina : participantes;
+    const tot = participantes;   // nómina del plan (archivo Nomina Argentina Plan de capacitación)
     nxSetBar(2, j.conductas || 0, tot);
     nxSetBar(3, j.pilares || 0, tot);
     nxSetBar(8, j.culturaBase || 0, tot);
@@ -1766,7 +1793,7 @@ function nxRenderKPIs() {
   const k = [
     { val:String(NX_ORDEN.length), lbl:'Actividades planificadas', color:'var(--blue2)' },
     { val:String(NTI), lbl:'Tiendas incluidas', color:'var(--purple)' },
-    { val:String(nGrupos * 2), lbl:'Talleres introductorios', color:'var(--orange)' },
+    { val:String(PR.grupos * 2), lbl:'Talleres introductorios', color:'var(--orange)' },
     { val:String(refVis.length), lbl:'Talleres de Práctica Aplicada', color:'var(--green)' },
   ];
   document.getElementById('nxKpiRow').innerHTML = k.map(x => `<div class="kpi"><div class="kpi-val" style="color:${x.color}">${x.val}</div><div class="kpi-lbl">${x.lbl}</div><div class="kpi-bar" style="background:${x.color}"></div></div>`).join('');
@@ -1813,9 +1840,9 @@ function nxRenderCalendar() {
       arr.forEach(se => {
         const idx = NS.indexOf(se);
         const slot = se.slot === 'am' ? 'AM' : se.slot === 'pm' ? 'PM' : se.slot === 'dia' ? 'DÍA' : '';
-        const area = se.area ? `<span style="background:${c.color};color:#fff;border-radius:3px;padding:0 4px;font-size:7px;font-weight:800;margin-left:2px">${se.area.replace('Áreas ', 'A').replace('Área ', 'A').replace(' y ', '+')}</span>` : '';
+        const area = se.area ? `<span style="background:${c.color};color:#fff;border-radius:3px;padding:0 4px;font-size:7px;font-weight:800;margin-left:2px">${se.intro ? se.area : se.area.replace('Áreas ', 'A').replace('Área ', 'A').replace(' y ', '+')}</span>` : '';
         const solo = se.cid >= 2 && se.cid <= 4 && s > ULT;
-        const sub = se.cid <= 1 || se.cid === 5 ? '' : se.cid >= 9 ? 'Reinaldo Contreras' : se.cid === 6 ? 'Cuestiónica' : se.cid === 8 ? se.sala.replace('Sala ', '') : (se.cid === 4 ? `G${se.ronda} · ${se.sala.replace('Sala ', '')}` : (solo ? 'Oswaldo' : se.facilitator.split(',')[0].split(' ')[0]));
+        const sub = se.intro ? `${se.size} ${se.cupos ? 'cupos' : 'pers.'} · ${se.sala.replace('Tienda ', '')}` : se.cid <= 1 || se.cid === 5 ? '' : se.cid >= 9 ? 'Reinaldo Contreras' : se.cid === 6 ? 'Cuestiónica' : se.cid === 8 ? se.sala.replace('Sala ', '') : (se.cid === 4 ? `G${se.ronda} · ${se.sala.replace('Sala ', '')}` : (solo ? 'Oswaldo' : se.facilitator.split(',')[0].split(' ')[0]));
         h += `<div onclick="nxOpenSession(${idx})" style="background:${solo ? 'repeating-linear-gradient(135deg,' + c.lt + ' 0 6px,#fff 6px 12px)' : c.lt};border-left:3px solid ${c.color};border-radius:7px;padding:5px 7px;cursor:pointer;display:flex;flex-direction:column;justify-content:center;min-height:${arr.length === 1 ? '56px' : '24px'};">
           <div style="display:flex;align-items:center;gap:3px;flex-wrap:wrap">${slot ? `<span style="color:${c.color};font-size:7px;font-weight:700;opacity:.7">${slot}</span>` : ''}<span style="font-size:8px;font-weight:800;color:var(--navy);line-height:1.2">${nesc(se.group)}</span>${area}</div>
           ${sub ? `<div style="font-size:7.5px;color:${c.color};font-weight:600;margin-top:1px;line-height:1.2;opacity:.9">${sub}</div>` : ''}</div>`;
@@ -1846,6 +1873,7 @@ window.nxOpenSession = i => { const s = NS[i], c = NCI(s.cid);
   const turno = s.slot === 'am' ? ' · Turno Mañana' : s.slot === 'pm' ? ' · Turno Tarde' : s.slot === 'dia' ? ' · Día completo' : '';
   let g = '';
   if (s.cid <= 1 || s.cid === 6 || s.cid >= 9) g = mf('📋 Actividad', s.group, true) + mf('📝 Detalle', s.detail, true) + mf('🎓 Responsable', s.facilitator, true);
+  else if (s.intro) g = mf('📋 Grupo', `${s.ronda} · ${s.segNombre}`) + mf('⏱ Horario', s.hours) + mf('📍 Sede', s.sala) + mf('👥 Participantes', `${s.size} ${s.cupos ? 'cupos' : 'personas'}${s.ger ? ' · ' + s.ger + ' Gerentes de Tienda' : ''}`) + mf('🗺 Áreas', s.areaLabel) + mf('🎓 Facilitador(es)', s.facilitator, true) + (s.feriado ? mf('⚠️ Atención', `Este día figura como feriado en el cronograma: ${nesc(s.feriado)}`, true) : '') + mf('📄 Listado de participantes', `<a href="${PROPUESTAS[OPCION].url}" target="_blank" rel="noopener" style="font-weight:800;color:var(--blue2)">Ver en la planilla de la ${PROPUESTAS[OPCION].corto} →</a>`, true);
   else if (s.cid <= 3 || s.cid === 8) g = mf('📋 Grupo', `${s.group} de ${NP.rondas} · ${s.area}`) + mf('⏱ Horario', s.hours) + mf('📍 Sala', s.sala) + mf('👥 Participantes', `${MAXT === 1 ? '1' : 'Hasta ' + MAXT} por farmacia (${s.tiendas.length * MAXT})`) + mf('🎓 Facilitador(es)', s.facilitator, true) + mf(`🏪 Farmacias convocadas (${s.tiendas.length})`, s.tiendas.map(nesc).join(' · '), true);
   else if (s.cid === 4) g = mf('📋 Práctica Aplicada', `Ciclo ${s.vuelta} · Conducta ${s.ciclo} y Pilar ${s.ciclo}<br><span style="font-size:12px;color:var(--muted)">${CONFIG.conductas[s.ciclo-1]} · ${CONFIG.pilares[s.ciclo-1]}</span>`, true) + mf('📋 Grupo', `Grupo ${s.ronda} · ${s.area}`) + mf('⏱ Horario', s.hours) + mf('📍 Sala', s.sala) + mf('👥 Participantes', `1 por farmacia (${s.tiendas.length})`) + mf('🎯 Actividad de la conducta', `${ACTS[s.ciclo-1].nombre}. <a href="#" onclick="nxOpenAct(${s.ciclo});return false;" style="font-weight:800;color:#e67e22">Ver detalle →</a>`, true) + mf(`🏛 Actividad del Pilar ${s.ciclo}`, `<b>"${ACT_PILAR.nombre}"</b>: ${ACT_PILAR.desc(s.ciclo)}`, true) + mf('🎓 Facilitador', s.facilitator) + mf(`🏪 Farmacias convocadas (${s.tiendas.length})`, s.tiendas.map(nesc).join(' · '), true);
   else g = mf('📋 Actividad', s.group, true) + mf('🎓 Con quién', s.facilitator, true);
@@ -1921,19 +1949,37 @@ window.nsRefresh = () => { NXDATA = null; nsRender(); nxFetchProgress(); };
 window.nsInitOnce = () => { if (!nsInit) { nsInit = true; nxFetchProgress(); } nsRender(); };
 
 // ===== Resumen al inicio: cuadro y línea de tiempo por mes =====
+if (location.hash === '#lo-que-viene') setTimeout(() => { try { goToNext(); } catch (e) {} }, 50);
+window.nxSetOpcion = k => { try { localStorage.setItem('nxOpcion', k); } catch (e) {} const u = new URL(location.href); u.searchParams.set('op', k.slice(2)); location.href = u.toString().replace(/#.*$/, '') + '#lo-que-viene'; };
 function nxRenderResumen() {
   const box = document.getElementById('nxResumen'); if (!box) return;
   const C = NX_COLORS;
   const rangoV = v => { const f = refVis.filter(x => x.vuelta === v).map(x => x.fecha).sort(); return [f[0], f[f.length - 1]]; };
   const v1 = rangoV(1), v2 = rangoV(2);
   const filas = [
-    { col: C[2].color, nombre: 'Taller 5 Conductas de Servicio', tipo: 'Introductorio', ini: R.kick[0], fin: R.kick[1], pob: `Personal de las ${NTI} farmacias (1 por tienda por grupo)`, resp: 'Mariana Meza, con Oswaldo Saldivia' },
-    { col: C[3].color, nombre: 'Taller 5 Pilares de la Operación', tipo: 'Introductorio', ini: R.kick[0], fin: R.kick[1], pob: `Personal de las ${NTI} farmacias (1 por tienda por grupo)`, resp: 'Oswaldo Saldivia, con Mariana Meza' },
+    { col: C[2].color, nombre: 'Taller 5 Conductas de Servicio', tipo: 'Introductorio', ini: R.kick[0], fin: R.kick[1], pob: `${participantes} colaboradores (Base Farmacia y Supervisorio por separado) + ${PR.cupos} cupos de nuevos ingresos y rezagados · ${PSEL.corto}`, resp: 'Mariana Meza, con Oswaldo Saldivia' },
+    { col: C[3].color, nombre: 'Taller 5 Pilares de la Operación', tipo: 'Introductorio', ini: R.kick[0], fin: R.kick[1], pob: `${participantes} colaboradores (Base Farmacia y Supervisorio por separado) + ${PR.cupos} cupos de nuevos ingresos y rezagados · ${PSEL.corto}`, resp: 'Oswaldo Saldivia, con Mariana Meza' },
     { col: C[4].color, nombre: 'Práctica Aplicada · Ciclo 1 (Conductas y Pilares 1 a 5)', tipo: 'Ciclo 1', ini: v1[0], fin: v1[1], pob: `Personal de las ${NTI} farmacias (1 por tienda por grupo)`, resp: 'Oswaldo Saldivia' },
     { col: C[4].color, nombre: 'Práctica Aplicada · Ciclo 2 (Conductas y Pilares 1 a 5)', tipo: 'Ciclo 2', ini: v2[0], fin: v2[1], pob: `Personal de las ${NTI} farmacias (1 por tienda por grupo)`, resp: 'Oswaldo Saldivia' },
   ];
   const th = t => `<th style="text-align:left;padding:12px 14px;font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border);white-space:nowrap">${t}</th>`;
-  let h = `<div class="section-label">Resumen: talleres introductorios de Conductas de Servicio y Pilares de la Operación y ciclos de Práctica Aplicada</div>
+  const P1 = propRes(PROPUESTAS.op1), P2 = propRes(PROPUESTAS.op2);
+  const btn = k => { const on = k === OPCION; return `<button onclick="nxSetOpcion('${k}')" style="font-family:inherit;font-weight:800;font-size:13px;padding:10px 18px;border-radius:999px;cursor:pointer;border:2px solid ${on ? 'var(--navy)' : 'var(--border)'};background:${on ? 'var(--navy)' : '#fff'};color:${on ? '#fff' : 'var(--navy)'}">${on ? '✓ ' : ''}${PROPUESTAS[k].corto}</button>`; };
+  const fila2 = (l, a, b) => `<tr style="border-bottom:1px solid #eef0f6"><td style="padding:10px 14px;font-weight:700;color:var(--text-mid)">${l}</td><td style="padding:10px 14px;font-weight:700;color:var(--navy);${OPCION === 'op1' ? 'background:#f2f5ff' : ''}">${a}</td><td style="padding:10px 14px;font-weight:700;color:var(--navy);${OPCION === 'op2' ? 'background:#f2f5ff' : ''}">${b}</td></tr>`;
+  const fer = P => P.enFeriado.length ? `⚠️ ${P.enFeriado.map(g => g.id + ' el ' + nf(g.f)).join(', ')} (feriado)` : 'Ninguno';
+  let h = `<div class="section-label">Propuestas de grupos del Introductorio</div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:12px">${btn('op1')}${btn('op2')}<span style="font-size:12px;color:var(--muted);font-weight:600">El cronograma, las tarjetas y la línea de tiempo muestran la opción seleccionada.</span></div>
+  <div class="cal-wrap" style="margin-bottom:26px"><div class="cal-scroll"><table style="width:100%;border-collapse:collapse;font-size:13px;min-width:680px">
+    <thead><tr style="background:#f8f9fd"><th style="text-align:left;padding:12px 14px;font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)"></th>${['op1','op2'].map(k => `<th style="text-align:left;padding:12px 14px;font-size:11px;font-weight:800;color:var(--navy)">${PROPUESTAS[k].nombre}<div style="font-weight:600;font-size:11px;color:var(--muted);margin-top:4px;text-transform:none;letter-spacing:0">${PROPUESTAS[k].desc}</div></th>`).join('')}</tr></thead><tbody>
+    ${fila2('Días con talleres', `${P1.dias} días (${nf(P1.ini)} – ${nf(P1.fin)})`, `${P2.dias} días (${nf(P2.ini)} – ${nf(P2.fin)})`)}
+    ${fila2('Grupos', `${P1.grupos}: ${P1.gBase} Base, ${P1.gSup} Supervisorio, ${P1.gCupos} de cupos`, `${P2.grupos}: ${P2.gBase} Base, ${P2.gSup} Supervisorio, ${P2.gCupos} de cupos`)}
+    ${fila2('Tamaño de los grupos', `${P1.tam} personas`, `${P2.tam} personas`)}
+    ${fila2('Colaboradores', `${P1.nomina} (${P1.base} Base, ${P1.sup} Supervisorio)`, `${P2.nomina} (${P2.base} Base, ${P2.sup} Supervisorio)`)}
+    ${fila2('Cupos reservados', `${P1.cupos} (nuevos ingresos y rezagados)`, `${P2.cupos} (nuevos ingresos y rezagados)`)}
+    ${fila2('Talleres en días feriados', fer(P1), fer(P2))}
+    ${fila2('Listado de participantes', `<a href="${PROPUESTAS.op1.url}" target="_blank" rel="noopener" style="color:var(--blue2)">Abrir planilla →</a>`, `<a href="${PROPUESTAS.op2.url}" target="_blank" rel="noopener" style="color:var(--blue2)">Abrir planilla →</a>`)}
+    </tbody></table></div></div>
+  <div class="section-label">Resumen: talleres introductorios de Conductas de Servicio y Pilares de la Operación y ciclos de Práctica Aplicada</div>
   <div class="cal-wrap" style="margin-bottom:26px"><div class="cal-scroll"><table style="width:100%;border-collapse:collapse;font-size:13px;min-width:760px">
     <thead><tr style="background:#f8f9fd">${['Formación','Inicio','Fin','Población objetivo','Responsable'].map(th).join('')}</tr></thead><tbody>
     ${filas.map(r => `<tr style="border-bottom:1px solid #eef0f6">
@@ -1958,7 +2004,7 @@ function nxRenderResumen() {
   <div class="cal-wrap" style="margin-bottom:40px"><div class="cal-scroll"><div style="min-width:1100px">
     <div style="display:grid;grid-template-columns:170px 1fr"><div style="background:#f8f9fd;border-right:1px solid var(--border)"></div>
       <div style="position:relative;height:38px">${meses.map((m, i) => { const w = pos(addDays(finMes(m), 1)) - pos(m); const d = D(m); return `<div style="position:absolute;top:0;bottom:0;left:${pos(m)}%;width:${w}%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:${i % 2 ? '#3b5fe2' : '#1a2e6b'};color:#fff;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;line-height:1.1">${NMONTHS[d.getUTCMonth()].slice(0, 3)}<span style="font-size:9px;opacity:.75">${d.getUTCFullYear()}</span></div>`; }).join('')}</div></div>
-    ${fila('Introductorio', 'Conductas de Servicio y Pilares de la Operación', pausa + bar(R.kick[0], R.kick[1], C[2].color, `${nf(R.kick[0])} – ${nf(R.kick[1])}`, 'Talleres en sala'))}
+    ${fila('Introductorio', 'Conductas de Servicio y Pilares de la Operación', pausa + bar(R.kick[0], R.kick[1], C[2].color, `${nf(R.kick[0])} – ${nf(R.kick[1])}`, PSEL.corto))}
     ${fila('Práctica Aplicada · Ciclo 1', `${MESES_CICLO[0]} – ${MESES_CICLO[4]}`, pausa + ciclo(1))}
     ${fila('Práctica Aplicada · Ciclo 2', `${MESES_CICLO[5]} – ${MESES_CICLO[9]}`, ciclo(2))}
     <div style="position:relative;height:0"><div style="position:absolute;left:calc(170px + (100% - 170px) * ${pos(CONFIG.salidaMariana) / 100});top:-${3 * 67 + 38}px;height:${3 * 67 + 38}px;border-left:2px solid #e74c3c" title="Último día de Mariana: ${nf(CONFIG.salidaMariana)}"></div></div>
