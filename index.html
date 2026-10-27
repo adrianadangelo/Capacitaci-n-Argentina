@@ -1724,7 +1724,7 @@ window.nxFetchProgress = async () => {
   try {
     const r = await fetch(PROGRESO_API, { cache: 'no-store' });
     const j = await r.json();
-    NXDATA = j; nsRender();
+    NXDATA = j; nsRender(); try { nxRenderResumen(); } catch (e) {}
     const tot = j.nomina > 0 && /Distribuci/.test(j.nominaFuente || '') ? j.nomina : participantes;   // total a formar según la distribución de colaboradores
     nxSetBar(2, j.conductas || 0, tot);
     nxSetBar(3, j.pilares || 0, tot);
@@ -1914,13 +1914,18 @@ const nsMini = (n, tot, col) => { const pct = tot ? Math.min(100, Math.round(n /
 function nsRenderEncuesta() {
   const box = document.getElementById('nsEncuesta'); if (!box) return;
   const j = NXDATA || {}, E = j.encuesta || [], nc = j.notaConductas, np = j.notaPilares;
-  if (!E.length && !(nc && nc.respuestas) && !(np && np.respuestas)) { box.innerHTML = ''; return; }
+  if (!E.length && !(nc && nc.respuestas) && !(np && np.respuestas) && j.faltaron == null) { box.innerHTML = ''; return; }
   const nota = (t, n, col) => n && n.respuestas ? `<div class="kpi"><div class="kpi-val" style="color:${col}">${String(n.promedio).replace('.', ',')}<span style="font-size:15px;color:var(--muted)"> / ${n.maximo}</span></div><div class="kpi-lbl">Nota promedio · ${t} (${n.respuestas} evaluaciones)</div><div class="kpi-bar" style="background:${col}"></div></div>` : '';
-  box.innerHTML = `<div class="section-label" style="margin-top:34px">Resultados de los formularios del Introductorio</div>
-    <div class="kpi-row" style="margin-bottom:18px">${nota('Conductas', nc, 'var(--orange)')}${nota('Pilares', np, '#8e44ad')}</div>
+  const falt = Object.entries(j.porFarmacia || {}).filter(([k, v]) => v.faltaron).sort((a, b) => b[1].faltaron - a[1].faltaron);
+  const faltHtml = j.faltaron != null ? `<div class="section-label" style="margin-top:34px">Inasistencias en los grupos ya realizados</div>
+    <div class="kpi-row" style="margin-bottom:14px"><div class="kpi"><div class="kpi-val" style="color:#c0392b">${j.faltaron}<span style="font-size:15px;color:var(--muted)"> / ${j.programadosPasados}</span></div><div class="kpi-lbl">Personas que faltaron a su grupo</div><div class="kpi-bar" style="background:#c0392b"></div></div></div>
+    ${falt.length ? `<div class="cal-wrap"><div style="padding:16px 20px;font-size:13px"><div style="font-weight:800;color:var(--navy);margin-bottom:8px">Faltaron por farmacia</div>${falt.map(([k, v]) => `<span style="display:inline-block;margin:3px 6px 3px 0;padding:4px 10px;border-radius:99px;background:#fdecea;color:#b91c1c;font-weight:700">${nesc(k)} · ${v.faltaron}</span>`).join('')}<div style="margin-top:10px;color:var(--muted)">Los nombres están en la pestaña «${nesc(j.faltaronHoja || 'Faltaron (automático)')}» de la <a href="${PSEL.url}" target="_blank" rel="noopener" style="color:var(--blue2);font-weight:800">planilla de distribución</a>.</div></div></div>` : ''}` : '';
+  const hayRes = E.length || (nc && nc.respuestas) || (np && np.respuestas);
+  box.innerHTML = (hayRes ? `<div class="section-label" style="margin-top:34px">Resultados de los formularios del Introductorio</div>
+    <div class="kpi-row" style="margin-bottom:18px">${nota('Conductas', nc, 'var(--orange)')}${nota('Pilares', np, '#8e44ad')}</div>` : '') + `
     ${E.length ? `<div class="cal-wrap"><div style="padding:18px 22px"><div style="font-weight:800;color:var(--navy);margin-bottom:12px">Satisfacción con el taller <span style="font-weight:600;color:var(--muted);font-size:12px">(escala de 1 a 5)</span></div>
       ${E.map(e => `<div style="display:grid;grid-template-columns:1fr 160px 44px;gap:12px;align-items:center;margin:8px 0;font-size:13px"><span style="color:var(--text-mid)">${nesc(e.pregunta)}</span><div style="height:8px;background:#eef0f6;border-radius:99px;overflow:hidden"><div style="height:100%;width:${e.promedio / 5 * 100}%;background:var(--green);border-radius:99px"></div></div><b style="color:var(--navy);text-align:right">${String(e.promedio).replace('.', ',')}</b></div>`).join('')}
-    </div></div>` : ''}`;
+    </div></div>` : ''}` + faltHtml;
 }
 function nsRender() { nsRenderEncuesta();
   const box = document.getElementById('nsContent'); if (!box) return;
@@ -1989,14 +1994,15 @@ function nxRenderResumen() {
   const hp = `<div class="section-label">Distribución de grupos del Introductorio</div>
   <p style="font-size:13px;color:var(--text-mid);margin:-6px 0 16px">${PSEL.desc} <a href="${PSEL.url}" target="_blank" rel="noopener" style="color:var(--blue2);font-weight:800">Abrir planilla →</a></p>
   <div class="kpi-row" style="margin-bottom:22px">${kp(P.nomina, 'Colaboradores a formar', 'var(--navy)')}${kp(P.grupos, `Grupos (${P.gBase} Base, ${P.gSup} Supervisorio, ${P.gCupos} de cupos)`, 'var(--blue2)')}${kp(P.dias, `Días con talleres (${nf(P.ini)} – ${nf(P.fin)})`, 'var(--orange)')}${kp(P.cupos, 'Cupos para nuevos ingresos y rezagados', '#8e44ad')}</div>
+  ${NXDATA && NXDATA.faltaron != null ? `<div style="background:#fff5f5;border:1px solid #f5c6cb;border-radius:12px;padding:12px 16px;margin:0 0 16px;font-size:13px;color:#7f1d1d"><b>Faltaron ${NXDATA.faltaron} de ${NXDATA.programadosPasados}</b> personas programadas en los grupos que ya se realizaron (no respondieron el formulario ni tienen «Sí» en la asistencia). El detalle con nombres está en la pestaña <b>${nesc(NXDATA.faltaronHoja || 'Faltaron (automático)')}</b> de la <a href="${PSEL.url}" target="_blank" rel="noopener" style="color:#b91c1c;font-weight:800">planilla de distribución →</a></div>` : ''}
   ${P.enFeriado.length ? `<p style="font-size:13px;font-weight:700;color:#b45309;margin:0 0 16px">⚠️ Talleres en días feriados: ${P.enFeriado.map(g => g.id + ' el ' + nf(g.f)).join(', ')}</p>` : ''}
   <div class="cal-wrap"><div class="cal-scroll"><table style="width:100%;border-collapse:collapse;font-size:12.5px;min-width:760px">
-    <thead><tr style="background:#f8f9fd">${['Semana','Grupo','Fecha','Turno','Tipo','Personas','Áreas'].map(t => `<th style="text-align:left;padding:10px 12px;font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)">${t}</th>`).join('')}</tr></thead><tbody>
+    <thead><tr style="background:#f8f9fd">${['Semana','Grupo','Fecha','Turno','Tipo','Personas','Áreas','Asistieron','Faltaron'].map(t => `<th style="text-align:left;padding:10px 12px;font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)">${t}</th>`).join('')}</tr></thead><tbody>
     ${Object.keys(semanas).sort().map((k, i) => semanas[k].map((g, j) => `<tr style="border-top:1px solid ${j ? '#f1f3f8' : 'var(--border)'}">
       ${j ? '' : `<td rowspan="${semanas[k].length}" style="padding:10px 12px;font-weight:800;color:var(--navy);vertical-align:top;white-space:nowrap">Semana ${i + 1}<div style="font-size:11px;color:var(--muted);font-weight:600">${nf(k)}</div></td>`}
       <td style="padding:8px 12px;font-weight:800;color:${col(g.t)}">${g.id}</td><td style="padding:8px 12px">${nf(g.f)}</td><td style="padding:8px 12px">${g.s === 'AM' ? 'Mañana · 8:00 a 12:00' : 'Tarde · 14:00 a 17:30'}</td>
       <td style="padding:8px 12px"><span style="background:${col(g.t)}1a;color:${col(g.t)};border-radius:6px;padding:2px 8px;font-weight:800;font-size:11px">${g.t}</span></td>
-      <td style="padding:8px 12px;font-weight:700">${g.n} ${g.cupos ? 'cupos' : ''}${g.ger ? ` <span style="color:var(--muted);font-weight:600">(${g.ger} Gerentes)</span>` : ''}</td><td style="padding:8px 12px;color:var(--text-mid)">${g.cupos ? g.a : (g.ad || g.a)}</td></tr>`).join('')).join('')}
+      <td style="padding:8px 12px;font-weight:700">${g.n} ${g.cupos ? 'cupos' : ''}${g.ger ? ` <span style="color:var(--muted);font-weight:600">(${g.ger} Gerentes)</span>` : ''}</td><td style="padding:8px 12px;color:var(--text-mid)">${g.cupos ? g.a : (g.ad || g.a)}</td>${(() => { const x = (NXDATA && NXDATA.porGrupo || {})[g.id]; if (!x) return '<td style="padding:8px 12px;color:var(--muted)">—</td><td style="padding:8px 12px;color:var(--muted)">—</td>'; return `<td style="padding:8px 12px;font-weight:800;color:var(--green)">${x.asistieron}</td><td style="padding:8px 12px;font-weight:800;color:${x.faltaron ? '#c0392b' : 'var(--muted)'}">${x.faltaron}</td>`; })()}</tr>`).join('')).join('')}
     </tbody></table></div></div>`;
   const pp = document.getElementById('nxPropuestas'); if (pp) pp.innerHTML = hp;
   let h = `<div class="section-label">Resumen: talleres introductorios de Conductas de Servicio y Pilares de la Operación y ciclos de Práctica Aplicada</div>
