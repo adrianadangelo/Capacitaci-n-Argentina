@@ -1918,8 +1918,21 @@ function nsRenderEncuesta() {
   const nota = (t, n, col) => n && n.respuestas ? `<div class="kpi"><div class="kpi-val" style="color:${col}">${String(n.promedio).replace('.', ',')}<span style="font-size:15px;color:var(--muted)"> / ${n.maximo}</span></div><div class="kpi-lbl">Nota promedio · ${t} (${n.respuestas} evaluaciones)</div><div class="kpi-bar" style="background:${col}"></div></div>` : '';
   const falt = Object.entries(j.porFarmacia || {}).filter(([k, v]) => v.faltaron).sort((a, b) => b[1].faltaron - a[1].faltaron);
   const faltHtml = j.faltaron != null ? `<div class="section-label" style="margin-top:34px">Inasistencias en los grupos ya realizados</div>
-    <div class="kpi-row" style="margin-bottom:14px"><div class="kpi"><div class="kpi-val" style="color:#c0392b">${j.faltaron}<span style="font-size:15px;color:var(--muted)"> / ${j.programadosPasados}</span></div><div class="kpi-lbl">Personas que faltaron a su grupo</div><div class="kpi-bar" style="background:#c0392b"></div></div></div>
-    ${falt.length ? `<div class="cal-wrap"><div style="padding:16px 20px;font-size:13px"><div style="font-weight:800;color:var(--navy);margin-bottom:8px">Faltaron por farmacia</div>${falt.map(([k, v]) => `<span style="display:inline-block;margin:3px 6px 3px 0;padding:4px 10px;border-radius:99px;background:#fdecea;color:#b91c1c;font-weight:700">${nesc(k)} · ${v.faltaron}</span>`).join('')}<div style="margin-top:10px;color:var(--muted)">Los nombres están en la pestaña «${nesc(j.faltaronHoja || 'Faltaron (automático)')}» de la <a href="${PSEL.url}" target="_blank" rel="noopener" style="color:var(--blue2);font-weight:800">planilla de distribución</a>.</div></div></div>` : ''}` : '';
+    <div class="kpi-row" style="margin-bottom:14px"><div class="kpi"><div class="kpi-val" style="color:#c0392b">${j.faltaron}<span style="font-size:15px;color:var(--muted)"> / ${j.programadosPasados}</span></div><div class="kpi-lbl">Personas que faltaron a su grupo (acumulado)</div><div class="kpi-bar" style="background:#c0392b"></div></div></div>
+    ${(() => {
+      const L = (j.faltaronLista || []).slice().sort((x, y) => x.f < y.f ? 1 : x.f > y.f ? -1 : (x.grupo < y.grupo ? -1 : 1));
+      if (!L.length) return '';
+      const tiendas = Array.from(new Set(L.map(x => x.tienda))).sort();
+      const th = t => `<th style="text-align:left;padding:10px 12px;font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);white-space:nowrap">${t}</th>`;
+      return `<div class="cal-wrap"><div style="padding:16px 20px 6px;display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+          <div style="font-weight:800;color:var(--navy);margin-right:auto">Todas las personas que faltaron <span style="font-weight:600;color:var(--muted);font-size:12px">(acumulado; quien recupera en otro grupo sale de la lista)</span></div>
+          <select id="nsFaltTienda" onchange="nsFiltrarFaltaron()" style="font-family:inherit;font-size:13px;padding:7px 10px;border:1px solid var(--border);border-radius:8px"><option value="">Todas las farmacias</option>${tiendas.map(t => `<option value="${nesc(t)}">${nesc(t)} (${L.filter(x => x.tienda === t).length})</option>`).join('')}</select>
+          <input id="nsFaltBuscar" oninput="nsFiltrarFaltaron()" placeholder="Buscar por nombre" style="font-family:inherit;font-size:13px;padding:7px 10px;border:1px solid var(--border);border-radius:8px;min-width:180px">
+        </div>
+        <div class="cal-scroll"><table style="width:100%;border-collapse:collapse;font-size:13px;min-width:720px"><thead><tr style="background:#f8f9fd">${['Fecha', 'Grupo', 'Turno', 'Farmacia', 'Nombre y apellido', 'Cargo'].map(th).join('')}</tr></thead>
+        <tbody id="nsFaltBody">${L.map(x => `<tr data-t="${nesc(x.tienda)}" data-n="${nesc(x.nombre.toUpperCase())}" style="border-top:1px solid #f1f3f8"><td style="padding:9px 12px;white-space:nowrap">${nf(x.f)}</td><td style="padding:9px 12px;font-weight:800;color:var(--blue2)">${nesc(x.grupo)}</td><td style="padding:9px 12px">${nesc(x.turno)}</td><td style="padding:9px 12px;font-weight:700">${nesc(x.tienda)}</td><td style="padding:9px 12px;font-weight:800;color:var(--navy)">${nesc(x.nombre)}</td><td style="padding:9px 12px;color:var(--text-mid)">${nesc(x.cargo)}</td></tr>`).join('')}</tbody></table></div>
+        <div id="nsFaltCount" style="padding:10px 20px 16px;font-size:12px;color:var(--muted)">Mostrando ${L.length} de ${L.length}</div></div>`;
+    })()}` : '';
   const hayRes = E.length || (nc && nc.respuestas) || (np && np.respuestas);
   box.innerHTML = (hayRes ? `<div class="section-label" style="margin-top:34px">Resultados de los formularios del Introductorio</div>
     <div class="kpi-row" style="margin-bottom:18px">${nota('Conductas', nc, 'var(--orange)')}${nota('Pilares', np, '#8e44ad')}</div>` : '') + `
@@ -1927,6 +1940,12 @@ function nsRenderEncuesta() {
       ${E.map(e => `<div style="display:grid;grid-template-columns:1fr 160px 44px;gap:12px;align-items:center;margin:8px 0;font-size:13px"><span style="color:var(--text-mid)">${nesc(e.pregunta)}</span><div style="height:8px;background:#eef0f6;border-radius:99px;overflow:hidden"><div style="height:100%;width:${e.promedio / 5 * 100}%;background:var(--green);border-radius:99px"></div></div><b style="color:var(--navy);text-align:right">${String(e.promedio).replace('.', ',')}</b></div>`).join('')}
     </div></div>` : ''}` + faltHtml;
 }
+window.nsFiltrarFaltaron = () => {
+  const t = (document.getElementById('nsFaltTienda') || {}).value || '', q = ((document.getElementById('nsFaltBuscar') || {}).value || '').trim().toUpperCase();
+  const rows = [...document.querySelectorAll('#nsFaltBody tr')]; let n = 0;
+  rows.forEach(r => { const ok = (!t || r.dataset.t === t) && (!q || r.dataset.n.indexOf(q) >= 0); r.style.display = ok ? '' : 'none'; if (ok) n++; });
+  const c = document.getElementById('nsFaltCount'); if (c) c.textContent = `Mostrando ${n} de ${rows.length}`;
+};
 function nsRender() { nsRenderEncuesta();
   const box = document.getElementById('nsContent'); if (!box) return;
   const C = NX_COLORS[2].color, Pl = NX_COLORS[3].color, V = NX_COLORS[4].color;
